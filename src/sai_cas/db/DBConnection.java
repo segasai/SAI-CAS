@@ -2,7 +2,7 @@ package sai_cas.db;
 import java.sql.*;
 import javax.sql.*;
 import javax.naming.*;
-import org.apache.tomcat.dbcp.dbcp.datasources.*;
+//import org.apache.tomcat.dbcp.dbcp.datasources.*;
 
 public class DBConnection
 {
@@ -16,7 +16,7 @@ public class DBConnection
     return conn;
   }
 
-  public static Connection getPooledConnection1() throws SQLException, javax.naming.NamingException
+ /* public static Connection getPooledConnection1() throws SQLException, javax.naming.NamingException
   {
     Context initContext = new InitialContext();
     Context envContext  = (Context)initContext.lookup("java:/comp/env");
@@ -27,7 +27,7 @@ public class DBConnection
 //    this.conn = conn;
     return conn;
   }
-
+  */
   
   public static Connection getSimpleConnection() throws SQLException
   {

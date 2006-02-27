@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.ListIterator;
-
 import java.io.PrintStream;
+import org.postgresql.*;
 
 public class DBInterface  extends Object
 {
@@ -201,7 +201,7 @@ public class DBInterface  extends Object
 	}
 	public void insertData(String[] stringArray) throws SQLException
 	{
-		boolean usingServerPrepare = ((org.postgresql.PGStatement)pstmtBuffered).isUseServerPrepare();
+//		boolean usingServerPrepare = ((org.postgresql.PGStatement)pstmtBuffered).isUseServerPrepare();
 //		System.out.println(usingServerPrepare);
 		for(int i=0, len = stringArray.length; i < len; i++)
 		{
