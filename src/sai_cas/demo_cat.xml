@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<catalog name="cat1">
+<info>This is my first CAS catalog</info>
+	<table name="gal1">
+		<info>The first table in cat1</info>
+		<description>Something long..........</description>
+		<column name="name" ucd="name_MAIN" datatype="char"/>  
+		<column name="RA" ucd="POS_EQ_RA_MAIN" datatype="double" unit="deg"/>
+		<column name="Dec" ucd="POS_EQ_DEC_MAIN" datatype="double" unit="deg"/>
+		<column name="RAErr" ucd="ERROR" datatype="double" unit="deg"/>
+		<column name="DecErr" ucd="ERROR" datatype="double" unit="deg"/>
+		<column name="Epoch" ucd="TIME_EPOCH" datatype="double" unit="deg"/>
+		<column name="Fmag" ucd="PHOT_PHG_R" datatype="double" unit="mag"/>
+		<column name="FmagErr" ucd="ERROR" datatype="double" unit="mag"/>
+		<column name="Jmag" ucd="PHOT_PHG_B" datatype="double" unit="mag"/>
+		<column name="JmagErr" ucd="ERROR" datatype="double" unit="mag"/>
+		<column name="Vmag" ucd="PHOT_PHG_V" datatype="double" unit="mag"/>
+		<column name="VmagErr" ucd="ERROR" datatype="double" unit="mag"/>
+		<column name="Nmag" ucd="PHOT_PHG_N" datatype="double" unit="mag"/>
+		<column name="NmagErr" ucd="ERROR" datatype="double" unit="mag"/>
+		<column name="classification" ucd="CLASS_OBJECT" datatype="char"/>
+		<column name="semiMajor" ucd="EXTENSION_RAD" datatype="double"/>
+		<column name="eccentricity" ucd="PHYS_ECCENTRICITY" datatype="double"/>
+		<column name="positionAngle" ucd="POS_POS-ANG" datatype="double" unit="deg"/>
+		<column name="status" ucd="CODE_QUALITY" datatype="double"/>
+	</table>
+	<table name="heasarc_abell_9001">
+		<description>Abell Clusters</description>
+		<column name="unique_id" datatype="int"  ucd="ID_MAIN">
+			<description>Integer key</description>
+		</column>      
+		<column name="name" datatype="char" >
+			<description>Abell Catalog Number (s = Supplemental Cluster Catalog)</description>
+		</column>
+		<column name="ra" datatype="double" unit="degree" ucd="POS_EQ_RA_MAIN">
+			<description> Right Ascension (hh mm.m)</description>
+		</column>
+		<column name="dec" datatype="double" unit="degree" ucd="POS_EQ_DEC_MAIN">
+			<description>Declination (dd mm)</description>
+		</column>
+		<column name="_count" datatype="int" >
+			<description>Number of Cluster Members</description>
+		</column>
+		<column name="bmtype" datatype="char"  >
+			<description>Bautz-Morgan Type, :=mean of obs, ?=quest</description>
+		</column>
+		<column name="redshift" datatype="float">
+			<description>Redshift</description>
+		</column>
+		<column name="rich" datatype="long" >
+			<description>Abell Richness Class (Abell 1958)</description>
+		</column>
+		<column name="dist" datatype="long">
+			<description>Abell Distance Class (Abell 1958)</description>
+		</column>
+		<column name="vmag" datatype="float"  >
+			<description>V Magnitude for 10th Ranked Member, Correlated for Extinction </description>
+		</column>
+	</table>
+</catalog>  
+          
+          
