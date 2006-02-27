@@ -1,0 +1,10 @@
+The classpath should contain 
+* the jar of the JDBC driver
+* the ANT deployment jars
+
+export CLASSPATH=/opt/jdbc/postgresql-8.1dev-401.jdbc3.jar
+
+java -classpath $CLASSPATH:build/classes/:/opt/jwsdp-1.6/jaxb/lib/jaxb-api.jar:/opt/jwsdp-1.6/jaxb/lib/jaxb-libs.jar:/opt/jwsdp-1.6/jaxb/lib/jaxb-impl.jar sai_cas.XMLCatalog
+
+http://localhost:8080/sai_cas/ConeSearch?cat=cat00&tab=gal1&RA=2&DEC=3&SR=1
+
