@@ -1,0 +1,115 @@
+<Context path="/sai_cas" docBase="sai_cas"
+	debug="5" reloadable="true" crossContext="true">
+	
+	<Valve className="org.apache.catalina.valves.AccessLogValve"
+		prefix="sai_cas." suffix=".log"
+		timestamp="true"/>
+
+	<Resource name="jdbc/postgres" auth="Container"
+		type="javax.sql.DataSource"
+		driverClassName="org.postgresql.Driver"
+		url="jdbc:postgresql://127.0.0.1:5432/cas"
+		username="math"
+		password=""/>
+	<ResourceParams name="jdbc/postgres">
+<!--		<parameter>
+			<name>factory</name>
+			<value>org.apache.commons.dbcp.BasicDataSourceFactory</value>
+		</parameter>-->                     
+		<parameter>
+			<name>url</name>
+			<value>jdbc:postgresql://127.0.0.1:5432/cas</value>
+		</parameter>              
+		<parameter>
+			<name>username</name>
+			<value>math</value>
+		</parameter>
+		<parameter>
+			<name>password</name>    
+			<value></value>
+		</parameter>
+		<parameter>
+			<name>maxActive</name>
+			<value>20</value>                     
+		</parameter>
+		<parameter>
+			<name>maxIdle</name>
+			<value>10</value>
+		</parameter>
+		<parameter>
+			<name>maxWait</name>
+			<value>-1</value>   
+		</parameter>   
+		<parameter>
+			<name>removeAbandoned</name>
+			<value>true</value>
+		</parameter>             
+		<parameter>
+			<name>removeAbandonedTimeout</name>
+			<value>60</value>
+		</parameter>                                        
+	</ResourceParams>
+	
+	<Resource name="jdbc/postgres1" auth="Container"
+		type="javax.sql.ConnectionPoolDataSource"/>
+	<ResourceParams name="jdbc/postgres1">
+	<parameter>
+		<name>factory</name>
+		<value>org.postgresql.jdbc2.optional.ConnectionPool</value>
+	</parameter>                     
+	<parameter>
+		<name>driverClassName</name>
+		<value>org.postgresql.Driver</value>
+	</parameter>
+    <parameter>
+      <name>url</name>    
+      <value>jdbc:postgresql://127.0.0.1:5432/cas</value>
+    </parameter>              
+    <parameter>
+      <name>username</name>
+      <value>math</value>
+    </parameter>
+    <parameter>
+      <name>password</name>    
+      <value></value>
+    </parameter>
+    <parameter>
+      <name>maxActive</name>
+      <value>20</value>                     
+    </parameter>
+    <parameter>
+      <name>maxIdle</name>
+      <value>10</value>
+    </parameter>
+    <parameter>
+      <name>maxWait</name>
+      <value>-1</value>   
+    </parameter>   
+     <parameter>
+      <name>removeAbandoned</name>
+      <value>true</value>
+    </parameter>             
+    <parameter>
+    <name>removeAbandonedTimeout</name>
+      <value>60</value>
+    </parameter>                                        
+  </ResourceParams>
+  
+
+  
+  
+	<Resource name="jdbc/postgres2" auth="Container"
+		type="org.apache.commons.dbcp.datasources.InstanceKeyDataSource" driverClassName="org.postgresql.Driver"
+		factory="org.apache.tomcat.dbcp.dbcp.datasources.PerUserPoolDataSourceFactory"/>
+	<ResourceParams name="jdbc/postgres2">
+		<parameter>
+			<name>driverClassName</name>
+			<value>org.postgresql.Driver</value>
+		</parameter>                        
+		<parameter>
+			<name>url</name>    
+			<value>jdbc:postgresql://127.0.0.1:5432/cas</value>
+		</parameter>              	
+	</ResourceParams>
+
+</Context>

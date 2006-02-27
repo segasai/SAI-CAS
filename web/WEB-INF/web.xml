@@ -1,0 +1,39 @@
+<!DOCTYPE web-app 
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" 
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+
+<web-app>
+    <display-name>SAI_CAS Application</display-name>
+    <description>
+The web application providing access to the catalogues
+    </description>
+
+<servlet>
+    <servlet-name>HelloServlet</servlet-name>
+    <servlet-class>sai_cas.ServerSnoop</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>HelloServlet</servlet-name>
+    <url-pattern>/xxx</url-pattern>
+</servlet-mapping>
+
+<servlet>
+    <servlet-name>ConeSearchServlet</servlet-name>
+    <servlet-class>sai_cas.servlet.ConeSearchServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>ConeSearchServlet</servlet-name>
+    <url-pattern>/ConeSearch</url-pattern>
+</servlet-mapping>
+
+</web-app>
+<!--
+<resource-ref>
+ <description>postgreSQL Datasource example</description>
+ <res-ref-name>jdbc/postgres</res-ref-name>
+ <res-type>javax.sql.DataSource</res-type>
+ <res-auth>Container</res-auth>
+</resource-ref>
+-->
