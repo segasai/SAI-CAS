@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<project name="sai_cas" default="deploy_cas">
+	
+	<property name="jwsdp.home" value="/opt/jwsdp-1.6/" />
+	<property name="tomcat.home" value="/home/math/vo_work/apache-tomcat-5.5.15/"/>
+	<property name="tomcat.common.lib" value="${tomcat.home}/common/lib/"/>
+	<property name="axis.lib" value="/opt/axis-1_3/lib/"/>
+	<property name="tomcat.server.lib" value="${tomcat.home}/server/lib/"/>
+	<property name="tomcat.user" value="math"/>
+	<property name="tomcat.password" value="aspen"/>
+	<property name="tomcat.manager.url" value="http://localhost:8080/manager"/>
+	<property name="build" value="${basedir}/build/"/>
+	<property name="build.classes" value="${build}/classes"/>
+	<property name="build.wsdl" value="${build}/wsdl"/>
+	
+	<!-- Definition of various Ant tasks -->
+
+	<!-- The Java XML Binding Binding Compiler -->
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+		<classpath>
+			<fileset dir="${jwsdp.home}" includes="jaxb/lib/jaxb-xjc.jar" />
+		</classpath>
+	</taskdef>
+
+	<!-- The Axis tasks -->
+	<taskdef resource="axis-tasks.properties">
+		<classpath>
+			<fileset dir="${axis.lib}" includes="*.jar"/>
+		</classpath>
+	</taskdef>
+
+	<!-- Tomcat tasks -->
+	<taskdef resource="org/apache/catalina/ant/antlib.xml">
+		<classpath>
+			<fileset dir="${tomcat.server.lib}" includes="catalina-ant.jar"/>
+		</classpath>
+	</taskdef>
+			
+	<!-- End of task definition section -->
+
+		
+			
+	<!-- Now the real tasks -->	
+	<target name="init">
+		<mkdir dir="${build}/classes"/>
+		<mkdir dir="gen_src"/>		
+		<mkdir dir="${build.wsdl}"/>
+	</target>
+	
+	<target name="xsd2java" depends="init">
+		<xjc schema="schema/cas1.xsd" target="gen_src" package="sai_cas.XMLCatalogFile">
+			<produces dir="gen_src/sai_cas/XMLCatalogFile"/>
+		</xjc>
+	</target>
+
+	<target name="java2wsdl" depends="compile1">
+		<axis-java2wsdl namespace="services.sai_cas"
+			namespaceimpl="services.sai_cas"
+			classname="sai_cas.services.MainAxisServices"
+			output="${build.wsdl}/sai_cas.wsdl"
+			location="http://localhost/axis/sai_cas">
+				<classpath>
+					<pathelement path="${build.classes}"/>
+				</classpath>
+		</axis-java2wsdl>
+	</target>
+	
+	<target name="wsdl2java" depends="java2wsdl">
+		<axis-wsdl2java output="gen_src/" timeout="-1"
+			url="${build.wsdl}/sai_cas.wsdl" serverside="true" skeletondeploy="true">
+		</axis-wsdl2java>
+	</target>
+	
+	<target name="compile" depends="xsd2java">
+		<javac debug="on" srcdir="gen_src" destdir="${build.classes}">
+			<compilerarg line="-Xlint:unchecked"/>
+			<classpath>
+				<fileset dir="${jwsdp.home}" includes="jaxb/lib/*.jar" />
+				<fileset dir="${jwsdp.home}" includes="jwsdp-shared/lib/*.jar" />
+				<fileset dir="${jwsdp.home}" includes="jaxp/lib/**/*.jar" />
+			</classpath>
+		</javac>
+		<copy file="gen_src/sai_cas/XMLCatalogFile/jaxb.properties"
+			todir="${build.classes}/sai_cas/XMLCatalogFile"/>
+	</target>
+	
+	<target name="compile1" depends="compile">
+		<javac srcdir="src" debug="on" destdir="${build.classes}" classpath="${build.classes}">
+			<compilerarg line="-Xlint:unchecked" />
+			<classpath>
+				<!-- <fileset dir="${build.classes}/"/> -->
+				<fileset dir="${jwsdp.home}" includes="jaxb/lib/*.jar" />
+				<fileset dir="${jwsdp.home}" includes="jwsdp-shared/lib/*.jar" />
+				<fileset dir="${tomcat.common.lib}" includes="*.jar" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile1">
+		<jar basedir="${build.classes}" destfile="${build}/sai_cas.jar">
+		</jar>
+	</target>
+
+	<target name="war" depends="jar">
+		<war destfile="${build}/sai_cas.war" webxml="web/WEB-INF/web.xml">
+			<fileset dir="web" includes="conesearch.jsp" />
+			<metainf dir="web/META-INF" includes="context.xml" />		
+			<!-- <lib dir="${build}" includes="*.jar"/> -->
+<!--			<lib dir="${tomcat.common.lib}/">
+				<include name="*jar"/>
+			</lib>-->
+			<classes dir="${build.classes}"/>         
+		</war>
+	</target>
+	
+	<target name="deploy_cas" depends="war">
+		<deploy war="${build}/sai_cas.war" url="${tomcat.manager.url}" 
+			username="${tomcat.user}" password="${tomcat.password}" path="/sai_cas" update="true"/>
+	</target>
+
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="gen_src" includes="**/*"/>
+			<fileset dir="${build}/" includes="**/*"/>
+		</delete>
+	</target>
+
+</project>
