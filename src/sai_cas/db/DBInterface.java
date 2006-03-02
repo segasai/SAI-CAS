@@ -10,7 +10,7 @@ import org.postgresql.*;
 
 public class DBInterface  extends Object
 {
-	static Logger logger = Logger.getLogger("DBInterface");
+	static Logger logger = Logger.getLogger("sai_cas.DBInterface");
 	
 	public DBInterface(Connection conn) throws java.sql.SQLException
 	{

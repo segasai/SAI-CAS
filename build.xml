@@ -22,6 +22,7 @@
 	
 	<property name="gen.src" value="${basedir}/gen_src/"/>
 	<property name="gen.src.axis" value="${basedir}/gen_src_axis/"/>
+	<property name="impl" value="${basedir}/impl/"/>
 	
 	<!-- Definition of various Ant tasks -->
 	
@@ -136,7 +137,9 @@
 	</target>
 	
 	<target name="axiscompile" depends="wsdl2java">
-		<copy file="impl/sai_cas/gen_services/Sai_casSoapBindingImpl.java" todir="${gen.src.axis}/sai_cas/gen_services/"/>
+		<copy file="${impl}/sai_cas/gen_services/Sai_casSoapBindingImpl.java"
+			todir="${gen.src.axis}/sai_cas/gen_services/"
+			overwrite="true"/>
 		<javac debug="on" srcdir="${gen.src.axis}"
 			destdir="${build.classes}">
 			<compilerarg line="-Xlint:unchecked"/>

@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 
 public class DBConnection
 {
-	static Logger logger = Logger.getLogger("DBConnection");
+	static Logger logger = Logger.getLogger("sai_cas.DBConnection");
 	public static Connection getPooledConnection() throws SQLException, javax.naming.NamingException
 	{
 		Context initContext = new InitialContext();

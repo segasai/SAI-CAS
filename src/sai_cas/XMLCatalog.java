@@ -29,7 +29,7 @@ import java.sql.*;
 
 public class XMLCatalog
 {
-	static Logger logger = Logger.getLogger("XMLCatalog");
+	static Logger logger = Logger.getLogger("sai_cas.XMLCatalog");
 
 	public XMLCatalog(String catalogString) throws  XMLCatalogException
 	{
@@ -98,14 +98,17 @@ public class XMLCatalog
 		/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
 		 *  I do the convertion to lower case.
 		 */
+		logger.debug("Beginning of DB work in inserting the catalogue... ");
 		String catalogName = cat.getName().toLowerCase();
 		String catalogInfo = cat.getInfo();
-		
+
+		logger.debug("Inserting the catalogue metadata... ");		
 		dbi.insertCatalog(catalogName);
 		dbi.setCatalogInfo(catalogName, catalogInfo);
 		
 		List<Table> tableList = cat.getTable();
-		
+
+		logger.debug("Looping through tables in the catalogue... ");				
 		for(Table table : tableList)
 		{
 			/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
@@ -146,11 +149,12 @@ public class XMLCatalog
 				columnDescriptionList.add(columnDescription);
 				columnInfoList.add(columnInfo);
 			}
-			
+			logger.debug("Inserting the columns, table metadata... ");				
 			dbi.insertTable(catalogName, tableName, columnNameList, datatypeList, unitList, columnInfoList, columnDescriptionList);
 			dbi.setTableInfo(catalogName, tableName, tableInfo);
 			dbi.setTableDescription(catalogName, tableName, tableDescription);
 
+			logger.debug("Preparing to read the data... ");							
 			/* Now we are handling the data in the table */			
 			Data d = table.getData();
 			
@@ -189,8 +193,9 @@ public class XMLCatalog
 				}
 
 				String[] datatypeArray = new String[datatypeList.size()];
+				logger.debug("Preparing to insert the data into the DB... ");							
 				dbi.prepareInsertingData(catalogName, tableName, datatypeList.toArray(datatypeArray));
-
+				logger.debug("Inserting the data into the DB... ");							
 				while (true)
 				{
 					String []sarr;

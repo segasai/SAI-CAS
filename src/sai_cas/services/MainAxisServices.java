@@ -12,7 +12,7 @@ import sai_cas.XMLCatalog;
 import sai_cas.db.*;
 
 public class MainAxisServices {
-	static Logger logger = Logger.getLogger("MainAxisServices");
+	static Logger logger = Logger.getLogger("sai_cas.MainAxisServices");
 	public static void insertCatalogfromURI(URI uriCatalog) throws Exception
 	/*
 	 * @params uriCatalog the 
@@ -28,9 +28,9 @@ public class MainAxisServices {
 	{
 		Connection conn = DBConnection.getPooledConnection();
 		DBInterface dbi = new DBInterface(conn);
-		logger.info("XXXXXXXXXXX");
+//		logger.info("XXXXXXXXXXX");
 		XMLCatalog xmlc = new XMLCatalog(catalogString);
-		logger.info("YYYYYYYYYYY");
+//		logger.info("YYYYYYYYYYY");
 		xmlc.insertDataToDB(dbi);			
 	}
 }
