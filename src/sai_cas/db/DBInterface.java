@@ -2,14 +2,15 @@ package sai_cas.db;
 
 import java.sql.*;
 import java.util.List;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.ListIterator;
-import java.io.PrintStream;
+
+import org.apache.log4j.Logger;
 import org.postgresql.*;
 
 public class DBInterface  extends Object
 {
+	static Logger logger = Logger.getLogger("DBInterface");
 	
 	public DBInterface(Connection conn) throws java.sql.SQLException
 	{
@@ -21,6 +22,7 @@ public class DBInterface  extends Object
 		Statement stmt = conn.createStatement(); 
 		stmt.execute(query);
 		stmt.close();
+		logger.info("The DB interface is successfully created...");
 	}
 
 	public void insertCatalog(String catalog) throws SQLException

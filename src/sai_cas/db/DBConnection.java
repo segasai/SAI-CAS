@@ -20,7 +20,11 @@ public class DBConnection
 		Connection conn = ds.getConnection();
 		if (conn == null)
 		{
-			logger.error("Cannot get the connection");
+			logger.error("Cannot get the pooled connection");
+		}
+		else 
+		{
+			logger.info("The pooled DB connection successfully retrieved");
 		}
 		//this.conn = conn;
 		return conn;

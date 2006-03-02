@@ -4,6 +4,9 @@ import sai_cas.XMLCatalogFile.*;
 
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.bind.*;
+
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,25 +23,43 @@ import java.net.URI;
 import java.util.List;
 import java.util.Date;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.sql.*;
 
 public class XMLCatalog
 {
-	public XMLCatalog(String catalogString) throws  javax.xml.bind.JAXBException
+	static Logger logger = Logger.getLogger("XMLCatalog");
+
+	public XMLCatalog(String catalogString) throws  XMLCatalogException
 	{
-		JAXBContext jc = JAXBContext.newInstance("sai_cas.XMLCatalogFile");
-		Unmarshaller um = jc.createUnmarshaller();
-		//try
-		//{
-			cat=(Catalog)um.unmarshal(new StreamSource ( new StringReader( catalogString )));
-/*		}
-		catch (javax.xml.bind.UnmarshalException e)
+		logger.info("The XMLCatalog constructor is running");
+		Unmarshaller um = null;
+		try
 		{
-			throw new Exception("Error during unmarshalling:\n Message: " + e.getMessage());
-		}*/
+			JAXBContext jc = JAXBContext.newInstance("sai_cas.XMLCatalogFile");
+			um = jc.createUnmarshaller();
+		}
+		catch (JAXBException e)
+		{
+			logger.error("Error in unmarshaller creation:", e);
+			throw new XMLCatalogException("Error in creating unmarshaller:\n Message: " + e.getMessage());			
+		}
+		try
+		{
+			cat=(Catalog)um.unmarshal(new StreamSource ( new StringReader( catalogString )));
+		}
+		catch (UnmarshalException e) 
+		{
+			logger.error("Error during unmarshalling:", e);
+			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage());
+		}
+		catch (JAXBException e)
+		{
+			logger.error("Error during unmarshalling:", e);
+			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage());
+		}
+		logger.info("The catalog successfully unmarshalled");
 	}
 	
 	public XMLCatalog(URI uri)throws  javax.xml.bind.JAXBException

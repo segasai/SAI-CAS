@@ -136,6 +136,7 @@
 	</target>
 	
 	<target name="axiscompile" depends="wsdl2java">
+		<copy file="impl/sai_cas/gen_services/Sai_casSoapBindingImpl.java" todir="${gen.src.axis}/sai_cas/gen_services/"/>
 		<javac debug="on" srcdir="${gen.src.axis}"
 			destdir="${build.classes}">
 			<compilerarg line="-Xlint:unchecked"/>
@@ -155,7 +156,7 @@
 
 	<target name="deploy_cas_ws" depends="axisjar">
 		<copy file="${build}/sai_cas_ws.jar" todir="${axis.web-inf.lib}"/>
-		<axis-admin xmlfile="${gen.src.axis}/sai_cas/services/deploy.wsdd"
+		<axis-admin xmlfile="${gen.src.axis}/sai_cas/gen_services/deploy.wsdd"
 			debug="on" hostname="${axis.host}" port="${axis.port}"/>
 	</target>
 		
