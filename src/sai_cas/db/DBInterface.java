@@ -479,6 +479,37 @@ public class DBInterface  extends Object
 			stmt.setString(4,column);
 			stmt.execute();
 	}
+	
+	public String[] getCatalogNames() throws SQLException
+	{
+		String query="SELECT cas_get_catalog_names();";
+		Statement stmt = conn.createStatement();
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ResultSetMetaData rsm = rs.getMetaData();
+		ArrayList<String> als = new ArrayList<String>();
+		while(rs.next())
+		{
+			als.add(rs.getString(1));
+		}
+		String[] result = new String[1];
+		if (als==null)
+		{
+			logger.error("NULL...");
+		}
+		return als.toArray(result);
+	}
+
+/*	public String[] getTableNames()
+	{
+		String query="SELECT cas_table_exists('"+catalog+"','"+table+"')";
+		Statement stmt = conn.createStatement();
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		return rs.getBoolean(1);		
+	}
+*/	
 
 	public void executeQuery(String query) throws java.sql.SQLException
 	{

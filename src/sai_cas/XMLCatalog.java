@@ -218,7 +218,8 @@ public class XMLCatalog
 
 
 					dbi.insertData(sarr);
-				}				
+				}
+				logger.debug("The data seems to be ingested correctly");
 			}
 		}  
 	}

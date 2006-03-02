@@ -13,24 +13,49 @@ import sai_cas.db.*;
 
 public class MainAxisServices {
 	static Logger logger = Logger.getLogger("sai_cas.MainAxisServices");
-	public static void insertCatalogfromURI(URI uriCatalog) throws Exception
-	/*
-	 * @params uriCatalog the 
+	
+	/**
 	 * 
+	 * @param uriCatalog  -- The URI of the catalogue
+	 * @throws Exception
+	 * @return void
 	 */
+	public static void insertCatalogfromURI(URI uriCatalog) throws Exception
 	{
 		Connection conn = DBConnection.getPooledConnection();
 		DBInterface dbi = new DBInterface(conn);
 		XMLCatalog xmlc = new XMLCatalog(uriCatalog);
 		xmlc.insertDataToDB(dbi);	
 	}
+	
+	/**
+	 *
+	 * @param catalogString -- The whole catalogue as a string
+	 * @throws Exception
+	 * @return void
+	 */
 	public static void insertCatalog(String catalogString) throws Exception
 	{
 		Connection conn = DBConnection.getPooledConnection();
 		DBInterface dbi = new DBInterface(conn);
-//		logger.info("XXXXXXXXXXX");
 		XMLCatalog xmlc = new XMLCatalog(catalogString);
-//		logger.info("YYYYYYYYYYY");
-		xmlc.insertDataToDB(dbi);			
+		xmlc.insertDataToDB(dbi);
+		conn.commit();
+		conn.close();
 	}
+	
+	/**
+	 * 
+	 * @return String[] -- the array of catalogues in the system
+	 * @throws Exception
+	 */
+	public static String[] getCatalogNames() throws Exception
+	{
+		Connection conn = DBConnection.getPooledConnection();
+		DBInterface dbi = new DBInterface(conn);
+		String []result = dbi.getCatalogNames();
+		conn.close();
+		return result;
+	}
+	
 }

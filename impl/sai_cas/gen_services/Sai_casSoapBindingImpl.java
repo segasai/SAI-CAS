@@ -32,5 +32,16 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
     		logger.error("Catched exception ",e);
     	}
     }
-
+    public java.lang.String[] getCatalogNames() throws java.rmi.RemoteException
+    {
+    	try 
+    	{
+    		return MainAxisServices.getCatalogNames();
+    	}
+    	catch (Exception e)
+    	{
+    		logger.error("Catched exception ",e);
+    		return null;
+    	}
+    }
 }
