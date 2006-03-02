@@ -2,86 +2,69 @@
 <project name="sai_cas" default="deploy_cas">
 	
 	<property name="jwsdp.home" value="/opt/java_libs/jwsdp-1.6/" />
+	
 	<property name="tomcat.home" value="/home/math/vo_work/apache-tomcat-5.5.15/"/>
 	<property name="tomcat.common.lib" value="${tomcat.home}/common/lib/"/>
-	<property name="axis.lib" value="/opt/java_libs/axis-1_3/lib/"/>
 	<property name="tomcat.server.lib" value="${tomcat.home}/server/lib/"/>
 	<property name="tomcat.user" value="math"/>
 	<property name="tomcat.password" value="aspen"/>
 	<property name="tomcat.manager.url" value="http://localhost:8080/manager"/>
+	
+	<property name="axis.web-inf.lib" value="${tomcat.home}/webapps/axis/WEB-INF/lib"/>	
+	<property name="axis.home" value="/opt/java_libs/axis-1_3/"/>
+	<property name="axis.lib" value="${axis.home}/lib/"/>
 	<property name="axis.host" value="localhost"/>
 	<property name="axis.port" value="8080"/>
+	
 	<property name="build" value="${basedir}/build/"/>
 	<property name="build.classes" value="${build}/classes"/>
 	<property name="build.wsdl" value="${build}/wsdl"/>
+	
 	<property name="gen.src" value="${basedir}/gen_src/"/>
 	<property name="gen.src.axis" value="${basedir}/gen_src_axis/"/>
 	
 	<!-- Definition of various Ant tasks -->
-
+	
 	<!-- The Java XML Binding Binding Compiler -->
 	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
 		<classpath>
 			<fileset dir="${jwsdp.home}" includes="jaxb/lib/jaxb-xjc.jar" />
 		</classpath>
 	</taskdef>
-
+	
 	<!-- The Axis tasks -->
 	<taskdef resource="axis-tasks.properties">
 		<classpath>
 			<fileset dir="${axis.lib}" includes="*.jar"/>
 		</classpath>
 	</taskdef>
-
+	
 	<!-- Tomcat tasks -->
 	<taskdef resource="org/apache/catalina/ant/antlib.xml">
 		<classpath>
 			<fileset dir="${tomcat.server.lib}" includes="catalina-ant.jar"/>
 		</classpath>
 	</taskdef>
-			
+	
 	<!-- End of task definition section -->
-
-		
-			
+	
+	
 	<!-- Now the real tasks -->	
 	<target name="init">
-		<mkdir dir="${build}/classes"/>
+		<mkdir dir="${build.classes}"/>
 		<mkdir dir="${gen.src}"/>		
 		<mkdir dir="${gen.src.axis}"/>		
 		<mkdir dir="${build.wsdl}"/>
 	</target>
 	
 	<target name="xsd2java" depends="init">
-		<xjc schema="schema/cas1.xsd" target="${gen.src}" package="sai_cas.XMLCatalogFile">
+		<xjc schema="schema/cas1.xsd" target="${gen.src}"
+			package="sai_cas.XMLCatalogFile">
 			<produces dir="${gen.src}/sai_cas/XMLCatalogFile"/>
 		</xjc>
 	</target>
-
-	<target name="java2wsdl" depends="compile1">
-		<axis-java2wsdl namespace="services.sai_cas"
-			namespaceimpl="services.sai_cas"
-			classname="sai_cas.services.MainAxisServices"
-			output="${build.wsdl}/sai_cas.wsdl"
-			location="http://localhost/axis/sai_cas">
-				<classpath>
-					<pathelement path="${build.classes}"/>
-				</classpath>
-		</axis-java2wsdl>
-	</target>
-		
-	<target name="wsdl2java" depends="java2wsdl">
-		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
-			url="${build.wsdl}/sai_cas.wsdl" serverside="true" skeletondeploy="true">
-		</axis-wsdl2java>
-	</target>
-
-	<target name="deploy_axis_services">
-		<axis-admin xmlfile="${gen.src.axis}/sai_cas/services/deploy.wsdd"
-			debug="on" hostname="${axis.host}" port="${axis.port}">
-		</axis-admin>
-	</target>
-				
+	
+	
 	<target name="compile" depends="xsd2java">
 		<javac debug="on" srcdir="${gen.src}" destdir="${build.classes}">
 			<compilerarg line="-Xlint:unchecked"/>
@@ -94,6 +77,8 @@
 		<copy file="${gen.src}/sai_cas/XMLCatalogFile/jaxb.properties"
 			todir="${build.classes}/sai_cas/XMLCatalogFile"/>
 	</target>
+	
+	
 	
 	<target name="compile1" depends="compile">
 		<javac srcdir="src" debug="on" destdir="${build.classes}" classpath="${build.classes}">
@@ -111,7 +96,7 @@
 		<jar basedir="${build.classes}" destfile="${build}/sai_cas.jar">
 		</jar>
 	</target>
-
+	
 	<target name="war" depends="jar">
 		<war destfile="${build}/sai_cas.war" webxml="web/WEB-INF/web.xml">
 			<fileset dir="web" includes="conesearch.jsp" />
@@ -129,6 +114,52 @@
 			username="${tomcat.user}" password="${tomcat.password}" path="/sai_cas" update="true"/>
 	</target>
 
+	<target name="java2wsdl" depends="compile1">
+		<axis-java2wsdl namespace="gen_services.sai_cas"
+			namespaceimpl="gen_services.sai_cas"
+			classname="sai_cas.services.MainAxisServices"
+			output="${build.wsdl}/sai_cas.wsdl"
+			location="http://localhost/axis/sai_cas">
+			<classpath>
+				<pathelement path="${build.classes}"/>
+			</classpath>
+		</axis-java2wsdl>
+	</target>
+	
+
+	
+	
+	<target name="wsdl2java" depends="java2wsdl">
+		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
+		url="${build.wsdl}/sai_cas.wsdl" serverside="true"
+		skeletondeploy="true"/>
+	</target>
+	
+	<target name="axiscompile" depends="wsdl2java">
+		<javac debug="on" srcdir="${gen.src.axis}"
+			destdir="${build.classes}">
+			<compilerarg line="-Xlint:unchecked"/>
+			<classpath>
+				<fileset dir="${axis.lib}" includes="*.jar"/>
+				<!--<fileset dir="${jwsdp.home}" includes="jwsdp-shared/lib/*.jar" />
+				<fileset dir="${jwsdp.home}" includes="jaxp/lib/**/*.jar" />-->
+			</classpath>
+		</javac>
+	</target>
+
+	
+	<target name="axisjar" depends="compile1,axiscompile">
+		<jar basedir="${build.classes}" destfile="${build}/sai_cas_ws.jar">
+		</jar>
+	</target>
+
+	<target name="deploy_cas_ws" depends="axisjar">
+		<copy file="${build}/sai_cas_ws.jar" todir="${axis.web-inf.lib}"/>
+		<axis-admin xmlfile="${gen.src.axis}/sai_cas/services/deploy.wsdd"
+			debug="on" hostname="${axis.host}" port="${axis.port}"/>
+	</target>
+		
+		
 	<target name="clean">
 		<delete includeemptydirs="true">
 			<fileset dir="${gen.src}" includes="**/*"/>
