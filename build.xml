@@ -120,7 +120,7 @@
 			namespaceimpl="gen_services.sai_cas"
 			classname="sai_cas.services.MainAxisServices"
 			output="${build.wsdl}/sai_cas.wsdl"
-			location="http://localhost/axis/sai_cas">
+			location="http://${axis.host}:${axis.port}/axis/sai_cas">
 			<classpath>
 				<pathelement path="${build.classes}"/>
 			</classpath>
