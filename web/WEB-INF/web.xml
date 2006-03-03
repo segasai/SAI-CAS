@@ -23,10 +23,22 @@ The web application providing access to the catalogues
     <servlet-name>ConeSearchServlet</servlet-name>
     <servlet-class>sai_cas.servlet.ConeSearchServlet</servlet-class>
 </servlet>
+
 <servlet-mapping>
     <servlet-name>ConeSearchServlet</servlet-name>
     <url-pattern>/ConeSearch</url-pattern>
 </servlet-mapping>
+
+<servlet>
+    <servlet-name>SQLQueryExecutorServlet</servlet-name>
+    <servlet-class>sai_cas.servlet.SQLQueryExecutorServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>SQLQueryExecutorServlet</servlet-name>
+    <url-pattern>/SQLQueryExecutor</url-pattern>
+</servlet-mapping>
+
 
 </web-app>
 <!--
