@@ -78,8 +78,8 @@
 				<fileset dir="${jwsdp.home}" includes="jaxp/lib/**/*.jar" />
 			</classpath>
 		</javac>
-		<copy file="${gen.src}/sai_cas/XMLCatalogFile/jaxb.properties"
-			todir="${build.classes}/sai_cas/XMLCatalogFile"/>
+<!--		<copy file="${gen.src}/sai_cas/XMLCatalogFile/jaxb.properties"
+			todir="${build.classes}/sai_cas/XMLCatalogFile"/>-->
 	</target>
 	
 	

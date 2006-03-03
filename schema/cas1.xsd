@@ -97,7 +97,7 @@
 		<xs:attribute name="name" use="required" type="xs:string"/>
 	</xs:complexType>					
 
-	<xs:complexType name="catalog_Type">
+	<xs:complexType name="catalog">
 		<xs:sequence>
 			<xs:element name="info" maxOccurs="1" minOccurs="0" type="xs:string"/>
 			<xs:element name="description" maxOccurs="1" minOccurs="0" type="xs:string"/>
@@ -110,5 +110,5 @@
 
 
 
-	<xs:element name="catalog" type="catalog_Type"/>
+	<xs:element name="catalog" type="catalog"/>
 </xs:schema>

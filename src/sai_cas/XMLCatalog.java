@@ -177,7 +177,7 @@ public class XMLCatalog
 			
 			if (ed != null)
 			{
-				String format = ed.getFormat();
+				String format = ed.getFormat().value();
 				
 				if (format.equals("delimited"))
 				{
@@ -261,7 +261,7 @@ public class XMLCatalog
 		{
 			this.ncols = ncols;
 
-			encoding = ed.getEncoding();
+			encoding = ed.getEncoding().value();
 			if (encoding == null) 
 			{
 				encoding="none";
