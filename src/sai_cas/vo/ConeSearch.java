@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 /**
  * The class printing the cone search results 
  * @author Sergey Koposov (math@sai.msu.ru) 
@@ -18,7 +20,7 @@ import java.util.List;
 
 public class ConeSearch
 {
-
+	static Logger logger = Logger.getLogger("sai_cas.MainAxisServices");
 
 	public static class ConeSearchException extends Exception
 	{
@@ -28,7 +30,7 @@ public class ConeSearch
 		}
 	}
 	public static void printVOTableConeSearch(PrintWriter out, String catalog,
-			String table, double ra, double dec, double rad)
+			String inputTable, double ra, double dec, double rad)
 	throws java.io.IOException
 	{
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -37,6 +39,7 @@ public class ConeSearch
 		out.println("xsi:noNamespaceSchemaLocation=\"http://www.ivoa.net/xml/VOTable/VOTable/v1.1\">");
 		Connection conn = null;
 		DBInterface dbi = null;
+		String table = inputTable;
 		
 		try
 		{
@@ -44,24 +47,41 @@ public class ConeSearch
 			conn = DBConnection.getPooledConnection();
 			if (conn == null)
 			{
+				logger.error("The ConeSearchServlet failed to get the connection to the DB..");
 				throw new ConeSearchException("Cannot connect to the database...\n Sorry");	
 			}	
 			dbi = new DBInterface (conn);
 			
-			if (dbi.checkCatalogExists(catalog) && dbi.checkTableExists(catalog, table))
+			if (!dbi.checkCatalogExists(catalog))
 			{
-				dbi.executeQuery("select * from " + catalog + "." + table + "");      
+				throw new ConeSearchException("Catalog " + catalog + " does not exist in our system");
 			}
-			else 
+			if (table == null)
 			{
-				throw new ConeSearchException("Catalog " + catalog + " or table " + table + " do not exist");
+				String[] tableArray = dbi.getTableNames(catalog);
+				if (tableArray.length > 1)
+				{
+					throw new ConeSearchException("Current catalogue \""+
+							catalog+
+							"\" has more than one table, so you must specify," +
+							" which one you want to query.\n"+
+							"The catalogue contains following tables: "+Arrays.toString(tableArray));					
+				}
+				table = tableArray[0];
 			}
+			else if (!dbi.checkTableExists(catalog, table))
+			{
+				throw new ConeSearchException("The table \"" + table + "\" does not exist in the catalogue \""+ catalog + "\"");				
+			}
+
+			/**  !!!!!!!!! TODO !!!!!!!!!!!!!!!
+			 *   Replace this query by real cone search logic
+			 */
+			dbi.executeQuery("select * from " + catalog + "." + table + "");      
 			
 			out.println("<RESOURCE name=\"" + catalog + "\">");
 			out.println("<TABLE name=\"" + table + "\">");
 				
-				
-			//if (dbi.qr==null) throw new SQLException("UUUUUUUU");    
 			int ncols = dbi.qr.getColumnCount();
 			
 			for (int i = 1; i <= ncols; i++)

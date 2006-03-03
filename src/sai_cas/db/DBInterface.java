@@ -533,7 +533,24 @@ public class DBInterface  extends Object
 		return als.toArray(result);
 	}
 	
-
+	/**
+	 * 
+	 * @param catalogName -- The name of catalogue
+	 * @return the table name if the catalogue contains only one table
+	 * and null, if the catalogue has more than one table
+	 */
+	public String getSingleTableFromCatalog(String catalogName) throws SQLException
+	{
+		String tableArray[] = getTableNames(catalogName);
+		if (tableArray.length>1)
+		{
+			return null;
+		}
+		else
+		{
+			return tableArray[0];
+		}
+	}
 	
 	public void executeQuery(String query) throws java.sql.SQLException
 	{
