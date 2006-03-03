@@ -29,7 +29,6 @@ public class ConeSearchServlet extends GenericServlet {
 		response.setContentType("text/xml");
 		PrintWriter out = response.getWriter();
 		
-		//out.println("req.getServerName(): " + req.getServerName());
 		String cat = request.getParameter("cat");
 		String tab = request.getParameter("tab");
 		
@@ -50,9 +49,7 @@ public class ConeSearchServlet extends GenericServlet {
 			{
 				throw new ConeSearchServletException("ERROR: Catalog name must be defined");
 			}
-			
-			//application.log("ConeSearch run; catalog: " + cat + " table: " + tab + " RA = " + sra + " DEC = " + sdec + " SR = " + ssr);
-			
+						
 			ra = Double.parseDouble(sra);
 			dec = Double.parseDouble(sdec);
 			sr = Double.parseDouble(ssr);
