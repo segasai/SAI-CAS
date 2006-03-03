@@ -492,10 +492,7 @@ public class DBInterface  extends Object
 			als.add(rs.getString(1));
 		}
 		String[] result = new String[1];
-		if (als==null)
-		{
-			logger.error("NULL...");
-		}
+		stmt.close();
 		return als.toArray(result);
 	}
 
@@ -511,14 +508,15 @@ public class DBInterface  extends Object
 			als.add(rs.getString(1));
 		}
 		String[] result = new String[1];
+		stmt.close();
 		return als.toArray(result);
 	}
 	
 	public String[][] getIndexes(String catalogName, String tableName) throws SQLException
 	{
-		String query="SELECT cas_get_table_indexes('" + catalogName +
-			"','" + tableName + "') as (a varchar, b varchar);";
-		
+		String query="SELECT * FROM cas_get_table_indexes('" + catalogName +
+			"','" + tableName + "') AS (a varchar, b varchar);";
+		logger.debug("Running query: "+query);
 		Statement stmt = conn.createStatement();
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
@@ -531,20 +529,12 @@ public class DBInterface  extends Object
 			als.add(row);
 		}
 		String[][] result = new String[1][1];
+		stmt.close();
 		return als.toArray(result);
 	}
 	
-/*	public String[] getTableNames()
-	{
-		String query="SELECT cas_table_exists('"+catalog+"','"+table+"')";
-		Statement stmt = conn.createStatement();
-		stmt.executeQuery(query);
-		ResultSet rs = stmt.getResultSet();
-		rs.next();
-		return rs.getBoolean(1);		
-	}
-*/	
 
+	
 	public void executeQuery(String query) throws java.sql.SQLException
 	{
 		conn.setAutoCommit(false);    

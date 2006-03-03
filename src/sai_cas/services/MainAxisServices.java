@@ -57,5 +57,34 @@ public class MainAxisServices {
 		conn.close();
 		return result;
 	}
-	
+	/**
+	 * 
+	 * @param catalogName
+	 * @return the array of tables in the catalogue
+	 * @throws Exception
+	 */
+	public static String[] getTableNames(String catalogName) throws Exception
+	{
+		Connection conn = DBConnection.getPooledConnection();
+		DBInterface dbi = new DBInterface(conn);
+		String result[] = dbi.getTableNames(catalogName);
+		conn.close();
+		return result;
+	}
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return the array of string pairs (indexName, indexDefinition) for give catalog and table
+	 * @throws Exception
+	 */
+	public static String[][] getIndexes(String catalogName, String tableName) throws Exception
+	{
+		Connection conn = DBConnection.getPooledConnection();
+		DBInterface dbi = new DBInterface(conn);
+		String result[][] = dbi.getIndexes(catalogName,tableName);		
+		conn.close();
+		return result;
+	}
+
 }
