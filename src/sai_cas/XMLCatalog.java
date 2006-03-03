@@ -47,7 +47,9 @@ public class XMLCatalog
 		}
 		try
 		{
-			cat=(Catalog)um.unmarshal(new StreamSource ( new StringReader( catalogString )));
+//			cat=(Catalog)
+			JAXBElement<?> catElement = (JAXBElement<?>)um.unmarshal(new StreamSource ( new StringReader( catalogString )));
+			cat = (Catalog)catElement.getValue();
 		}
 		catch (UnmarshalException e) 
 		{
