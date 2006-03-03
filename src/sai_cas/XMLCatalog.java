@@ -358,47 +358,111 @@ public class XMLCatalog
 		private String encoding;
 		private String format;
 	}
+
 	private class FixedWidthDataReader extends DataReader
 	{
 		public FixedWidthDataReader(Externaldata ed, int ncols) throws XMLCatalogException 
 		{
 			super(ed,ncols);
-			String fields = properties.getProperty("fields");
-			String fieldsArray[];
-			if (fields==null)
+			String fields = properties.getProperty("widths");
+			String widthsArray[];
+			if (fields == null)
 			{
-				throw new XMLCatalogException ("You should define the fields attribute when you select the 'fixed-width' format");				
+				throw new XMLCatalogException ("You should define the \"widths\" property when you select the 'fixed-width' format");
 			}
-			fieldsArray = fields.split(" ",0);
-			int len = fieldsArray.length;
-
+			withNewline = (properties.getProperty("withNewLines")!=null);
+			
+			widthsArray = fields.split(" ",0);
+			int len = widthsArray.length;
+			
 			if (len != ncols)
 			{
-				throw new XMLCatalogException("The number of elements in the list of fields must be equal to the number of columns ("+ncols+")");
+				throw new XMLCatalogException("The number of elements in the list of widths must be equal to the number of columns ("+ncols+")");
 			}
 
 			try 
 			{
-				this.fields = new int[len];
+				this.widths = new int[len];
 				for (int i = 0; i < len; i++)
 				{
-					this.fields[i] = Integer.parseInt(fieldsArray[i]);
+					this.widths[i] = Integer.parseInt(widthsArray[i]);
 				}
 			}
 			catch (NumberFormatException e)
 			{
 				throw new XMLCatalogException("Invalid field list for the fixed-width format");
 			}
+			stringBuffer = new ArrayList<String>();
+			stringBuffer.ensureCapacity(bufLen);
+			stringBufferIterator = stringBuffer.listIterator();
+			getReader();
 
 		}
-		public String[] getData() throws XMLCatalogException
+		public String[] getData() throws IOException, XMLCatalogException
 		{
-			return new String[10];
+			String s;
+			String result[]=new String[ncols];
+			while (!stringBufferIterator.hasNext())
+			{
+				stringBuffer.clear();
+				if (withNewline)
+				{
+					int i;
+					for(i = 1; i <= bufLen; i++)
+					{
+						String s1 = br.readLine();
+						if (s1 == null) break; 
+						stringBuffer.add(s1);	
+					}
+					
+					if (i == 1)
+					{
+						if (!getReader())
+						{
+							return null;
+						}
+					}
+				}
+				else
+				{
+					char buf[]=new char[totalWidth*bufLen];
+					int nChars = br.read(buf,0,totalWidth*bufLen);
+					if (nChars == -1)
+					{
+						if (!getReader())
+						{
+							return null;
+						}						
+					}
+					else
+					{
+						if  (nChars%totalWidth!=0)
+						{
+							throw new XMLCatalogException("Wrong datasource: the size of the file is not the multiplier of the total width of the fields");
+						}
+						for (int i = 0; i < nChars/totalWidth; i++)
+						{
+							stringBuffer.add(new String(buf,i*totalWidth,totalWidth));
+						}
+					}
+				}
+				stringBufferIterator = stringBuffer.listIterator();
+			}
+			s = stringBufferIterator.next();
+
+			for(int i = 0, cur_pos = 0; i < ncols; i++)
+			{
+				result[i] = s.substring(cur_pos, cur_pos += widths[i]);
+			}
+			return result;
 		}
-		int fields[];
+
 		int widths[];
+		int totalWidth;
+		boolean withNewline;
 		final int bufLen = 1000;
-		List<String> stringBuffer;
+		ArrayList<String> stringBuffer;
+		ListIterator<String> stringBufferIterator;
 		
 	}
 	private class DelimitedDataReader extends DataReader
@@ -420,7 +484,7 @@ public class XMLCatalog
 		public String[] getData() throws IOException, XMLCatalogException
 		{
 			String s;
-			if (!stringBufferIterator.hasNext())
+			while (!stringBufferIterator.hasNext())
 			{
 				int i;
 				stringBuffer.clear();
@@ -444,18 +508,8 @@ public class XMLCatalog
 			return s.split(delimiter);
 		}
 		private String delimiter;
-//		public BufferedStream br;
 		ArrayList<String> stringBuffer;
 		ListIterator<String> stringBufferIterator;
 		final int bufLen = 100;
 	}
-
-/*	private class EncodedStream extends InputStream
-	{
-		public static EncodedStream (URI uri, String encoding)
-		{
-			
-		}
-	} 	
-*/	
 }

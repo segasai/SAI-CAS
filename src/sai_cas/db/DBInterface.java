@@ -486,7 +486,6 @@ public class DBInterface  extends Object
 		Statement stmt = conn.createStatement();
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
-		ResultSetMetaData rsm = rs.getMetaData();
 		ArrayList<String> als = new ArrayList<String>();
 		while(rs.next())
 		{
@@ -500,6 +499,41 @@ public class DBInterface  extends Object
 		return als.toArray(result);
 	}
 
+	public String[] getTableNames(String catalogName) throws SQLException
+	{
+		String query="SELECT cas_get_table_names('"+catalogName+"');";
+		Statement stmt = conn.createStatement();
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ArrayList<String> als = new ArrayList<String>();
+		while(rs.next())
+		{
+			als.add(rs.getString(1));
+		}
+		String[] result = new String[1];
+		return als.toArray(result);
+	}
+	
+	public String[][] getIndexes(String catalogName, String tableName) throws SQLException
+	{
+		String query="SELECT cas_get_table_indexes('" + catalogName +
+			"','" + tableName + "') as (a varchar, b varchar);";
+		
+		Statement stmt = conn.createStatement();
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ArrayList<String[]> als = new ArrayList<String[]>();
+		String[] row = new String[2];
+		while(rs.next())
+		{
+			row[0]=rs.getString(1);
+			row[1]=rs.getString(2);			
+			als.add(row);
+		}
+		String[][] result = new String[1][1];
+		return als.toArray(result);
+	}
+	
 /*	public String[] getTableNames()
 	{
 		String query="SELECT cas_table_exists('"+catalog+"','"+table+"')";
