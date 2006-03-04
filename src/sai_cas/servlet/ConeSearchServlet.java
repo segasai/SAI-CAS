@@ -59,7 +59,7 @@ public class ConeSearchServlet extends GenericServlet {
 		}	
 		catch (NumberFormatException e) 
 		{
-			ConeSearch.printVOTableConeSearchError(out, e.toString());
+			ConeSearch.printVOTableConeSearchError(out, "ERROR: Invalid input for (ra,dec,SR)");
 		}
 		catch (ConeSearchServletException e) 
 		{
