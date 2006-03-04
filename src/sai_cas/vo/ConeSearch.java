@@ -44,7 +44,8 @@ public class ConeSearch
 		try
 		{
 			//Connection conn = DBConnection.getSimpleConnection();
-			conn = DBConnection.getPooledConnection();
+			logger.debug("Trying to get the Pooled Connection");
+			conn = DBConnection.getPooledConnection1();
 			if (conn == null)
 			{
 				logger.error("The ConeSearchServlet failed to get the connection to the DB..");
