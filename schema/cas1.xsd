@@ -2,18 +2,27 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
 	<xs:complexType name="property">
-		<xs:attribute name="name" type="xs:string"/>
+        <xs:annotation>
+        	<xs:documentation>The type property containing the pair (name), (value).</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string"/>
 		<xs:attribute name="value" type="xs:string"/>
 	</xs:complexType>
 
 	<xs:complexType name="property_list">
-		<xs:sequence>
+        <xs:annotation>
+        	<xs:documentation>The type storing the set of properties</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
 			<xs:element name="property" minOccurs="1" maxOccurs="unbounded" type="property"/>
 		</xs:sequence>
 	</xs:complexType>
 
 	<xs:complexType name="column">
-		<xs:all>
+        <xs:annotation>
+        	<xs:documentation>The type describing the column of the table</xs:documentation>
+        </xs:annotation>
+        <xs:all>
 			<xs:element name="info" maxOccurs="1" minOccurs="0" type="xs:string"/>
 			<xs:element name="description" maxOccurs="1" minOccurs="0" type="xs:string"/>
 			<xs:element name="property_list" minOccurs="0" maxOccurs="1" type="property_list"/>
@@ -27,7 +36,7 @@
 
 	<!-- The part of the schema taken from the VOTABLE schema -->
 	<xs:complexType name="td">
-		<xs:simpleContent>
+        <xs:simpleContent>
 			<xs:extension base="xs:string">
 			</xs:extension>
 		</xs:simpleContent>
@@ -87,7 +96,10 @@
 	</xs:complexType>
 
 	<xs:complexType name="table">
-		<xs:sequence>
+        <xs:annotation>
+        	<xs:documentation>The type describing the table</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
 			<xs:element name="info" maxOccurs="1" minOccurs="0" type="xs:string"/>
 			<xs:element name="description" maxOccurs="1" minOccurs="0" type="xs:string"/>
 			<xs:element name="property_list" minOccurs="0" maxOccurs="1" type="property_list"/>
@@ -106,9 +118,6 @@
 		</xs:sequence>
 		<xs:attribute name="name" use="required" type="xs:string"/>
 	</xs:complexType>
-
-
-
 
 	<xs:element name="catalog" type="catalog"/>
 </xs:schema>

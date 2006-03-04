@@ -41,11 +41,4 @@ The web application providing access to the catalogues
 
 
 </web-app>
-<!--
-<resource-ref>
- <description>postgreSQL Datasource example</description>
- <res-ref-name>jdbc/postgres</res-ref-name>
- <res-type>javax.sql.DataSource</res-type>
- <res-auth>Container</res-auth>
-</resource-ref>
--->
+<!--<resource-ref> <description>postgreSQL Datasource example</description> <res-ref-name>jdbc/postgres</res-ref-name> <res-type>javax.sql.DataSource</res-type> <res-auth>Container</res-auth> </resource-ref>-->
