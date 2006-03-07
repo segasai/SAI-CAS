@@ -3,32 +3,32 @@
 
 	<Valve className="org.apache.catalina.valves.AccessLogValve"
 		prefix="sai_cas." suffix=".log" timestamp="true" />
-
+<ResourceLink name="jdbc/postgres" global="jdbc/postgres" type="javax.sql.DataSource">
+</ResourceLink>
+<!--  
 	<Resource name="jdbc/postgres" auth="Container"
 		type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
 		url="jdbc:postgresql://127.0.0.1:5432/cas" username="math" password=""
 		maxActive="20" maxIdle="10" maxWait="-1" removeAbandoned="true"
 		removeAbandonedTimeout="60" />
 		
-<!--  javax.sql.ConnectionPoolDataSource-->
-	<Resource name="jdbc/postgres1" auth="Container"
-		type="javax.sql.ConnectionPoolDataSource" 
-		driverClassName="org.postgresql.Driver" databaseName="cas"/>
-<!--  		factory="org.postgresql.jdbc2.optional.ConnectionPool"-->
-<!--	url="jdbc:postgresql://127.0.0.1:5432/cas" databaseName="cas"
-		serverName="localhost" portNumber="5432"
-		maxActive="20" maxIdle="10" maxWait="-1" removeAbandoned="true"
-		removeAbandonedTimeout="60" />-->
 	<Resource name="jdbc/DriverAdapterCPDS" auth="Container"
-	type="org.apache.tomcat.dbcp.dbcp.cpdsadapter.DriverAdapterCPDS"
-	driver="org.postgresql.Driver" url="jdbc:postgresql://127.0.0.1:5432/cas"
-	factory="org.apache.tomcat.dbcp.dbcp.cpdsadapter.DriverAdapterCPDS"
-	username="math" password=""/>
+		type="org.apache.tomcat.dbcp.dbcp.cpdsadapter.DriverAdapterCPDS"
+		driver="org.postgresql.Driver" url="jdbc:postgresql://127.0.0.1:5432/cas"
+		factory="org.apache.tomcat.dbcp.dbcp.cpdsadapter.DriverAdapterCPDS"
+		username="math" password=""/>
 
 
 	<Resource name="jdbc/postgresPerUser" auth="Container"
 		type="org.apache.tomcat.dbcp.dbcp.datasources.PerUserPoolDataSource"
 		factory="org.apache.tomcat.dbcp.dbcp.datasources.PerUserPoolDataSourceFactory"
 		dataSourceName="java://comp/env/jdbc/DriverAdapterCPDS"/>
+-->
+	<ResourceLink name="jdbc/DriverAdapterCPDS"
+		type="org.apache.tomcat.dbcp.dbcp.cpdsadapter.DriverAdapterCPDS" 
+		global="jdbc/DriverAdapterCPDS"/>
+	<ResourceLink name="jdbc/postgresPerUser"
+		type="org.apache.tomcat.dbcp.dbcp.datasources.PerUserPoolDataSource" 
+		global="jdbc/postgresPerUser"/>
 
 </Context>

@@ -2,6 +2,7 @@ package sai_cas.db;
 import java.sql.*;
 import java.util.Arrays;
 
+import javax.servlet.ServletContext;
 import javax.sql.*;
 import javax.naming.*;
 import org.apache.log4j.Logger;
@@ -10,57 +11,87 @@ import org.apache.tomcat.dbcp.dbcp.datasources.*;
 public class DBConnection
 {
 	static Logger logger = Logger.getLogger("sai_cas.DBConnection");
-	public static Connection getPooledConnection() throws SQLException, javax.naming.NamingException
+	public static Connection getPooledConnection() 
 	{
-		Context initContext = new InitialContext();
-		Context envContext  = (Context)initContext.lookup("java:/comp/env");
-		DataSource ds = (DataSource)envContext.lookup("jdbc/postgres");
+		Connection conn;
+		DataSource ds;
+		try
+		{
+			Context initContext = new InitialContext();
+			Context envContext  = (Context)initContext.lookup("java:/comp/env");
+			ds = (DataSource)envContext.lookup("jdbc/postgres");
+		}
+		catch (NamingException e)
+		{
+			logger.error("Cannot get the JNDI datasource");
+			return null;
+		}
 		if (ds == null)
 		{
 			logger.error("Cannot get the JNDI datasource");
+			return null;	
 		}
-		Connection conn = ds.getConnection();
+		try
+		{
+			conn = ds.getConnection();
+		}
+		catch (SQLException e)
+		{
+			logger.error("Cannot get the pooled connection");
+			return null;
+		}
 		if (conn == null)
 		{
 			logger.error("Cannot get the pooled connection");
 		}
-		else 
-		{
-			logger.info("The pooled DB connection successfully retrieved");
-		}
+
+		logger.info("The pooled DB connection successfully retrieved");
+
 		//this.conn = conn;
 		return conn;
 	}
 
-	public static Connection getPooledConnection1() throws SQLException, javax.naming.NamingException
+	public static Connection getPooledPerUserConnection() throws SQLException
 	{
-		Context initContext = new InitialContext();
-		Context envContext  = (Context)initContext.lookup("java:/comp/env");
-		//ConnectionPoolDataSource ds1 = (ConnectionPoolDataSource)envContext.lookup("jdbc/postgres1");       
-		PerUserPoolDataSource ds2 = (PerUserPoolDataSource)envContext.lookup("jdbc/postgresPerUser");
-		if (ds2 == null)
-		{
-			logger.error("Cannot get the JNDI datasource");
-		}
-		else
-		{
-			logger.debug("Successfully got the PerUserPoolDataSource");
-		}
-		//ds2.setDataSourceName("jdbc/postgres1");
+		return getPooledPerUserConnection("cas_user","aspen");
+	}
+	
+	public static Connection getPooledPerUserConnection(String user, String password) throws SQLException
+	{
 		Connection conn = null;
+		PerUserPoolDataSource pupds;
 		try
 		{
-//			ds2.setDataSourceName("java://comp/env/jdbc/DriverAdapterCPDS");
-			conn = ds2.getConnection("math","");
+			Context initContext = new InitialContext();
+			Context envContext  = (Context)initContext.lookup("java:/comp/env");
+			//Context envContext = initContext.getContext();
+			pupds = (PerUserPoolDataSource)envContext.lookup("jdbc/postgresPerUser");
+		}
+		catch (NamingException e)
+		{
+			logger.error("Cannot get the JNDI datasource, catched exception ("+e.getMessage()+" "+e.getCause()+")");
+			return null;
+		}
+		if (pupds == null)
+		{
+			logger.error("Cannot get the JNDI datasource");
+			return null;	
+		}
+
+		logger.debug("Successfully got the PerUserPoolDataSource");
+
+		try
+		{
+			//ds2.setDataSourceName("java://comp/env/jdbc/DriverAdapterCPDS");
+			conn = pupds.getConnection(user, password);
 		}
 		catch (SQLException e)
 		{
-//			logger.error(Arrays.toString(e.getStackTrace()));
-			logger.error(e.getStackTrace()[0]);
-			logger.error(e.getMessage());
-			logger.error(e.getCause());
-
+			logger.error("Failed to get the Pooled Connection");
+			logger.error("The cause of that" + e.getMessage()+" "+e.getCause());
+			return null;
 		}
+		logger.info("The pooled DB connection successfully retrieved");
 		//this.conn = conn;
 		return conn;
 	}

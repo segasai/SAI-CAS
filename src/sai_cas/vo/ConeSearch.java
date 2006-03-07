@@ -45,7 +45,7 @@ public class ConeSearch
 		{
 			//Connection conn = DBConnection.getSimpleConnection();
 			logger.debug("Trying to get the Pooled Connection");
-			conn = DBConnection.getPooledConnection1();
+			conn = DBConnection.getPooledPerUserConnection();
 			if (conn == null)
 			{
 				logger.error("The ConeSearchServlet failed to get the connection to the DB..");
@@ -116,18 +116,6 @@ public class ConeSearch
 			out.println("</TABLE>");    
 			
 			out.println("</RESOURCE>");
-		}
-		catch (javax.naming.NamingException e)
-		{
-			out.println("<DESCRIPTION>ERROR:\nNaming Exception: " + e.getMessage() + "</DESCRIPTION>");
-			StackTraceElement[] ste =  e.getStackTrace();
-			List <StackTraceElement> stel = Arrays.asList(ste);
-			out.println("<INFO>");
-			for (StackTraceElement ste0 : stel)
-			{
-				out.println(ste0);
-			}
-			out.println("</INFO>");
 		}
 		catch (java.sql.SQLException e)
 		{

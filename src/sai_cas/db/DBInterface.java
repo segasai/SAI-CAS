@@ -671,7 +671,7 @@ public class DBInterface  extends Object
 		{
 			if (baseColumnNameArray[n-1]==null)
 			{
-				baseColumnNameArray[n-1]=((org.postgresql.jdbc3.Jdbc3ResultSetMetaData)rsmd).getBaseColumnName(n);
+				baseColumnNameArray[n-1]=((org.postgresql.PGResultSetMetaData)rsmd).getBaseColumnName(n);
 			}
 			return baseColumnNameArray[n-1];
 		}
@@ -682,7 +682,7 @@ public class DBInterface  extends Object
 			{
 				if (baseColumnNameArray[n - 1] == null)
 				{
-					baseColumnNameArray[n - 1] = ((org.postgresql.jdbc3.Jdbc3ResultSetMetaData)rsmd).getBaseColumnName(n);
+					baseColumnNameArray[n - 1] = ((org.postgresql.PGResultSetMetaData)rsmd).getBaseColumnName(n);
 				}
 			}
 			return baseColumnNameArray;
@@ -704,7 +704,7 @@ public class DBInterface  extends Object
 		{
 			if (baseTableNameArray[n-1]==null)
 			{
-				baseTableNameArray[n-1] = ((org.postgresql.jdbc3.Jdbc3ResultSetMetaData)rsmd).getBaseTableName(n);
+				baseTableNameArray[n-1] = ((org.postgresql.PGResultSetMetaData)rsmd).getBaseTableName(n);
 			}
 			return baseTableNameArray[n-1];
 		}
@@ -713,7 +713,7 @@ public class DBInterface  extends Object
 		{
 			if (baseCatalogNameArray[n-1]==null)
 			{
-				baseCatalogNameArray[n-1] = ((org.postgresql.jdbc3.Jdbc3ResultSetMetaData)rsmd).getBaseSchemaName(n);
+				baseCatalogNameArray[n-1] = ((org.postgresql.PGResultSetMetaData)rsmd).getBaseSchemaName(n);
 			}
 			return  baseCatalogNameArray[n-1];
 		}

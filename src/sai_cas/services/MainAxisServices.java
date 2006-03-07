@@ -22,7 +22,7 @@ public class MainAxisServices {
 	 */
 	public static void insertCatalogfromURI(URI uriCatalog) throws Exception
 	{
-		Connection conn = DBConnection.getPooledConnection();
+		Connection conn = DBConnection.getPooledPerUserConnection();
 		DBInterface dbi = new DBInterface(conn);
 		XMLCatalog xmlc = new XMLCatalog(uriCatalog);
 		xmlc.insertDataToDB(dbi);	
@@ -36,7 +36,7 @@ public class MainAxisServices {
 	 */
 	public static void insertCatalog(String catalogString) throws Exception
 	{
-		Connection conn = DBConnection.getPooledConnection();
+		Connection conn = DBConnection.getPooledPerUserConnection();
 		DBInterface dbi = new DBInterface(conn);
 		XMLCatalog xmlc = new XMLCatalog(catalogString);
 		xmlc.insertDataToDB(dbi);
@@ -51,7 +51,7 @@ public class MainAxisServices {
 	 */
 	public static String[] getCatalogNames() throws Exception
 	{
-		Connection conn = DBConnection.getPooledConnection();
+		Connection conn = DBConnection.getPooledPerUserConnection();
 		DBInterface dbi = new DBInterface(conn);
 		String []result = dbi.getCatalogNames();
 		conn.close();
@@ -65,7 +65,7 @@ public class MainAxisServices {
 	 */
 	public static String[] getTableNames(String catalogName) throws Exception
 	{
-		Connection conn = DBConnection.getPooledConnection();
+		Connection conn = DBConnection.getPooledPerUserConnection();
 		DBInterface dbi = new DBInterface(conn);
 		String result[] = dbi.getTableNames(catalogName);
 		conn.close();
@@ -80,7 +80,7 @@ public class MainAxisServices {
 	 */
 	public static String[][] getIndexes(String catalogName, String tableName) throws Exception
 	{
-		Connection conn = DBConnection.getPooledConnection();
+		Connection conn = DBConnection.getPooledPerUserConnection();
 		DBInterface dbi = new DBInterface(conn);
 		String result[][] = dbi.getIndexes(catalogName,tableName);		
 		conn.close();
