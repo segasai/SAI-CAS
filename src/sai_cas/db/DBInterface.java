@@ -135,7 +135,7 @@ public class DBInterface  extends Object
 		}*/
 		public void set(int i, String value) throws java.sql.SQLException
 		{
-			pstmt.setInt(i, Integer.parseInt(value));
+			pstmt.setInt(i, Integer.parseInt(value.trim()));
 		}
 		public String getInsert()
 		{
@@ -151,7 +151,7 @@ public class DBInterface  extends Object
 		}*/
 		public void set(int i, String value) throws java.sql.SQLException
 		{
-			pstmt.setLong(i, Long.parseLong(value));
+			pstmt.setLong(i, Long.parseLong(value.trim()));
 		}
 		public String getInsert()
 		{
@@ -166,7 +166,7 @@ public class DBInterface  extends Object
 		}*/
 		public void set(int i, String value) throws java.sql.SQLException
 		{
-			pstmt.setDouble(i, Double.parseDouble(value));
+			pstmt.setDouble(i, Double.parseDouble(value.trim()));
 		}		
 		public String getInsert()
 		{
@@ -179,7 +179,7 @@ public class DBInterface  extends Object
 	{
 		public void set(int i, String value) throws java.sql.SQLException
 		{
-			pstmt.setFloat(i, Float.parseFloat(value));
+			pstmt.setFloat(i, Float.parseFloat(value.trim()));
 		}		
 		public String getInsert()
 		{
