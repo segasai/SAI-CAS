@@ -80,18 +80,37 @@ public class XMLCatalog
 		
 	}
 	
-	public XMLCatalog(File file)throws  javax.xml.bind.JAXBException
+	public XMLCatalog(File file)throws XMLCatalogException
 	{
-		JAXBContext jc = JAXBContext.newInstance("sai_cas.XMLCatalogFile");
-		Unmarshaller um = jc.createUnmarshaller();
-		//try
-		//{
-			cat=(Catalog)um.unmarshal(file);
-/*		}
-		catch (javax.xml.bind.UnmarshalException e)
+		logger.info("The XMLCatalog constructor is running");
+		Unmarshaller um = null;
+		try
 		{
-			throw new Exception("Error during unmarshalling:\n Message: " + e.getMessage());
-		}*/
+			JAXBContext jc = JAXBContext.newInstance("sai_cas.XMLCatalogFile");
+			um = jc.createUnmarshaller();
+		}
+		catch (JAXBException e)
+		{
+			logger.error("Error in unmarshaller creation:", e);
+			throw new XMLCatalogException("Error in creating unmarshaller:\n Message: " + e.getMessage());			
+		}
+		try
+		{
+//			cat=(Catalog)
+			JAXBElement<?> catElement = (JAXBElement<?>)um.unmarshal(file);
+			cat = (Catalog)catElement.getValue();
+		}
+		catch (UnmarshalException e) 
+		{
+			logger.error("Error during unmarshalling:", e);
+			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
+		}
+		catch (JAXBException e)
+		{
+			logger.error("Error during unmarshalling:", e);
+			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
+		}
+		logger.info("The catalog successfully unmarshalled");
 		
 	}
 
@@ -271,7 +290,7 @@ public class XMLCatalog
 	public static void main(String args[]) throws Exception
 	{
 		Class.forName("org.postgresql.Driver");
-		Connection dbcon =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas","math","");
+		Connection dbcon =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas","cas_user","");
 		dbcon.setAutoCommit(false);
 		Statement stmt = dbcon.createStatement(); 
 		stmt.execute("set search_path to cas_metadata, public");        
