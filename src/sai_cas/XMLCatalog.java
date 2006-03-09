@@ -467,7 +467,7 @@ public class XMLCatalog
 			}
 			else
 			{
-				fieldsArray = widthsIn.split(" ",0);
+				fieldsArray = fieldsIn.split(" ",0);
 				int len = fieldsArray.length;
 				
 				if (len != 2*ncols)
