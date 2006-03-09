@@ -79,6 +79,8 @@ public class DBInterface  extends Object
 				ss[i] = new StatementSetterVarchar();
 			else if (internalDatatypeArray[i].equals( "integer"))
 				ss[i] = new StatementSetterInt();
+			else if (internalDatatypeArray[i].equals( "smallint"))
+				ss[i] = new StatementSetterInt();
 			else if (internalDatatypeArray[i].equals( "double precision"))
 				ss[i] = new StatementSetterDouble();
 			else if (internalDatatypeArray[i].equals( "real"))
@@ -132,12 +134,14 @@ public class DBInterface  extends Object
 		public void set(int i, String value) throws java.sql.SQLException
 		{
 			String value1 = value.trim();
-			if (value1.length()==0)
+			System.err.println("XXXXXXX '"+value1+"' "+value1.length());
+			if (value1.length() == 0)
 			{
 				pstmt.setNull(i,Types.INTEGER);
+				return;
 			}
 			int offset=0;
-			if (value1.charAt(0)=='+')
+			if (value1.charAt(0) =='+')
 			{
 					offset=1;
 			}			
@@ -155,13 +159,15 @@ public class DBInterface  extends Object
 		{
 			String value1 = value.trim();
 			int offset=0;
-			if (value1.charAt(0)=='+')
-			{
-					offset=1;
-			}
 			if (value1.length()==0)
 			{
 				pstmt.setNull(i,Types.BIGINT);
+				return;
+			}
+
+			if (value1.charAt(0)=='+')
+			{
+					offset=1;
 			}
 			
 			pstmt.setLong(i, Long.parseLong(value1.substring(offset)));
@@ -183,6 +189,7 @@ public class DBInterface  extends Object
 			if (value1.length() == 0)
 			{
 				pstmt.setNull(i,Types.DOUBLE);
+				return;
 			}			
 			pstmt.setDouble(i, Double.parseDouble(value1));
 		}		
@@ -201,6 +208,7 @@ public class DBInterface  extends Object
 			if (value1.length() == 0)
 			{
 				pstmt.setNull(i,Types.FLOAT);
+				return;
 			}			
 			pstmt.setFloat(i, Float.parseFloat(value1));
 		}		
