@@ -433,7 +433,7 @@ public class XMLCatalog
 			{
 				throw new XMLCatalogException ("You should define the \"widths\" or \"fields\" property when you select the 'fixed-width' format");
 			}
-			if ((fieldsIn!=null)&&(widthsIn==null))
+			if ((fieldsIn!=null)&&(widthsIn!=null))
 			{
 				throw new XMLCatalogException ("You must not define the \"widths\" and \"fields\" properties together when you select the 'fixed-width' format");				
 			}
