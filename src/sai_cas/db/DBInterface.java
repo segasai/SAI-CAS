@@ -129,19 +129,18 @@ public class DBInterface  extends Object
 	
 	private class StatementSetterInt extends StatementSetter
 	{
-/*		public StatementSetterInt (String datatype)
-		{
-			super(datatype);
-		}*/
 		public void set(int i, String value) throws java.sql.SQLException
 		{
 			String value1 = value.trim();
+			if (value1.length()==0)
+			{
+				pstmt.setNull(i,Types.INTEGER);
+			}
 			int offset=0;
 			if (value1.charAt(0)=='+')
 			{
 					offset=1;
-			}
-			
+			}			
 			pstmt.setInt(i, Integer.parseInt(value1.substring(offset)));
 		}
 		public String getInsert()
@@ -152,10 +151,6 @@ public class DBInterface  extends Object
 
 	private class StatementSetterLong extends StatementSetter
 	{
-/*		public StatementSetterLong (String datatype)
-		{
-			super(datatype);
-		}*/
 		public void set(int i, String value) throws java.sql.SQLException
 		{
 			String value1 = value.trim();
@@ -163,6 +158,10 @@ public class DBInterface  extends Object
 			if (value1.charAt(0)=='+')
 			{
 					offset=1;
+			}
+			if (value1.length()==0)
+			{
+				pstmt.setNull(i,Types.BIGINT);
 			}
 			
 			pstmt.setLong(i, Long.parseLong(value1.substring(offset)));
@@ -180,7 +179,12 @@ public class DBInterface  extends Object
 		}*/
 		public void set(int i, String value) throws java.sql.SQLException
 		{
-			pstmt.setDouble(i, Double.parseDouble(value.trim()));
+			String value1 = value.trim();
+			if (value1.length() == 0)
+			{
+				pstmt.setNull(i,Types.DOUBLE);
+			}			
+			pstmt.setDouble(i, Double.parseDouble(value1));
 		}		
 		public String getInsert()
 		{
@@ -193,7 +197,12 @@ public class DBInterface  extends Object
 	{
 		public void set(int i, String value) throws java.sql.SQLException
 		{
-			pstmt.setFloat(i, Float.parseFloat(value.trim()));
+			String value1 = value.trim();
+			if (value1.length() == 0)
+			{
+				pstmt.setNull(i,Types.FLOAT);
+			}			
+			pstmt.setFloat(i, Float.parseFloat(value1));
 		}		
 		public String getInsert()
 		{
