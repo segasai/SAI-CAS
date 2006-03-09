@@ -20,12 +20,30 @@ public class MainAxisServices {
 	 * @throws Exception
 	 * @return void
 	 */
+	
 	public static void insertCatalogfromURI(URI uriCatalog) throws Exception
 	{
-		Connection conn = DBConnection.getPooledPerUserConnection();
-		DBInterface dbi = new DBInterface(conn);
-		XMLCatalog xmlc = new XMLCatalog(uriCatalog);
-		xmlc.insertDataToDB(dbi);	
+		
+		Connection conn = null;
+		DBInterface dbi = null;
+		XMLCatalog xmlc;
+		
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			xmlc = new XMLCatalog(uriCatalog);
+			xmlc.insertDataToDB(dbi);
+		}
+		catch (SQLException e)
+		{
+			throw e;
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+			
 	}
 	
 	/**
@@ -36,12 +54,26 @@ public class MainAxisServices {
 	 */
 	public static void insertCatalog(String catalogString) throws Exception
 	{
-		Connection conn = DBConnection.getPooledPerUserConnection();
-		DBInterface dbi = new DBInterface(conn);
-		XMLCatalog xmlc = new XMLCatalog(catalogString);
-		xmlc.insertDataToDB(dbi);
-		conn.commit();
-		conn.close();
+		Connection conn = null;
+		DBInterface dbi = null;
+		XMLCatalog xmlc;
+		
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			xmlc = new XMLCatalog(catalogString);
+			xmlc.insertDataToDB(dbi);
+			dbi.close();
+		}
+		catch (SQLException e)
+		{
+			throw e;
+		}
+		finally 
+		{
+			DBInterface.close(dbi, conn);
+		}
 	}
 	
 	/**
@@ -51,10 +83,21 @@ public class MainAxisServices {
 	 */
 	public static String[] getCatalogNames() throws Exception
 	{
-		Connection conn = DBConnection.getPooledPerUserConnection();
-		DBInterface dbi = new DBInterface(conn);
-		String []result = dbi.getCatalogNames();
-		conn.close();
+		Connection conn = null;
+		DBInterface dbi = null;
+		String []result = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getCatalogNames();
+		}
+		catch(SQLException e)
+		{}
+		finally
+		{
+			DBInterface.close(dbi,conn);
+		}
 		return result;
 	}
 	/**
@@ -65,10 +108,23 @@ public class MainAxisServices {
 	 */
 	public static String[] getTableNames(String catalogName) throws Exception
 	{
-		Connection conn = DBConnection.getPooledPerUserConnection();
-		DBInterface dbi = new DBInterface(conn);
-		String result[] = dbi.getTableNames(catalogName);
-		conn.close();
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getTableNames(catalogName);
+		}
+		catch(SQLException e)
+		{
+			
+		}
+		finally
+		{
+			DBInterface.close(dbi,conn);
+		}
 		return result;
 	}
 	/**
@@ -80,11 +136,22 @@ public class MainAxisServices {
 	 */
 	public static String[][] getIndexes(String catalogName, String tableName) throws Exception
 	{
-		Connection conn = DBConnection.getPooledPerUserConnection();
-		DBInterface dbi = new DBInterface(conn);
-		String result[][] = dbi.getIndexes(catalogName,tableName);		
-		conn.close();
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[][] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getIndexes(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
 		return result;
-	}
-
+	}	
 }

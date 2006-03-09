@@ -24,6 +24,42 @@ public class DBInterface  extends Object
 		stmt.execute(query);
 		logger.info("The DB interface is successfully created...");
 	}
+	
+	public void close() throws SQLException
+	{
+		if (stmt != null)
+		{
+			stmt.close();
+		}
+		if (pstmtBuffered != null)
+		{
+			pstmtBuffered.close();
+		}
+		if (qr != null)
+		{
+			qr.close();
+		}
+		conn.commit();
+		conn.close();
+	}
+	
+	public static void close(DBInterface dbi, Connection conn)
+	{
+		try 
+		{
+			if (dbi!=null)
+			{
+				dbi.close();
+			}
+			else if (conn!=null)
+			{
+				conn.close();
+			}
+		}
+		catch(SQLException e)
+		{			
+		}
+	}
 
 	public void insertCatalog(String catalog) throws SQLException
 	{
@@ -33,20 +69,11 @@ public class DBInterface  extends Object
 		query = "CREATE SCHEMA "+catalog;
 		stmt.execute(query);            
 
-		/*
-		String query = "INSERT INTO catalog_list (name) VALUES (?)";
-		PreparedStatement stmt = conn.prepareStatement(query); 
-		String xx  = null;
-		stmt.setString(1,xx);
-		stmt.execute();     
-		query = "CREATE SCHEMA "+catalog;
-		stmt.execute(query);            
-		*/
 	}
 
 	public void prepareInsertingData(String catalog, String table, String[] datatypeArray) throws SQLException, DBException
 	{
-		String[] internalDatatypeArray=new String[datatypeArray.length];
+		String[] internalDatatypeArray = new String[datatypeArray.length];
 
 		/* !!!!!!!!!!!!!!!  TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 		/* The external datatype should be put into the separate function since the code 

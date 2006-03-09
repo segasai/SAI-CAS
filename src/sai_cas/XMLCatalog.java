@@ -321,9 +321,12 @@ public class XMLCatalog
 		public DataReader(Externaldata ed, int ncols) throws XMLCatalogException
 		{
 			this.ncols = ncols;
-
-			encoding = ed.getEncoding().value();
-			if (encoding == null) 
+			EncodingType et = ed.getEncoding();
+			if (et != null)
+			{
+				encoding = ed.getEncoding().value();
+			}
+			else
 			{
 				encoding="none";
 			}

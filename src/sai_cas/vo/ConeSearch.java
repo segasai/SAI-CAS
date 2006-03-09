@@ -133,11 +133,10 @@ public class ConeSearch
 		
 		try 
 		{
-			if (dbi != null)
+			if (conn != null)
 			{
-				if (dbi.qr != null) dbi.qr.close();
+				dbi.close();
 			}
-			if (conn != null) { conn.commit(); conn.close();}
 		}
 		catch (SQLException e)
 		{
