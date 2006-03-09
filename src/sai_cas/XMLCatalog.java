@@ -406,33 +406,71 @@ public class XMLCatalog
 		public FixedWidthDataReader(Externaldata ed, int ncols) throws XMLCatalogException 
 		{
 			super(ed,ncols);
-			String fields = properties.getProperty("widths");
-			String widthsArray[];
-			if (fields == null)
-			{
-				throw new XMLCatalogException ("You should define the \"widths\" property when you select the 'fixed-width' format");
-			}
-			withNewline = (properties.getProperty("withNewLines")!=null);
+			String widthsIn = properties.getProperty("widths");
+			String fieldsIn = properties.getProperty("fields");
+			String widthsArray[], fieldsArray[];
 			
-			widthsArray = fields.split(" ",0);
-			int len = widthsArray.length;
-			
-			if (len != ncols)
+			if ((widthsIn == null)&&(fieldsIn==null))
 			{
-				throw new XMLCatalogException("The number of elements in the list of widths must be equal to the number of columns ("+ncols+")");
+				throw new XMLCatalogException ("You should define the \"widths\" or \"fields\" property when you select the 'fixed-width' format");
 			}
-
-			try 
+			if ((fieldsIn!=null)&&(widthsIn==null))
 			{
-				this.widths = new int[len];
-				for (int i = 0; i < len; i++)
+				throw new XMLCatalogException ("You must not define the \"widths\" and \"fields\" properties together when you select the 'fixed-width' format");				
+			}
+			if (widthsIn!=null)
+			{
+				withoutNewLines = (properties.getProperty("withoutNewLines")!=null);
+				
+				widthsArray = widthsIn.split(" ",0);
+				int len = widthsArray.length;
+				
+				if (len != ncols)
 				{
-					this.widths[i] = Integer.parseInt(widthsArray[i]);
+					throw new XMLCatalogException("The number of elements in the list of widths must be equal to the number of columns ("+ncols+")");
+				}
+				
+				try 
+				{
+					this.fieldsLeft = new int[len];
+					this.fieldsRight = new int[len];
+					int cur_pos = 0;
+					for (int i = 0; i < len; i++)
+					{
+						this.fieldsLeft[i]=cur_pos;
+						this.fieldsRight[i]=(cur_pos+=Integer.parseInt(widthsArray[i]));
+					}
+				}
+				catch (NumberFormatException e)
+				{
+					throw new XMLCatalogException("Invalid field list for the fixed-width format");
 				}
 			}
-			catch (NumberFormatException e)
+			else
 			{
-				throw new XMLCatalogException("Invalid field list for the fixed-width format");
+				fieldsArray = widthsIn.split(" ",0);
+				int len = fieldsArray.length;
+				
+				if (len != 2*ncols)
+				{
+					throw new XMLCatalogException("The number of elements in the list of fields must be twice the number of columns ("+ncols+")");
+				}
+				
+				try 
+				{
+					this.fieldsLeft = new int[ncols];
+					this.fieldsRight = new int[ncols];
+					for (int i = 0; i < len; i++)
+					{
+						this.fieldsLeft[i]=Integer.parseInt(fieldsArray[i*2]);
+						this.fieldsRight[i]=Integer.parseInt(fieldsArray[2*i+1]);
+					}
+				}
+				catch (NumberFormatException e)
+				{
+					throw new XMLCatalogException("Invalid field list for the fixed-width format");
+				}
+				
 			}
 			stringBuffer = new ArrayList<String>();
 			stringBuffer.ensureCapacity(bufLen);
@@ -447,7 +485,7 @@ public class XMLCatalog
 			while (!stringBufferIterator.hasNext())
 			{
 				stringBuffer.clear();
-				if (withNewline)
+				if (!withoutNewLines)
 				{
 					int i;
 					for(i = 1; i <= bufLen; i++)
@@ -492,16 +530,17 @@ public class XMLCatalog
 			}
 			s = stringBufferIterator.next();
 
-			for(int i = 0, cur_pos = 0; i < ncols; i++)
+			for(int i = 0; i < ncols; i++)
 			{
-				result[i] = s.substring(cur_pos, cur_pos += widths[i]);
+				result[i] = s.substring(fieldsLeft[i],fieldsRight[i]);
 			}
 			return result;
 		}
 
-		int widths[];
+		int fieldsLeft[];
+		int fieldsRight[];
 		int totalWidth;
-		boolean withNewline;
+		boolean withoutNewLines;
 		final int bufLen = 1000;
 		ArrayList<String> stringBuffer;
 		ListIterator<String> stringBufferIterator;
