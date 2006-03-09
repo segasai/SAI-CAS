@@ -479,7 +479,7 @@ public class XMLCatalog
 				{
 					this.fieldsLeft = new int[ncols];
 					this.fieldsRight = new int[ncols];
-					for (int i = 0; i < len; i++)
+					for (int i = 0; i < ncols; i++)
 					{
 						this.fieldsLeft[i]=Integer.parseInt(fieldsArray[i*2]);
 						this.fieldsRight[i]=Integer.parseInt(fieldsArray[2*i+1]);
