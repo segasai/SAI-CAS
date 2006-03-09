@@ -135,7 +135,14 @@ public class DBInterface  extends Object
 		}*/
 		public void set(int i, String value) throws java.sql.SQLException
 		{
-			pstmt.setInt(i, Integer.parseInt(value.trim()));
+			String value1 = value.trim();
+			int offset=0;
+			if (value1.charAt(0)=='+')
+			{
+					offset=1;
+			}
+			
+			pstmt.setInt(i, Integer.parseInt(value1.substring(offset)));
 		}
 		public String getInsert()
 		{
@@ -151,7 +158,14 @@ public class DBInterface  extends Object
 		}*/
 		public void set(int i, String value) throws java.sql.SQLException
 		{
-			pstmt.setLong(i, Long.parseLong(value.trim()));
+			String value1 = value.trim();
+			int offset=0;
+			if (value1.charAt(0)=='+')
+			{
+					offset=1;
+			}
+			
+			pstmt.setLong(i, Long.parseLong(value1.substring(offset)));
 		}
 		public String getInsert()
 		{
