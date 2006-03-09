@@ -20,9 +20,8 @@ public class DBInterface  extends Object
 		conn.setAutoCommit(false);
 		
 		String query = "SET search_path TO cas_metadata,public;";
-		Statement stmt = conn.createStatement(); 
+		stmt = conn.createStatement(); 
 		stmt.execute(query);
-		stmt.close();
 		logger.info("The DB interface is successfully created...");
 	}
 
@@ -30,7 +29,6 @@ public class DBInterface  extends Object
 	{
 
 		String query = "INSERT INTO catalog_list (name) VALUES ('"+catalog+"')";
-		Statement stmt = conn.createStatement(); 
 		stmt.execute(query);     
 		query = "CREATE SCHEMA "+catalog;
 		stmt.execute(query);            
@@ -54,7 +52,6 @@ public class DBInterface  extends Object
 		/* The external datatype should be put into the separate function since the code 
 		 * here duplicate the code from the insertTODB 
 		 */
-		Statement stmt = conn.createStatement(); 
 		for (int i = 0; i < datatypeArray.length; i++)
 		{	
 			String query0 = "select cas_get_internal_datatype('"+datatypeArray[i]+"')";
@@ -67,7 +64,6 @@ public class DBInterface  extends Object
 			internalDatatypeArray[i]=rs.getString(1);
 			rs.close();
 		}
-		stmt.close();
 		
 		StringBuffer query =  new StringBuffer(1000);
 		query.append("INSERT INTO "+catalog+"."+table+" VALUES (");
@@ -252,43 +248,37 @@ public class DBInterface  extends Object
 			query.append("'" + stringArray[i] + "',");
 		}
 		query.setCharAt(query.length()-1,')');
-		Statement stmt = conn.createStatement(); 
 		stmt.execute(query.toString());
 	}
 
 	public void insertCatalog(String catalog, String catalogInfo, String catalogDescription) throws SQLException
 	{
 		String query = "INSERT INTO catalog_list (name, info, description) VALUES ('"+catalog+"','"+catalogInfo+"','"+catalogDescription+"')";
-		Statement stmt = conn.createStatement(); 
 		stmt.execute(query);     
 		query = "CREATE SCHEMA "+catalog;
-		stmt.execute(query);            
+		stmt.execute(query);
 	}
 
 
 	public boolean checkCatalogExists(String catalog) throws SQLException
 	{
 		String query="SELECT cas_catalog_exists('"+catalog+"')";
-		Statement stmt = conn.createStatement(); 
 		stmt.executeQuery(query);            
 		ResultSet rs = stmt.getResultSet();
 		rs.next();
 		boolean result = rs.getBoolean(1);
 		rs.close();
-		stmt.close();
 		return result;
 	}
 
 	public boolean checkCatalogPropertyExists(String property) throws SQLException
 	{
 		String query="SELECT cas_catalog_property_exists('"+property+"')";
-		Statement stmt = conn.createStatement(); 
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
 		rs.next();
 		boolean result = rs.getBoolean(1);
 		rs.close();
-		stmt.close();
 		return result;
 	}
 	/**
@@ -304,8 +294,7 @@ public class DBInterface  extends Object
 		"(property_id, catalog_id, value) VALUES"+
 		"(cas_get_catalog_property_id( '" +property+"' ),"+
 		" cas_get_catalog_id ( '"+catalog+"' ), '"+value+"' )";
-		Statement stmt = conn.createStatement(); 
-		stmt.execute(query);            
+		stmt.execute(query);
 	}
 	/**
 	 * This function just do the bulk set of properties for the catalogue
@@ -336,29 +325,26 @@ public class DBInterface  extends Object
 	{
 		String query="UPDATE catalog_list SET info = '"+ info+ "'WHERE" +
 		" id = cas_get_catalog_id ( '"+catalog+"' )";
-		Statement stmt = conn.createStatement(); 
 		stmt.executeUpdate(query);
-		System.out.println(query);
 	}
 
 	public void setCatalogDescription(String catalog, String description) throws SQLException
 	{
 		String query="UPDATE catalog_list SET description = ? WHERE " +
 		" id = cas_get_catalog_id ( ? )";
-		PreparedStatement stmt = conn.prepareStatement(query); 
-		stmt.setString(1,description);
-		stmt.setString(2,catalog);
-		stmt.executeUpdate();            
+		PreparedStatement pstmt = conn.prepareStatement(query); 
+		pstmt.setString(1,description);
+		pstmt.setString(2,catalog);
+		pstmt.executeUpdate();
+		pstmt.close();
 	}
 
 
 	public void insertTable(String catalog, String table, List<String> columns, List<String> columnTypes, List<String> columnUnits, List<String> infoList, List<String> descriptionList) throws SQLException, DBException
 	{
 		String query = "INSERT INTO table_list (name, catalog_id) VALUES ( '"+table+"',cas_get_catalog_id('"+catalog+"') )";
-		Statement stmt = conn.createStatement(); 
 
 		stmt.execute(query);            
-
 		ListIterator<String> cit = columns.listIterator();
 		ListIterator<String> ctit = columnTypes.listIterator();
 		ListIterator<String> cuit = columnUnits.listIterator();
@@ -411,32 +397,33 @@ public class DBInterface  extends Object
 			pstmt.setString(7,columnDescription);      
 			pstmt.execute();
 		}
+		pstmt.close();
 		sb.deleteCharAt(sb.length()-1);
 		sb.append(")");
 
-		//stmt = conn.createStatement(); 
-		//System.out.println(sb);
-		stmt.execute(new String(sb));            
+		stmt.execute(new String(sb)); 
 	}
 
 	public boolean checkTableExists(String catalog, String table) throws SQLException
 	{
 		String query="SELECT cas_table_exists('"+catalog+"','"+table+"')";
-		Statement stmt = conn.createStatement();
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
 		rs.next();
-		return rs.getBoolean(1);
+		boolean result = rs.getBoolean(1);
+		rs.close();
+		return result;
 	}
 
 	public boolean checkTablePropertyExists(String property) throws SQLException
 	{
 		String query="SELECT cas_table_property_exists('"+property+"')";
-		Statement stmt = conn.createStatement(); 
 		stmt.executeQuery(query);            
 		ResultSet rs = stmt.getResultSet();
 		rs.next();
-		return rs.getBoolean(1);
+		boolean result = rs.getBoolean(1);
+		rs.close();
+		return result;
 	}
 
 
@@ -446,8 +433,7 @@ public class DBInterface  extends Object
 		"(property_id, table_id, value) VALUES"+
 		"(cas_get_table_property_id( '" +property+"' ),"+
 		" cas_get_table_id ( '"+catalog+"', '"+table+"' ), '"+value+"' )";
-		Statement stmt = conn.createStatement(); 
-		stmt.execute(query);            
+		stmt.execute(query);
 	}
 
 	/**
@@ -481,45 +467,48 @@ public class DBInterface  extends Object
 	{
 		String query="UPDATE table_list SET info = ? WHERE " +
 		" id = cas_get_table_id (?, ?)";
-		PreparedStatement stmt = conn.prepareStatement(query); 
-		stmt.setString(1,info);
-		stmt.setString(2,catalog);
-		stmt.setString(3,table);
-		stmt.executeUpdate();            
+		PreparedStatement pstmt = conn.prepareStatement(query); 
+		pstmt.setString(1,info);
+		pstmt.setString(2,catalog);
+		pstmt.setString(3,table);
+		pstmt.executeUpdate(); 
+		pstmt.close();
 	}
 
 	public void setTableDescription(String catalog, String table, String description) throws SQLException
 	{
 		String query="UPDATE table_list SET description = ? WHERE " +
 		" id = cas_get_table_id ( ?,? )";
-		PreparedStatement stmt = conn.prepareStatement(query); 
-		stmt.setString(1,description);
-		stmt.setString(2,catalog);
-		stmt.setString(3,table);
-		stmt.executeUpdate();            
+		PreparedStatement pstmt = conn.prepareStatement(query); 
+		pstmt.setString(1,description);
+		pstmt.setString(2,catalog);
+		pstmt.setString(3,table);
+		pstmt.executeUpdate();
+		pstmt.close();
 	}
-
 
 
 
 	public boolean checkAttributeExists(String catalog, String table, String attribute) throws SQLException
 	{
 		String query="SELECT cas_attribute_exists('"+catalog+"','"+table+"','"+attribute+"')";
-		Statement stmt = conn.createStatement(); 
 		stmt.executeQuery(query);            
 		ResultSet rs = stmt.getResultSet();
 		rs.first();
-		return rs.getBoolean(1);
+		boolean result = rs.getBoolean(1);
+		rs.close();
+		return result;
 	}
 
 	public boolean checkAttributePropertyExists(String property) throws SQLException
 	{
 		String query="SELECT cas_attribute_property_exists('"+property+"')";
-		Statement stmt = conn.createStatement(); 
 		stmt.executeQuery(query);            
 		ResultSet rs = stmt.getResultSet();
 		rs.first();
-		return rs.getBoolean(1);
+		boolean result = rs.getBoolean(1);
+		rs.close();
+		return result;
 	}
 
 	public void setAttributeProperty(String catalog, String table, String attribute, String property, String value) throws SQLException
@@ -528,49 +517,48 @@ public class DBInterface  extends Object
 		"(property_id, attribute_id, value) VALUES"+
 		"(cas_get_attribute_property_id( '" +property+"' ),"+
 		" cas_get_attribute_id ( '"+catalog+"', '"+table+"', '"+attribute+"' ), '"+value+"' )";
-		Statement stmt = conn.createStatement(); 
-		stmt.execute(query);            
+		stmt.execute(query);
 	}
 
 	public void setAttributeInfo(String catalog, String table, String attribute, String info) throws SQLException
 	{
 		String query="UPDATE attribute_list SET info = '"+ info + "'WHERE" +
 		" id = cas_get_attribute_id ( '"+catalog+"','"+ table+ "','"+attribute+"')";
-		Statement stmt = conn.createStatement(); 
-		stmt.executeUpdate(query);            
+		stmt.executeUpdate(query);
 	}
 
 	public void setAttributeDescription(String catalog, String table, String attribute, String description) throws SQLException
 	{
 		String query="UPDATE attribute_list SET description = '"+ description + "'WHERE" +
 		" id = cas_get_table_id ( '"+catalog+"','"+table+"','"+attribute+"' )";
-		PreparedStatement stmt = conn.prepareStatement(query); 
-		stmt.setString(1,description);
-		stmt.setString(2,catalog);
-		stmt.setString(3,table);
-		stmt.setString(4,attribute);
-		stmt.executeUpdate();            
+		PreparedStatement pstmt = conn.prepareStatement(query); 
+		pstmt.setString(1,description);
+		pstmt.setString(2,catalog);
+		pstmt.setString(3,table);
+		pstmt.setString(4,attribute);
+		pstmt.executeUpdate();
+		pstmt.close();
 	}
 
 
 
 	public void setUnit (String catalog, String table, String column, String unit) throws SQLException
 	{
-
-			String query = "UPDATE attribute_list SET unit = ? where"+
-			"(cas_get_attribute_id(? ,? ,?)";
-			PreparedStatement stmt = conn.prepareStatement(query); 
-			stmt.setString(1,unit);
-			stmt.setString(2,catalog);
-			stmt.setString(3,table);
-			stmt.setString(4,column);
-			stmt.execute();
+		
+		String query = "UPDATE attribute_list SET unit = ? where"+
+		"(cas_get_attribute_id(? ,? ,?)";
+		PreparedStatement pstmt = conn.prepareStatement(query); 
+		pstmt.setString(1,unit);
+		pstmt.setString(2,catalog);
+		pstmt.setString(3,table);
+		pstmt.setString(4,column);
+		pstmt.execute();
+		pstmt.close();
 	}
 	
 	public String[] getCatalogNames() throws SQLException
 	{
 		String query="SELECT cas_get_catalog_names();";
-		Statement stmt = conn.createStatement();
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
 		ArrayList<String> als = new ArrayList<String>();
@@ -579,14 +567,13 @@ public class DBInterface  extends Object
 			als.add(rs.getString(1));
 		}
 		String[] result = new String[1];
-		stmt.close();
+		rs.close();
 		return als.toArray(result);
 	}
 
 	public String[] getTableNames(String catalogName) throws SQLException
 	{
 		String query="SELECT cas_get_table_names('"+catalogName+"');";
-		Statement stmt = conn.createStatement();
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
 		ArrayList<String> als = new ArrayList<String>();
@@ -595,7 +582,7 @@ public class DBInterface  extends Object
 			als.add(rs.getString(1));
 		}
 		String[] result = new String[1];
-		stmt.close();
+		rs.close();
 		return als.toArray(result);
 	}
 	
@@ -604,7 +591,6 @@ public class DBInterface  extends Object
 		String query="SELECT * FROM cas_get_table_indexes('" + catalogName +
 			"','" + tableName + "') AS (a varchar, b varchar);";
 		logger.debug("Running query: "+query);
-		Statement stmt = conn.createStatement();
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
 		ArrayList<String[]> als = new ArrayList<String[]>();
@@ -616,7 +602,7 @@ public class DBInterface  extends Object
 			als.add(row);
 		}
 		String[][] result = new String[1][1];
-		stmt.close();
+		rs.close();
 		return als.toArray(result);
 	}
 	
@@ -625,7 +611,6 @@ public class DBInterface  extends Object
 //		String query="?=CALL cas_get_table_ra_dec(?,?)";
 		String query="SELECT * from cas_get_table_ra_dec('"+catalogName+"','"+tableName+"') as (a varchar, b varchar)";
 		logger.debug("Running query: "+query);
-		Statement stmt = conn.createStatement();
 /*		Statement stmt = conn.prepareCall(query);
 		stmt.setString(2,catalogName);
 		stmt.setString(3,tableName);
@@ -636,7 +621,7 @@ public class DBInterface  extends Object
 		rs.next();
 		res[0]= rs.getString(1);
 		res[1]= rs.getString(2);
-		stmt.close();
+		rs.close();
 		return res;
 	}
 	
@@ -911,5 +896,5 @@ public class DBInterface  extends Object
 	
 	public QueryResults qr;
 	private Connection conn;
-
+	Statement stmt;
 }
