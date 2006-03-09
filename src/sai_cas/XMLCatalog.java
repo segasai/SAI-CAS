@@ -3,6 +3,7 @@ import sai_cas.db.*;
 import sai_cas.XMLCatalogFile.*;
 
 import javax.xml.transform.stream.StreamSource;
+//import javax.xml.stream.XMLEventReader;
 import javax.xml.bind.*;
 
 import org.apache.log4j.Logger;
@@ -54,12 +55,12 @@ public class XMLCatalog
 		catch (UnmarshalException e) 
 		{
 			logger.error("Error during unmarshalling:", e);
-			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage());
+			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
 		}
 		catch (JAXBException e)
 		{
 			logger.error("Error during unmarshalling:", e);
-			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage());
+			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
 		}
 		logger.info("The catalog successfully unmarshalled");
 	}
@@ -103,7 +104,17 @@ public class XMLCatalog
 		logger.debug("Beginning of DB work in inserting the catalogue... ");
 		String catalogName = cat.getName().toLowerCase();
 		String catalogInfo = cat.getInfo();
-
+		String catalogDescription = cat.getDescription();
+		List<String[]> catalogProperties;	
+		try
+		{
+			catalogProperties = convertProperties(cat.getPropertyList().getProperty());	
+		}
+		catch (NullPointerException e)
+		{
+			catalogProperties = new ArrayList<String[]>();
+		}
+		dbi.setCatalogProperties(catalogName, catalogProperties);
 		logger.debug("Inserting the catalogue metadata... ");		
 		dbi.insertCatalog(catalogName);
 		dbi.setCatalogInfo(catalogName, catalogInfo);
@@ -121,6 +132,16 @@ public class XMLCatalog
 			
 			String tableInfo = table.getInfo();
 			String tableDescription = table.getDescription();
+			List<String[]> tableProperties;
+			try
+			{
+				tableProperties = convertProperties(table.getPropertyList().getProperty());	
+			}
+			catch (NullPointerException e)
+			{
+				tableProperties = new ArrayList<String[]>();
+			}
+
 			
 			List<Column> columnList = table.getColumn();
 				
@@ -144,7 +165,12 @@ public class XMLCatalog
 				unit =  column.getUnit();
 				columnDescription = column.getDescription();
 				columnInfo = column.getInfo();
-				
+				/* TODO 
+				 * I should write the handling of the column properties too
+				 * Now I don't do that since in that loop I should kind of 
+				 * create the list of lists of properties ... 
+				 */
+//				List<Property> columnProperties = table.getPropertyList().getProperty();
 				datatypeList.add(datatype);
 				columnNameList.add(columnName);
 				unitList.add(unit);
@@ -155,7 +181,7 @@ public class XMLCatalog
 			dbi.insertTable(catalogName, tableName, columnNameList, datatypeList, unitList, columnInfoList, columnDescriptionList);
 			dbi.setTableInfo(catalogName, tableName, tableInfo);
 			dbi.setTableDescription(catalogName, tableName, tableDescription);
-
+			dbi.setTableProperties(catalogName, tableName, tableProperties);
 			logger.debug("Preparing to read the data... ");							
 			/* Now we are handling the data in the table */			
 			Data d = table.getData();
@@ -225,6 +251,20 @@ public class XMLCatalog
 			}
 		}  
 	}
+	
+	public List<String[]> convertProperties(List<Property> propertyList)
+	{
+		List<String[]> result = new ArrayList<String[]>();
+		//String[] propertyPair = new String[2];
+		for (Property p: propertyList)
+		{
+			String[] propertyPair = {p.getName(),p.getValue()};
+			result.add(propertyPair);
+		}
+		return result;
+		
+	}
+	
 	
 	private Catalog cat;
 	

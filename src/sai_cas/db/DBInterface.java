@@ -8,6 +8,7 @@ import java.util.ListIterator;
 import org.apache.log4j.Logger;
 import org.postgresql.*;
 
+
 public class DBInterface  extends Object
 {
 	static Logger logger = Logger.getLogger("sai_cas.DBInterface");
@@ -260,8 +261,13 @@ public class DBInterface  extends Object
 		stmt.close();
 		return result;
 	}
-
-
+	/**
+	 * 
+	 * @param catalog -- the catalog to which the properties will be set
+	 * @param property -- the property name 
+	 * @param value -- the property value
+	 * @throws SQLException
+	 */
 	public void setCatalogProperty(String catalog, String property, String value) throws SQLException
 	{
 		String query="INSERT INTO catalog_property_map"+
@@ -271,7 +277,31 @@ public class DBInterface  extends Object
 		Statement stmt = conn.createStatement(); 
 		stmt.execute(query);            
 	}
-
+	/**
+	 * This function just do the bulk set of properties for the catalogue
+	 * @param catalog -- the name of the catalogue
+	 * @param propertyList -- the list of two element arrays of property name/value pairs
+	 * @throws SQLException
+	 */
+	public void setCatalogProperties(String catalog, List<String[]> propertyList) throws SQLException
+	{
+		logger.debug("Inserting catalog properties...");
+		for (String[] propertyPair: propertyList)
+		{
+			if (checkCatalogPropertyExists(propertyPair[0]))
+			{
+				setCatalogProperty(catalog,propertyPair[0],propertyPair[1]);
+			}
+			else
+			{
+				/* TODO 
+				 * I should handle somehow the case when the property do not
+				 * exist
+				 */
+			}
+		}
+	}
+	
 	public void setCatalogInfo(String catalog, String info) throws SQLException
 	{
 		String query="UPDATE catalog_list SET info = '"+ info+ "'WHERE" +
@@ -390,6 +420,33 @@ public class DBInterface  extends Object
 		stmt.execute(query);            
 	}
 
+	/**
+	 * This function just do the bulk set of properties for the table
+	 * @param catalog -- the name of the catalogue
+	 * @param table -- the name of the tabl
+	 * @param propertyList -- the list of two element arrays of property name/value pairs
+	 * @throws SQLException
+	 */
+	public void setTableProperties(String catalog, String table, List<String[]> propertyList) throws SQLException
+	{
+		logger.debug("Inserting table properties...");
+		for (String[] propertyPair: propertyList)
+		{
+			if (checkTablePropertyExists(propertyPair[0]))
+			{
+				setTableProperty(catalog,table,propertyPair[0],propertyPair[1]);
+			}
+			else
+			{
+				/* TODO 
+				 * I should handle somehow the case when the property do not
+				 * exist
+				 */
+			}
+		}
+	}
+
+	
 	public void setTableInfo(String catalog, String table, String info) throws SQLException
 	{
 		String query="UPDATE table_list SET info = ? WHERE " +
@@ -531,6 +588,26 @@ public class DBInterface  extends Object
 		String[][] result = new String[1][1];
 		stmt.close();
 		return als.toArray(result);
+	}
+	
+	public String[] getRaDecColumns(String catalogName, String tableName) throws SQLException
+	{
+//		String query="?=CALL cas_get_table_ra_dec(?,?)";
+		String query="SELECT * from cas_get_table_ra_dec('"+catalogName+"','"+tableName+"') as (a varchar, b varchar)";
+		logger.debug("Running query: "+query);
+		Statement stmt = conn.createStatement();
+/*		Statement stmt = conn.prepareCall(query);
+		stmt.setString(2,catalogName);
+		stmt.setString(3,tableName);
+		stmt.registerOutParameter(1,Types.VARCHAR);
+		stmt.registerOutParameter(4,Types.VARCHAR);*/
+		ResultSet rs = stmt.executeQuery(query);
+		String [] res = new String[2];
+		rs.next();
+		res[0]= rs.getString(1);
+		res[1]= rs.getString(2);
+		stmt.close();
+		return res;
 	}
 	
 	/**

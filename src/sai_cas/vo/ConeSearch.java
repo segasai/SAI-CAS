@@ -78,7 +78,9 @@ public class ConeSearch
 			/**  !!!!!!!!! TODO !!!!!!!!!!!!!!!
 			 *   Replace this query by real cone search logic
 			 */
-			dbi.executeQuery("select * from " + catalog + "." + table + "");      
+			String[] raDecArray=dbi.getRaDecColumns(catalog,table);
+			
+			dbi.executeQuery("select * from " + catalog + "." + table + " where q3c_radial_query("+raDecArray[0] +","+raDecArray[1]+","+ra+","+dec+","+rad+")");      
 			
 			out.println("<RESOURCE name=\"" + catalog + "\">");
 			out.println("<TABLE name=\"" + table + "\">");
@@ -119,6 +121,7 @@ public class ConeSearch
 		}
 		catch (java.sql.SQLException e)
 		{
+			logger.error("Got the SQL exception...",e);
 			out.println("<DESCRIPTION>ERROR:\nSQL Exception: " + e.getMessage() + "</DESCRIPTION>");    
 		}
 		catch (ConeSearchException e)
