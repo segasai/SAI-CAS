@@ -583,6 +583,17 @@ public class DBInterface  extends Object
 		pstmt.close();
 	}
 	
+	public String getCatalogDescription(String catalog) throws SQLException
+	{
+		String query="SELECT cas_get_catalog_description('"+catalog+"');";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		String result = rs.getString(1);
+		rs.close();
+		return result;
+	}
+
 	public String[] getCatalogNames() throws SQLException
 	{
 		String query="SELECT cas_get_catalog_names();";
@@ -883,10 +894,12 @@ public class DBInterface  extends Object
 			stmt.setString(2, getBaseTableName(n));
 			stmt.setString(3, getBaseColumnName(n));
 			ResultSet rs = stmt.executeQuery(); 
-			unitArray[n-1] = rs.getString(1);
 			rs.next();
 			String columnInfo = rs.getString(1);
-			if (columnInfo==null) columnInfo="";
+			if (columnInfo == null) 
+			{
+				columnInfo = "";
+			}
 			rs.close();
 			stmt.close();
 			return columnInfo;
@@ -902,7 +915,10 @@ public class DBInterface  extends Object
 			ResultSet rs = stmt.executeQuery(); 
 			rs.next();
 			String columnDescription = rs.getString(1);
-			if (columnDescription==null) columnDescription="";
+			if (columnDescription == null)
+			{
+				columnDescription = "";
+			}
 			rs.close();
 			stmt.close();      
 			return columnDescription;
