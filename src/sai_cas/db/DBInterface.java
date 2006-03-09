@@ -134,7 +134,6 @@ public class DBInterface  extends Object
 		public void set(int i, String value) throws java.sql.SQLException
 		{
 			String value1 = value.trim();
-			System.err.println("XXXXXXX '"+value1+"' "+value1.length());
 			if (value1.length() == 0)
 			{
 				pstmt.setNull(i,Types.INTEGER);
@@ -666,25 +665,10 @@ public class DBInterface  extends Object
 		/* Ensure that the autocommit is turned off, since only in that case the
 		 * cursor based ResultSet is working
 		 */ 
+		logger.debug("Executing Query: "+ query);
 		PreparedStatement stmt = conn.prepareStatement(query,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
 		stmt.setFetchSize(100);
 		this.qr = new QueryResults(stmt.executeQuery());
-		//if (this.qr==null) throw new SQLException("AAAAAAAAAA");
-		/* int ncols = rsmd.getColumnCount();
-		List ucdList = new List<String>();
-		List columnList = new List<String>();
-		List tableList = new List<String>();
-		List catalogList = new List<String>();
-		List unitList = new List<String>();
-		List datatypeList[] = new List<String>();
-		 
-		for (int i = 1; i <= ncols;i++)
-		{
-			columnList.add(((org.postgresql.jdbc3.Jdbc3ResultSetMetaData)rsmd).getBaseColumnName(i));
-			tableList.add(((org.postgresql.jdbc3.Jdbc3ResultSetMetaData)rsmd).getBaseTableName(i));
-			catalogList.add(((org.postgresql.jdbc3.Jdbc3ResultSetMetaData)rsmd).getBaseSchemaName(i));    
-		}    
-		*/
 	}
 
 	
@@ -714,7 +698,7 @@ public class DBInterface  extends Object
 
 	}
 */
-	public class QueryResults // extends org.postgresql.jdbc3.Jdbc3ResultSet//ResultSet
+	public class QueryResults
 	{
 		public QueryResults(ResultSet rs) throws SQLException
 		{
