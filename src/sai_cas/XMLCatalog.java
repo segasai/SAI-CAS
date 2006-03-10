@@ -162,16 +162,15 @@ public class XMLCatalog
 			}
 
 			
-			List<Column> columnList = table.getColumn();
-				
-			Iterator columnIterator = columnList.iterator();
-			
+			List<Column> columnList = table.getColumn();			
 			List<String> datatypeList = new ArrayList<String>();
 			List<String> columnNameList = new ArrayList<String>();
 			List<String> unitList = new ArrayList<String>();
+			List<String> ucdList = new ArrayList<String>();
+
 			List<String> columnDescriptionList = new ArrayList<String>();
 			List<String> columnInfoList = new ArrayList<String>();
-			String unit, columnName, datatype, columnInfo, columnDescription;
+			String unit, ucd, columnName, datatype, columnInfo, columnDescription;
 			int ncols = columnList.size();
 			
 			for (Column column : columnList)
@@ -182,6 +181,7 @@ public class XMLCatalog
 				 */
 				columnName = column.getName().toLowerCase();
 				unit =  column.getUnit();
+				ucd = column.getUcd();
 				columnDescription = column.getDescription();
 				columnInfo = column.getInfo();
 				/* TODO 
@@ -193,11 +193,13 @@ public class XMLCatalog
 				datatypeList.add(datatype);
 				columnNameList.add(columnName);
 				unitList.add(unit);
+				ucdList.add(ucd);
 				columnDescriptionList.add(columnDescription);
 				columnInfoList.add(columnInfo);
 			}
 			logger.debug("Inserting the columns, table metadata... ");				
 			dbi.insertTable(catalogName, tableName, columnNameList, datatypeList, unitList, columnInfoList, columnDescriptionList);
+			dbi.setUcds(catalogName, tableName, columnNameList, ucdList);
 			dbi.setTableInfo(catalogName, tableName, tableInfo);
 			dbi.setTableDescription(catalogName, tableName, tableDescription);
 			dbi.setTableProperties(catalogName, tableName, tableProperties);

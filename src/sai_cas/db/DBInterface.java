@@ -242,13 +242,13 @@ public class DBInterface  extends Object
 
 	private class StatementSetterVarchar extends StatementSetter
 	{
-/*		public StatementSetterVarchar (PreparedStatement pstmt)
-		{
-			super(pstmt);
-		}*/
+		/* !!!!!!!!!! IMPORTANT !!!!!!!!!!!!!!!!!!
+		 * Currently I trim all the char[] fields
+		 */
+		
 		public void set(int i, String value) throws java.sql.SQLException
 		{
-			pstmt.setString(i, value);
+			pstmt.setString(i, value.trim());
 		}
 		public String getInsert()
 		{
@@ -532,7 +532,7 @@ public class DBInterface  extends Object
 		String query="SELECT cas_attribute_property_exists('"+property+"')";
 		stmt.executeQuery(query);            
 		ResultSet rs = stmt.getResultSet();
-		rs.first();
+		rs.next();
 		boolean result = rs.getBoolean(1);
 		rs.close();
 		return result;
@@ -582,6 +582,51 @@ public class DBInterface  extends Object
 		pstmt.execute();
 		pstmt.close();
 	}
+
+	public boolean checkUcdExists(String ucd) throws SQLException
+	{
+		String query="SELECT cas_ucd_exists('"+ucd+"')";
+		stmt.executeQuery(query);            
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		boolean result = rs.getBoolean(1);
+		rs.close();
+		return result;
+		
+	}
+	
+	public void setUcds (String catalog, String table, List<String> columnList, List<String> ucdList) throws SQLException
+	{
+		
+		String query = "UPDATE attribute_list SET ucd_id = cas_get_ucd_id(?)" +
+				"WHERE id = cas_get_attribute_id('" + catalog + "','" +
+				table + "',?)";
+		PreparedStatement pstmt = conn.prepareStatement(query); 
+		ListIterator<String> columnListIterator = columnList.listIterator();
+		ListIterator<String> ucdListIterator = ucdList.listIterator();
+		String ucd, column;
+		while(columnListIterator.hasNext())
+		{
+			column = columnListIterator.next(); 
+			ucd = ucdListIterator.next();
+			if (ucd == null)
+			{
+				continue;
+			}
+			if (!checkUcdExists(ucd))
+			{
+				String query1 = "INSERT INTO ucd_list (name) VALUES ('" + ucd+"')";
+				stmt.execute(query1);
+			}
+			pstmt.setString(1,ucd);
+			pstmt.setString(2,column);
+			pstmt.execute();				
+			
+		}
+		pstmt.close();
+		
+	}
+
 	
 	public String getCatalogDescription(String catalog) throws SQLException
 	{
@@ -879,8 +924,11 @@ public class DBInterface  extends Object
 				stmt.setString(3, getBaseColumnName(n));
 				ResultSet rs = stmt.executeQuery(); 
 				rs.next();
-				unitArray[n-1] = rs.getString(1);
-				if (unitArray[n-1]==null) unitArray[n-1]="";
+				unitArray[n - 1] = rs.getString(1);
+				if (unitArray[n - 1] == null) 
+				{
+					unitArray[n - 1] = "";
+				}
 				rs.close();
 				stmt.close();
 			}
@@ -889,11 +937,11 @@ public class DBInterface  extends Object
 
 		public String getColumnInfo(int n)  throws SQLException
 		{
-			PreparedStatement stmt = conn.prepareStatement("select cas_get_column_info(?, ?, ?)");
-			stmt.setString(1, getBaseCatalogName(n));
-			stmt.setString(2, getBaseTableName(n));
-			stmt.setString(3, getBaseColumnName(n));
-			ResultSet rs = stmt.executeQuery(); 
+			PreparedStatement pstmt = conn.prepareStatement("select cas_get_column_info(?, ?, ?)");
+			pstmt.setString(1, getBaseCatalogName(n));
+			pstmt.setString(2, getBaseTableName(n));
+			pstmt.setString(3, getBaseColumnName(n));
+			ResultSet rs = pstmt.executeQuery(); 
 			rs.next();
 			String columnInfo = rs.getString(1);
 			if (columnInfo == null) 
@@ -901,7 +949,7 @@ public class DBInterface  extends Object
 				columnInfo = "";
 			}
 			rs.close();
-			stmt.close();
+			pstmt.close();
 			return columnInfo;
 		}
 

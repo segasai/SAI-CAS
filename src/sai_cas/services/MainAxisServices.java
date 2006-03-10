@@ -37,7 +37,7 @@ public class MainAxisServices {
 		}
 		catch (SQLException e)
 		{
-			throw e;
+			logger.error("Got an exception... ", e);
 		}
 		finally
 		{
@@ -68,7 +68,7 @@ public class MainAxisServices {
 		}
 		catch (SQLException e)
 		{
-			throw e;
+			logger.error("Got an exception... ", e);			
 		}
 		finally 
 		{
@@ -81,7 +81,7 @@ public class MainAxisServices {
 	 * @return String[] -- the array of catalogues in the system
 	 * @throws Exception
 	 */
-	public static String[] getCatalogNames() throws Exception
+	public static String[] getCatalogNames() 
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -93,10 +93,12 @@ public class MainAxisServices {
 			result = dbi.getCatalogNames();
 		}
 		catch(SQLException e)
-		{}
+		{
+			logger.error("Caught an exception... ", e);			
+		}
 		finally
 		{
-			DBInterface.close(dbi,conn);
+			DBInterface.close(dbi, conn);
 		}
 		return result;
 	}
@@ -119,11 +121,11 @@ public class MainAxisServices {
 		}
 		catch(SQLException e)
 		{
-			
+			logger.error("Caught an exception... ", e);			
 		}
 		finally
 		{
-			DBInterface.close(dbi,conn);
+			DBInterface.close(dbi, conn);
 		}
 		return result;
 	}
@@ -143,10 +145,11 @@ public class MainAxisServices {
 		{
 			conn = DBConnection.getPooledPerUserConnection();
 			dbi = new DBInterface(conn);
-			result = dbi.getIndexes(catalogName,tableName);
+			result = dbi.getIndexes(catalogName, tableName);
 		}
 		catch(SQLException e)
 		{
+			logger.error("Caught an exception... ",e);
 		}
 		finally
 		{

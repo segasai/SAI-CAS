@@ -79,10 +79,19 @@ public class ConeSearch
 			 *   Replace this query by real cone search logic
 			 */
 			String[] raDecArray=dbi.getRaDecColumns(catalog,table);
+			if ((raDecArray[0]==null)||(raDecArray[1]==null))
+			{
+				throw new ConeSearchException("Selected table in the catalogue "+
+						"do not have marked RA, DEC columns. Cannot run Cone Search in that case...");
+			}
+			String catalogDescription = dbi.getCatalogDescription(catalog);
 			
-			dbi.executeQuery("select * from " + catalog + "." + table + " where q3c_radial_query("+raDecArray[0] +","+raDecArray[1]+","+ra+","+dec+","+rad+")");      
-			
+			dbi.executeQuery("select * from " + catalog + "." + table + " where q3c_radial_query("+raDecArray[0] +","+raDecArray[1]+","+ra+","+dec+","+rad+")");
 			out.println("<RESOURCE name=\"" + catalog + "\">");
+			out.println("<DESCRIPTION>"+catalogDescription+"</DESCRIPTION>");
+			out.println("<INFO>Cone search result from catalogue: "+catalog +
+						", table: "+ table+"\n" +
+						"RA="+ra+" DEC="+dec+" SR="+rad+"</INFO>");
 			out.println("<TABLE name=\"" + table + "\">");
 				
 			int ncols = dbi.qr.getColumnCount();
@@ -97,6 +106,10 @@ public class ConeSearch
 				out.print("<DESCRIPTION>");
 				out.print(dbi.qr.getColumnDescription(i));
 				out.println("</DESCRIPTION>");
+				out.print("<INFO>");
+				out.print(dbi.qr.getColumnInfo(i));
+				out.println("</INFO>");
+
 				out.println("</FIELD>");
 			}
 			out.println("<TABLEDATA>");
