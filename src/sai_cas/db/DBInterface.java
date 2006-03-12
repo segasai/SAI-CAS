@@ -23,6 +23,7 @@ public class DBInterface  extends Object
 		stmt = conn.createStatement(); 
 		stmt.execute(query);
 		logger.info("The DB interface is successfully created...");
+		curNBatchStatements =0 ;
 	}
 	
 	public void close() throws SQLException
@@ -33,6 +34,7 @@ public class DBInterface  extends Object
 		}
 		if (pstmtBuffered != null)
 		{
+			pstmtBuffered.executeBatch();
 			pstmtBuffered.close();
 		}
 		if (qr != null)
@@ -263,7 +265,12 @@ public class DBInterface  extends Object
 		{
 			ss[i].set(i+1 , stringArray[i]);
 		}
-		pstmtBuffered.executeUpdate();	
+		//pstmtBuffered.executeUpdate();
+		pstmtBuffered.addBatch();
+		if (curNBatchStatements == maxBatchStatement)
+		{
+			pstmtBuffered.executeBatch();
+		}
 	}
 	
 	public void insertData(String catalog, String table, String[] stringArray) throws SQLException
@@ -988,4 +995,6 @@ public class DBInterface  extends Object
 	public QueryResults qr;
 	private Connection conn;
 	Statement stmt;
+	final int maxBatchStatement=1000;
+	int curNBatchStatements;
 }
