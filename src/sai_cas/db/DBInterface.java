@@ -269,6 +269,7 @@ public class DBInterface  extends Object
 		pstmtBuffered.addBatch();
 		if (++curNBatchStatements == maxBatchStatement)
 		{
+			logger.debug("Executing batch ....");
 			pstmtBuffered.executeBatch();
 			curNBatchStatements = 0;
 		}
@@ -996,6 +997,6 @@ public class DBInterface  extends Object
 	public QueryResults qr;
 	private Connection conn;
 	Statement stmt;
-	final int maxBatchStatement=1000;
+	final int maxBatchStatement=100;
 	int curNBatchStatements;
 }
