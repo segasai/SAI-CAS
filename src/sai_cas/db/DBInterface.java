@@ -267,9 +267,10 @@ public class DBInterface  extends Object
 		}
 		//pstmtBuffered.executeUpdate();
 		pstmtBuffered.addBatch();
-		if (curNBatchStatements == maxBatchStatement)
+		if (++curNBatchStatements == maxBatchStatement)
 		{
 			pstmtBuffered.executeBatch();
+			curNBatchStatements = 0;
 		}
 	}
 	
