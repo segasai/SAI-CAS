@@ -137,6 +137,7 @@ public class XMLCatalog
 		logger.debug("Inserting the catalogue metadata... ");		
 		dbi.insertCatalog(catalogName);
 		dbi.setCatalogInfo(catalogName, catalogInfo);
+		dbi.setCatalogDescription(catalogName, catalogDescription);
 		
 		List<Table> tableList = cat.getTable();
 
