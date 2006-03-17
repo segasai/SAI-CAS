@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 
 public class ConeSearch
 {
-	static Logger logger = Logger.getLogger("sai_cas.MainAxisServices");
+	static Logger logger = Logger.getLogger("sai_cas.ConeSearch");
 
 	public static class ConeSearchException extends Exception
 	{
@@ -75,9 +75,6 @@ public class ConeSearch
 				throw new ConeSearchException("The table \"" + table + "\" does not exist in the catalogue \""+ catalog + "\"");				
 			}
 
-			/**  !!!!!!!!! TODO !!!!!!!!!!!!!!!
-			 *   Replace this query by real cone search logic
-			 */
 			String[] raDecArray=dbi.getRaDecColumns(catalog,table);
 			if ((raDecArray[0]==null)||(raDecArray[1]==null))
 			{
@@ -96,6 +93,7 @@ public class ConeSearch
 				
 			int ncols = dbi.qr.getColumnCount();
 			
+			logger.debug("Printing VOtable header ...");
 			for (int i = 1; i <= ncols; i++)
 			{
 				out.println("<FIELD name=\"" + dbi.qr.getColumnName(i) +
@@ -113,6 +111,7 @@ public class ConeSearch
 				out.println("</FIELD>");
 			}
 			out.println("<TABLEDATA>");
+			logger.debug("Retrieving and outputting the data ...");
 			
 			String dataArray[];
 			while (dbi.qr.next())
@@ -129,8 +128,9 @@ public class ConeSearch
 			}
 			out.println("</TABLEDATA>");
 			out.println("</TABLE>");    
-			
 			out.println("</RESOURCE>");
+			logger.debug("Finished outputting the data ...");
+
 		}
 		catch (java.sql.SQLException e)
 		{
