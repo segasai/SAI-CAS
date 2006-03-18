@@ -577,6 +577,7 @@ public class XMLCatalog
 		{
 			super(ed, ncols);
 			delimiter = properties.getProperty("delimiter");
+			nullMarker = properties.getProperty("null");
 			
 			if (delimiter == null)
 			{
@@ -611,9 +612,21 @@ public class XMLCatalog
 				stringBufferIterator = stringBuffer.listIterator();
 			}
 			s = stringBufferIterator.next();
-			return s.split(delimiter);
+			String sArr[] = s.split(delimiter);
+			if (nullMarker != null)
+			{
+				int n = sArr.length;
+				for (int i = 0; i < n; i++)
+				{
+					if (nullMarker.equals(sArr[i]))
+					{
+						sArr[i]="";
+					} 
+				}
+			}
+			return sArr;
 		}
-		private String delimiter;
+		private String delimiter, nullMarker;
 		ArrayList<String> stringBuffer;
 		ListIterator<String> stringBufferIterator;
 		final int bufLen = 100;
