@@ -110,6 +110,7 @@ public class ConeSearch
 
 				out.println("</FIELD>");
 			}
+			out.println("<DATA>");
 			out.println("<TABLEDATA>");
 			logger.debug("Retrieving and outputting the data ...");
 			
@@ -124,9 +125,10 @@ public class ConeSearch
 					if (s == null) s = "";
 					out.print("<TD>" + s + "</TD>");
 				}
-				out.println("</TR>");        
+				out.println("\n</TR>");        
 			}
 			out.println("</TABLEDATA>");
+			out.println("</DATA>");
 			out.println("</TABLE>");    
 			out.println("</RESOURCE>");
 			logger.debug("Finished outputting the data ...");
