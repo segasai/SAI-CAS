@@ -149,6 +149,7 @@ public class XMLCatalog
 			 */
 			
 			String tableName = table.getName().toLowerCase();
+			logger.debug("Inserting the table: "+tableName);				
 			
 			String tableInfo = table.getInfo();
 			String tableDescription = table.getDescription();
@@ -340,7 +341,11 @@ public class XMLCatalog
 				properties.setProperty(property.getName(),property.getValue());
 			}
 			List<Datasource> sourceList = ed.getSource();
-			
+			if (sourceList == null)
+			{
+				throw new XMLCatalogException("If there is the externaldata field, you should put the link for the data source");				
+			}
+
 			ArrayList<URL> urlList = new ArrayList<URL>();
 			for (Datasource source: sourceList)
 			{
@@ -365,9 +370,11 @@ public class XMLCatalog
 			InputStream is;
 			InputStream is1;
 			
+			logger.debug("Retrieving the reader ...");
 			if (urlIterator.hasNext())
 			{
 				currentURL = urlIterator.next();
+				logger.debug("Reading from the URL: "+currentURL);
 			}
 			else
 			{
@@ -578,7 +585,7 @@ public class XMLCatalog
 			super(ed, ncols);
 			delimiter = properties.getProperty("delimiter");
 			nullMarker = properties.getProperty("null");
-			
+
 			if (delimiter == null)
 			{
 				throw new XMLCatalogException ("You should define the delimiter when you select the 'delimited' format");
@@ -612,7 +619,12 @@ public class XMLCatalog
 				stringBufferIterator = stringBuffer.listIterator();
 			}
 			s = stringBufferIterator.next();
-			String sArr[] = s.split(delimiter);
+//			logger.debug("Read string: "+s);
+//			logger.debug("Delim: "+delimiter);
+			
+			String sArr[] = s.split("\\"+delimiter);
+//			logger.debug("Length: "+sArr.length);
+
 			if (nullMarker != null)
 			{
 				int n = sArr.length;

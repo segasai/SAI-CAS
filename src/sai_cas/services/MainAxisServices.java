@@ -34,14 +34,12 @@ public class MainAxisServices {
 			dbi = new DBInterface(conn);
 			xmlc = new XMLCatalog(uriCatalog);
 			xmlc.insertDataToDB(dbi);
+			DBInterface.close(dbi, conn);
 		}
 		catch (SQLException e)
 		{
 			logger.error("Got an exception... ", e);
-		}
-		finally
-		{
-			DBInterface.close(dbi, conn);
+			DBInterface.close(dbi, conn, false);
 		}
 			
 	}
@@ -64,15 +62,12 @@ public class MainAxisServices {
 			dbi = new DBInterface(conn);
 			xmlc = new XMLCatalog(catalogString);
 			xmlc.insertDataToDB(dbi);
-			dbi.close();
+			DBInterface.close(dbi, conn);
 		}
 		catch (SQLException e)
 		{
-			logger.error("Got an exception... ", e);			
-		}
-		finally 
-		{
-			DBInterface.close(dbi, conn);
+			logger.error("Got an exception... ", e);
+			DBInterface.close(dbi, conn, false);
 		}
 	}
 	

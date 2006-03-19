@@ -25,8 +25,13 @@ public class DBInterface  extends Object
 		logger.info("The DB interface is successfully created...");
 		curNBatchStatements =0 ;
 	}
-	
+
 	public void close() throws SQLException
+	{
+		close(true);
+	}
+
+	public void close(boolean commit_flag) throws SQLException
 	{
 		if (stmt != null)
 		{
@@ -41,17 +46,25 @@ public class DBInterface  extends Object
 		{
 			qr.close();
 		}
-		conn.commit();
+		if (commit_flag)
+		{
+			conn.commit();
+		}
 		conn.close();
 	}
-	
+
 	public static void close(DBInterface dbi, Connection conn)
+	{
+		close(dbi,conn,true);	
+	}
+	
+	public static void close(DBInterface dbi, Connection conn, boolean commit_flag)
 	{
 		try 
 		{
 			if (dbi!=null)
 			{
-				dbi.close();
+				dbi.close(commit_flag);
 			}
 			else if (conn!=null)
 			{
