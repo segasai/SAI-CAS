@@ -494,7 +494,7 @@ public class XMLCatalog
 					this.fieldsRight = new int[ncols];
 					for (int i = 0; i < ncols; i++)
 					{
-						this.fieldsLeft[i]=Integer.parseInt(fieldsArray[i*2]);
+						this.fieldsLeft[i]=Integer.parseInt(fieldsArray[i*2])-1;
 						this.fieldsRight[i]=Integer.parseInt(fieldsArray[2*i+1]);
 					}
 				}
