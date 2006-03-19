@@ -36,6 +36,19 @@ public class ConeSearchServlet extends GenericServlet {
 		String sdec = request.getParameter("DEC");
 		String ssr = request.getParameter("SR");
 
+		if (sra == null)
+		{
+			sra = request.getParameter("ra");
+		}
+		if (sdec == null)
+		{
+			sdec = request.getParameter("dec");
+		}
+		if (ssr == null) 
+		{
+			ssr = request.getParameter("sr");
+		}
+
 		double ra, dec, sr;
 
 		try 
