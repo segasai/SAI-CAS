@@ -139,11 +139,15 @@ public class ConeSearch
 		catch (java.sql.SQLException e)
 		{
 			logger.error("Got the SQL exception...",e);
-			out.println("<DESCRIPTION>ERROR:\nSQL Exception: " + e.getMessage() + "</DESCRIPTION>");    
+			out.println("<DESCRIPTION>ERROR:\nSQL Exception: " + e.getMessage() +
+						"\nContact saicas@sai.msu.ru in case of problems\n"+
+						"</DESCRIPTION>");    
 		}
 		catch (ConeSearchException e)
 		{
-			out.println("<DESCRIPTION>ERROR: " + e.getMessage() + "</DESCRIPTION>");    
+			out.println("<DESCRIPTION>ERROR: " + e.getMessage() +
+						"\nContact saicas@sai.msu.ru in case of problems\n"+
+						"</DESCRIPTION>");    
 		}
 		
 		out.println("</VOTABLE>");
