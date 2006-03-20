@@ -66,7 +66,7 @@ public class ConeSearch
 							catalog+
 							"\" has more than one table, so you must specify," +
 							" which one you want to query.\n"+
-							"The catalogue contains following tables: "+Arrays.toString(tableArray));					
+							"The catalogue contains following tables: "+Arrays.toString(tableArray));
 				}
 				table = tableArray[0];
 			}
@@ -88,7 +88,9 @@ public class ConeSearch
 			out.println("<DESCRIPTION>"+catalogDescription+"</DESCRIPTION>");
 			out.println("<INFO>Cone search result from catalogue: "+catalog +
 						", table: "+ table+"\n" +
-						"RA="+ra+" DEC="+dec+" SR="+rad+"</INFO>");
+						"RA="+ra+" DEC="+dec+" SR="+rad+"\n"+
+						"Contact saicas@sai.msu.ru in case of problems"
+						"</INFO>");
 			out.println("<TABLE name=\"" + table + "\">");
 				
 			int ncols = dbi.qr.getColumnCount();
@@ -171,9 +173,10 @@ public class ConeSearch
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		out.println("<!DOCTYPE VOTABLE SYSTEM \"http://us-vo.org/xml/VOTable.dtd\">");
 		out.print("<VOTABLE version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
-		out.println("xsi:noNamespaceSchemaLocation=\"http://www.ivoa.net/xml/VOTable/VOTable/v1.1\">");
+		out.println("xsi:noNamespaceSchemaLocation=\"http://www.ivoa.net/xml/VOTable/v1.1\">");
 		out.print("<DESCRIPTION>");
 		out.println(error_message);
+		out.println("Contact email: saicas@sai.msu.ru");
 		out.println("</DESCRIPTION>");
 		out.println("</VOTABLE>");
 		} 
