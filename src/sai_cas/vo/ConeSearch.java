@@ -89,7 +89,7 @@ public class ConeSearch
 			out.println("<INFO>Cone search result from catalogue: "+catalog +
 						", table: "+ table+"\n" +
 						"RA="+ra+" DEC="+dec+" SR="+rad+"\n"+
-						"Contact saicas@sai.msu.ru in case of problems"
+						"Contact saicas@sai.msu.ru in case of problems"+
 						"</INFO>");
 			out.println("<TABLE name=\"" + table + "\">");
 				
