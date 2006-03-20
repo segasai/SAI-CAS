@@ -36,7 +36,7 @@ public class ConeSearch
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		out.println("<!DOCTYPE VOTABLE SYSTEM \"http://us-vo.org/xml/VOTable.dtd\">");
 		out.print("<VOTABLE version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
-		out.println("xsi:noNamespaceSchemaLocation=\"http://www.ivoa.net/xml/VOTable/VOTable/v1.1\">");
+		out.println("xsi:noNamespaceSchemaLocation=\"http://www.ivoa.net/xml/VOTable/v1.1\">");
 		Connection conn = null;
 		DBInterface dbi = null;
 		String table = inputTable;
