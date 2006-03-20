@@ -2,16 +2,6 @@
 <project name="sai_cas" default="deploy_cas">
 
 	<property file="build.properties"/>		
-<!-- OBSOLETE currently... 
-	<property name="jwsdp.home" value="/opt/java_libs/jwsdp-1.6/" />
-	<property name="tomcat.home" value="/home/math/vo_work/apache-tomcat-5.5.15/"/>
-	<property name="tomcat.user" value="math"/>
-	<property name="tomcat.password" value="aspen"/>
-	<property name="tomcat.manager.url" value="http://localhost:8080/manager"/>
-	<property name="axis.home" value="/opt/java_libs/axis-1_3/"/>
-	<property name="axis.host" value="localhost"/>
-	<property name="axis.port" value="8080"/>
--->
 
 	<property name="tomcat.common.lib" value="${tomcat.home}/common/lib/"/>
 	<property name="tomcat.server.lib" value="${tomcat.home}/server/lib/"/>
