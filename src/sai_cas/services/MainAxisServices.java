@@ -97,6 +97,63 @@ public class MainAxisServices {
 		}
 		return result;
 	}
+
+
+	/**
+	 * 
+	 * @return String -- the info about the catalogue
+	 * @throws Exception
+	 */
+	public static String getCatalogInfo(String catalog) 
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getCatalogInfo(catalog);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @return String -- the info about the catalogue
+	 * @throws Exception
+	 */
+	public static String getCatalogDescription(String catalog) 
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getCatalogDescription(catalog);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+
 	/**
 	 * 
 	 * @param catalogName

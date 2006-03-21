@@ -44,6 +44,33 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 			return null;
 		}
 	}
+
+	public java.lang.String getCatalogInfo(String cat) throws java.rmi.RemoteException
+	{
+		try 
+		{
+			return MainAxisServices.getCatalogInfo(cat);
+		}
+		catch (Exception e)
+		{
+			logger.error("Catched exception ",e);
+			return null;
+		}	
+	}
+
+	public java.lang.String getCatalogDescription(String cat) throws java.rmi.RemoteException
+	{
+		try 
+		{
+			return MainAxisServices.getCatalogDescription(cat);
+		}
+		catch (Exception e)
+		{
+			logger.error("Catched exception ",e);
+			return null;
+		}	
+	}
+
 	public java.lang.String[] getTableNames(java.lang.String catalogName) throws java.rmi.RemoteException {
 		try
 		{

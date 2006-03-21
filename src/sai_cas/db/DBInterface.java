@@ -661,6 +661,17 @@ public class DBInterface  extends Object
 		return result;
 	}
 
+	public String getCatalogInfo(String catalog) throws SQLException
+	{
+		String query="SELECT cas_get_catalog_info('"+catalog+"');";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		String result = rs.getString(1);
+		rs.close();
+		return result;
+	}
+
 	public String[] getCatalogNames() throws SQLException
 	{
 		String query="SELECT cas_get_catalog_names();";
