@@ -82,7 +82,72 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 			return null;			
 		}
 	}
+
+	public java.lang.String[] getColumnNames(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException {
+		try
+		{
+			return MainAxisServices.getColumnNames(catalogName, tableName);
+		}
+		catch(Exception e)
+		{
+			logger.error("Catched exception ",e);
+			return null;			
+		}
+	}
+
+
+	public java.lang.String[] getColumnInfos(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException {
+		try
+		{
+			return MainAxisServices.getColumnInfos(catalogName, tableName);
+		}
+		catch(Exception e)
+		{
+			logger.error("Catched exception ",e);
+			return null;			
+		}
+	}
 	
+
+	public java.lang.String[] getColumnDescriptions(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException {
+		try
+		{
+			return MainAxisServices.getColumnDescriptions(catalogName, tableName);
+		}
+		catch(Exception e)
+		{
+			logger.error("Catched exception ",e);
+			return null;			
+		}
+	}
+
+
+	public java.lang.String[] getColumnUnits(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException {
+		try
+		{
+			return MainAxisServices.getColumnUnits(catalogName, tableName);
+		}
+		catch(Exception e)
+		{
+			logger.error("Catched exception ",e);
+			return null;			
+		}
+	}
+
+
+	public java.lang.String[] getColumnUCDs(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException {
+		try
+		{
+			return MainAxisServices.getColumnUCDs(catalogName, tableName);
+		}
+		catch(Exception e)
+		{
+			logger.error("Catched exception ",e);
+			return null;			
+		}
+	}
+
+
 	public java.lang.String[][] getIndexes(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException {
 		try
 		{

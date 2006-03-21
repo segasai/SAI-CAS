@@ -181,6 +181,156 @@ public class MainAxisServices {
 		}
 		return result;
 	}
+
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return the array of tables in the catalogue
+	 * @throws Exception
+	 */
+	public static String[] getColumnNames(String catalogName, String tableName) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getColumnNames(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return the array of tables in the catalogue
+	 * @throws Exception
+	 */
+	public static String[] getColumnInfos(String catalogName, String tableName) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getColumnInfos(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return the array of tables in the catalogue
+	 * @throws Exception
+	 */
+	public static String[] getColumnDescriptions(String catalogName, String tableName) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getColumnDescriptions(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return the array of tables in the catalogue
+	 * @throws Exception
+	 */
+	public static String[] getColumnUnits(String catalogName, String tableName) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getColumnUCDs(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+
+
+
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return the array of tables in the catalogue
+	 * @throws Exception
+	 */
+	public static String[] getColumnUCDs(String catalogName, String tableName) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getColumnUCDs(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+
 	/**
 	 * 
 	 * @param catalogName

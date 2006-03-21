@@ -701,6 +701,84 @@ public class DBInterface  extends Object
 		rs.close();
 		return als.toArray(result);
 	}
+
+	public String[] getColumnNames(String catalogName,String tableName) throws SQLException
+	{
+		String query="SELECT cas_get_attribute_names('"+catalogName+"','"+tableName+"');";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ArrayList<String> als = new ArrayList<String>();
+		while(rs.next())
+		{
+			als.add(rs.getString(1));
+		}
+		String[] result = new String[1];
+		rs.close();
+		return als.toArray(result);
+	}
+
+	public String[] getColumnDescriptions(String catalogName,String tableName) throws SQLException
+	{
+		String query="SELECT cas_get_column_descriptions('"+catalogName+"','"+tableName+"');";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ArrayList<String> als = new ArrayList<String>();
+		while(rs.next())
+		{
+			als.add(rs.getString(1));
+		}
+		String[] result = new String[1];
+		rs.close();
+		return als.toArray(result);
+	}
+
+	public String[] getColumnInfos(String catalogName,String tableName) throws SQLException
+	{
+		String query="SELECT cas_get_column_infos('"+catalogName+"','"+tableName+"');";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ArrayList<String> als = new ArrayList<String>();
+		while(rs.next())
+		{
+			als.add(rs.getString(1));
+		}
+		String[] result = new String[1];
+		rs.close();
+		return als.toArray(result);
+	}
+
+
+	public String[] getColumnUnits(String catalogName,String tableName) throws SQLException
+	{
+		String query="SELECT cas_get_column_units('"+catalogName+"','"+tableName+"');";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ArrayList<String> als = new ArrayList<String>();
+		while(rs.next())
+		{
+			als.add(rs.getString(1));
+		}
+		String[] result = new String[1];
+		rs.close();
+		return als.toArray(result);
+	}
+
+
+	public String[] getColumnUCDs(String catalogName,String tableName) throws SQLException
+	{
+		String query="SELECT cas_get_column_ucds('"+catalogName+"','"+tableName+"');";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ArrayList<String> als = new ArrayList<String>();
+		while(rs.next())
+		{
+			als.add(rs.getString(1));
+		}
+		String[] result = new String[1];
+		rs.close();
+		return als.toArray(result);
+	}
+
 	
 	public String[][] getIndexes(String catalogName, String tableName) throws SQLException
 	{
@@ -915,7 +993,7 @@ public class DBInterface  extends Object
 		{
 			if (ucdArray[n-1]==null)
 			{
-				PreparedStatement stmt = conn.prepareStatement("select cas_get_ucd(?, ?, ?)");
+				PreparedStatement stmt = conn.prepareStatement("select cas_get_column_ucd(?, ?, ?)");
 				stmt.setString(1, getBaseCatalogName(n));
 				stmt.setString(2, getBaseTableName(n));
 				stmt.setString(3, getBaseColumnName(n));
@@ -951,7 +1029,7 @@ public class DBInterface  extends Object
 		{
 			if (unitArray[n-1]==null)
 			{
-				PreparedStatement stmt = conn.prepareStatement("select cas_get_unit(?, ?, ?)");
+				PreparedStatement stmt = conn.prepareStatement("select cas_get_column_unit(?, ?, ?)");
 				stmt.setString(1, getBaseCatalogName(n));
 				stmt.setString(2, getBaseTableName(n));
 				stmt.setString(3, getBaseColumnName(n));
