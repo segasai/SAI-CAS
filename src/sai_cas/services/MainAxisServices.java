@@ -128,7 +128,7 @@ public class MainAxisServices {
 
 	/**
 	 * 
-	 * @return String -- the info about the catalogue
+	 * @return String -- the Description of the catalogue
 	 * @throws Exception
 	 */
 	public static String getCatalogDescription(String catalog) 
@@ -157,7 +157,7 @@ public class MainAxisServices {
 	/**
 	 * 
 	 * @param catalogName
-	 * @return the array of tables in the catalogue
+	 * @return String[] the array of table names in the catalogue
 	 * @throws Exception
 	 */
 	public static String[] getTableNames(String catalogName) throws Exception
@@ -186,7 +186,7 @@ public class MainAxisServices {
 	 * 
 	 * @param catalogName
 	 * @param tableName
-	 * @return the array of tables in the catalogue
+	 * @return String[] the array of column names in the table of the catalogue
 	 * @throws Exception
 	 */
 	public static String[] getColumnNames(String catalogName, String tableName) throws Exception
@@ -215,7 +215,7 @@ public class MainAxisServices {
 	 * 
 	 * @param catalogName
 	 * @param tableName
-	 * @return the array of tables in the catalogue
+	 * @return String[] the array of infos about the columns in the table of the catalogue
 	 * @throws Exception
 	 */
 	public static String[] getColumnInfos(String catalogName, String tableName) throws Exception
@@ -244,7 +244,7 @@ public class MainAxisServices {
 	 * 
 	 * @param catalogName
 	 * @param tableName
-	 * @return the array of tables in the catalogue
+	 * @return String[] the array of descriptions of the columns in the table of the catalogue
 	 * @throws Exception
 	 */
 	public static String[] getColumnDescriptions(String catalogName, String tableName) throws Exception
@@ -273,7 +273,7 @@ public class MainAxisServices {
 	 * 
 	 * @param catalogName
 	 * @param tableName
-	 * @return the array of tables in the catalogue
+	 * @return String[] -- the array of units of columns in the table of the catalogue
 	 * @throws Exception
 	 */
 	public static String[] getColumnUnits(String catalogName, String tableName) throws Exception
@@ -305,7 +305,7 @@ public class MainAxisServices {
 	 * 
 	 * @param catalogName
 	 * @param tableName
-	 * @return the array of tables in the catalogue
+	 * @return String[] -- the array of UCD's of columns in the table of the catalogue
 	 * @throws Exception
 	 */
 	public static String[] getColumnUCDs(String catalogName, String tableName) throws Exception
@@ -335,7 +335,7 @@ public class MainAxisServices {
 	 * 
 	 * @param catalogName
 	 * @param tableName
-	 * @return the array of string pairs (indexName, indexDefinition) for give catalog and table
+	 * @return String[][] -- the array of string pairs (indexName, indexDefinition) for given catalog and table
 	 * @throws Exception
 	 */
 	public static String[][] getIndexes(String catalogName, String tableName) throws Exception
@@ -358,5 +358,5 @@ public class MainAxisServices {
 			DBInterface.close(dbi, conn);
 		}
 		return result;
-	}	
+	}
 }
