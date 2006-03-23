@@ -67,6 +67,11 @@ public class ConeSearchServlet extends GenericServlet {
 			dec = Double.parseDouble(sdec);
 			sr = Double.parseDouble(ssr);
 			
+			if (sr > 3)
+			{
+				throw new ConeSearchServletException("ERROR: Sorry we currently do not allow queries with search radius greater than 3 degrees.");
+			}
+			
 			ConeSearch.printVOTableConeSearch(out, cat, tab, ra, dec, sr);
 
 		}	
