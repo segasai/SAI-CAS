@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBException;
 import org.apache.log4j.Logger;
 
 import sai_cas.XMLCatalog;
+import sai_cas.XMLCatalogException;
 import sai_cas.db.*;
 
 public class MainAxisServices {
@@ -50,7 +51,7 @@ public class MainAxisServices {
 	 * @throws Exception
 	 * @return void
 	 */
-	public static void insertCatalog(String catalogString) throws Exception
+	public static void insertCatalog(String catalogString) throws SQLException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -67,6 +68,17 @@ public class MainAxisServices {
 		catch (SQLException e)
 		{
 			logger.error("Got an exception... ", e);
+			DBInterface.close(dbi, conn, false);
+		}
+		catch (XMLCatalogException e)
+		{
+			logger.error("Got an XMLCatalog exception... ", e);
+			DBInterface.close(dbi, conn, false);
+		
+		}
+		catch (DBException e)
+		{
+			logger.error("Got an DB exception... ", e);
 			DBInterface.close(dbi, conn, false);
 		}
 	}
