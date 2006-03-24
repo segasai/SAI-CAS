@@ -267,8 +267,15 @@ public class XMLCatalog
 						throw new XMLCatalogException("The number of columns in the data file ("+sarr.length+") is not equal to the number of the fields in the XML declaration("+ncols+")");
 					}
 
+					try
+					{
+						dbi.insertData(sarr);
+					}
+					catch (NumberFormatException e)
+					{
+						throw new XMLCatalogException("NumberFormatException in "+ dr.currentURL.toString()+ " "+e.getMessage());					
+					}
 
-					dbi.insertData(sarr);
 				}
 				logger.debug("The data seems to be ingested correctly");
 			}
