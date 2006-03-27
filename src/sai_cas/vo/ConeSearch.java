@@ -76,7 +76,7 @@ public class ConeSearch
 			}
 
 			String[] raDecArray=dbi.getRaDecColumns(catalog,table);
-			if ((raDecArray[0]==null)||(raDecArray[1]==null))
+			if ((raDecArray[0] == null)||(raDecArray[1] == null))
 			{
 				throw new ConeSearchException("Selected table in the catalogue "+
 						"do not have marked RA, DEC columns. Cannot run Cone Search in that case...");
@@ -103,9 +103,9 @@ public class ConeSearch
 				out.println("<FIELD name=\"" + dbi.qr.getColumnName(i) +
 						"\" ucd=\"" + dbi.qr.getUcd(i) +
 						"\" unit=\"" + dbi.qr.getUnit(i) +
-						"\" datatype=\"" + datatype + 
-						((datatype.equals("char"))?"arraysize=\"*\"":"") +
-						"\">");
+						"\" datatype=\"" + datatype + "\"" 
+						((datatype.equals("char"))?" arraysize=\"*\" ":"") +
+						">");
 				/* !!!!!!!!!!!  TODO  !!!!!!!!!!!!!! 
 				 * Here I inserted the stupid logic to set arraysize="*" 
 				 * for every char field. Certainly the info about it should
