@@ -98,10 +98,20 @@ public class ConeSearch
 			logger.debug("Printing VOtable header ...");
 			for (int i = 1; i <= ncols; i++)
 			{
+				String datatype = dbi.qr.getDatatype(i);
+				
 				out.println("<FIELD name=\"" + dbi.qr.getColumnName(i) +
 						"\" ucd=\"" + dbi.qr.getUcd(i) +
 						"\" unit=\"" + dbi.qr.getUnit(i) +
-						"\" datatype=\"" + dbi.qr.getDatatype(i) + "\">");
+						"\" datatype=\"" + datatype + 
+						((datatype.equals("char"))?"arraysize=\"*\"":"") +
+						"\">");
+				/* !!!!!!!!!!!  TODO  !!!!!!!!!!!!!! 
+				 * Here I inserted the stupid logic to set arraysize="*" 
+				 * for every char field. Certainly the info about it should
+				 * be stored in the database and retrieved from it. But
+				 * currently I use arraysize="*" for everything
+				 */
 				
 				out.print("<DESCRIPTION>");
 				out.print(dbi.qr.getColumnDescription(i));
