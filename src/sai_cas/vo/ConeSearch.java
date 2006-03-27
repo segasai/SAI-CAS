@@ -103,7 +103,7 @@ public class ConeSearch
 				out.println("<FIELD name=\"" + dbi.qr.getColumnName(i) +
 						"\" ucd=\"" + dbi.qr.getUcd(i) +
 						"\" unit=\"" + dbi.qr.getUnit(i) +
-						"\" datatype=\"" + datatype + "\"" 
+						"\" datatype=\"" + datatype + "\"" +
 						((datatype.equals("char"))?" arraysize=\"*\" ":"") +
 						">");
 				/* !!!!!!!!!!!  TODO  !!!!!!!!!!!!!! 
