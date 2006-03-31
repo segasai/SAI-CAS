@@ -67,6 +67,10 @@ public class ConeSearchServlet extends GenericServlet {
 			dec = Double.parseDouble(sdec);
 			sr = Double.parseDouble(ssr);
 			
+			/* !!!!!!!! TODO !!!!!!!!!! 
+			 * The maxSR parameter should be defined in some specific place 
+			 * for example in .properties file or in the database... 
+			 */
 			if (sr > 3)
 			{
 				throw new ConeSearchServletException("ERROR: Sorry we currently do not allow queries with search radius greater than 3 degrees.");
