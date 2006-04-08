@@ -2,6 +2,9 @@ package sai_cas.services;
 import java.net.URI;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.IOException;
 
 import javax.naming.NamingException;
 import javax.xml.bind.JAXBException;
@@ -11,6 +14,7 @@ import org.apache.log4j.Logger;
 import sai_cas.XMLCatalog;
 import sai_cas.XMLCatalogException;
 import sai_cas.db.*;
+import sai_cas.vo.ConeSearch;
 
 public class MainAxisServices {
 	static Logger logger = Logger.getLogger("sai_cas.MainAxisServices");
@@ -371,4 +375,26 @@ public class MainAxisServices {
 		}
 		return result;
 	}
+
+
+
+	public static String getConeSearch(String cat, String tab, double ra, double dec, double sr) 
+	{	
+		StringBuffer sb;
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		try
+		{
+			ConeSearch.printVOTableConeSearch(pw, cat, tab, ra, dec, sr);
+		}
+		catch (IOException e)
+		{
+			logger.error("Got an exception... ", e);
+		}
+		return sw.toString();	
+	}
 }
+
+
+
+

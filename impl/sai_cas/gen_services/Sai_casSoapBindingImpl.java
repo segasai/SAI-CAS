@@ -159,5 +159,9 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 			return null;			
 		}
 	}
+	public String getConeSearch(String cat, String tab, double ra, double dec, double sr) 
+	{
+		return getConeSearch(cat, tab, ra, dec, sr);
+	}
 	
 }
