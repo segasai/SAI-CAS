@@ -372,9 +372,14 @@ public class DBInterface  extends Object
 	
 	public void setCatalogInfo(String catalog, String info) throws SQLException
 	{
-		String query="UPDATE catalog_list SET info = '"+ info+ "'WHERE" +
-		" id = cas_get_catalog_id ( '"+catalog+"' )";
-		stmt.executeUpdate(query);
+		String query="UPDATE catalog_list SET info = ? WHERE" +
+		" id = cas_get_catalog_id ( ? )";
+		PreparedStatement pstmt = conn.prepareStatement(query); 
+		pstmt.setString(1,info);
+		pstmt.setString(2,catalog);
+		pstmt.executeUpdate();
+		pstmt.close();
+
 	}
 
 	public void setCatalogDescription(String catalog, String description) throws SQLException
