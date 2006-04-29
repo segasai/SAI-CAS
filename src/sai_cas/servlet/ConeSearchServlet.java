@@ -26,7 +26,6 @@ public class ConeSearchServlet extends GenericServlet {
 		throws ServletException, java.io.IOException
 	{
 
-		response.setContentType("text/xml");
 		PrintWriter out = response.getWriter();
 		
 		String cat = request.getParameter("cat");
@@ -35,6 +34,23 @@ public class ConeSearchServlet extends GenericServlet {
 		String sra = request.getParameter("RA");
 		String sdec = request.getParameter("DEC");
 		String ssr = request.getParameter("SR");
+
+
+		String format = request.getParameter("format");
+		if (format == null)
+		{
+			format="votable";
+		}
+
+		if (format.equals("votable"))
+		{
+			response.setContentType("text/xml");
+		}
+		else 
+		{
+			/* TODO */
+		}
+
 
 		String sverbosity = request.getParameter("VERB");
 		/* We set up the the default maximal verbosity */
@@ -51,7 +67,7 @@ public class ConeSearchServlet extends GenericServlet {
 		{
 			verbosity = 3;
 		}
-		
+
 
 
 		if (sra == null)
@@ -86,7 +102,7 @@ public class ConeSearchServlet extends GenericServlet {
 			dec = Double.parseDouble(sdec);
 			sr = Double.parseDouble(ssr);
 			
-			ConeSearch.printVOTableConeSearch(out, cat, tab, ra, dec, sr, verbosity);
+			ConeSearch.printVOTableConeSearch(out, cat, tab, ra, dec, sr, format, verbosity);
 		}	
 		catch (NumberFormatException e) 
 		{

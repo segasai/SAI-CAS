@@ -1,7 +1,7 @@
 package sai_cas.vo;
 
 import sai_cas.db.*;
-
+import sai_cas.output.*;
 //import javax.servlet.jsp.*;
 import java.io.PrintWriter;
 import java.io.PrintStream;
@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 
 public class ConeSearch
 {
-	static Logger logger = Logger.getLogger("sai_cas.ConeSearch");
+	static Logger logger = Logger.getLogger("sai_cas.vo.ConeSearch");
 
 	public static class ConeSearchException extends Exception
 	{
@@ -30,13 +30,156 @@ public class ConeSearch
 		}
 	}
 	public static void printVOTableConeSearch(PrintWriter out, String catalog,
+			String inputTable, double ra, double dec, double rad, String format, int verbosity)
+	throws java.io.IOException
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String table = inputTable;
+		QueryResultsOutputter qro = null;
+
+		if (format.equals("votable"))
+		{
+			VOTableQueryResultsOutputter voqro = new VOTableQueryResultsOutputter();
+			qro = voqro;
+		}
+		else if (format.equals("csv"))
+		{
+			qro = new CSVQueryResultsOutputter();		
+		}
+		else 
+		{
+			VOTableQueryResultsOutputter voqro = new VOTableQueryResultsOutputter();
+			qro = voqro;		
+		}
+
+		
+		try
+		{
+			//Connection conn = DBConnection.getSimpleConnection();
+			logger.debug("Trying to get the Pooled Connection");
+			conn = DBConnection.getPooledPerUserConnection();
+			if (conn == null)
+			{
+				logger.error("The ConeSearchServlet failed to get the connection to the DB..");
+				throw new ConeSearchException("Cannot connect to the database...\n Sorry");	
+			}	
+			dbi = new DBInterface (conn);
+			
+			if (!dbi.checkCatalogExists(catalog))
+			{
+				throw new ConeSearchException("Catalog " + catalog + " does not exist in our system");
+			}
+			if (table == null)
+			{
+				String[] tableArray = dbi.getTableNames(catalog);
+				if (tableArray.length > 1)
+				{
+					throw new ConeSearchException("Current catalogue \""+
+							catalog+
+							"\" has more than one table, so you must specify," +
+							" which one you want to query.\n"+
+							"The catalogue contains following tables: "+Arrays.toString(tableArray));
+				}
+				table = tableArray[0];
+			}
+			else if (!dbi.checkTableExists(catalog, table))
+			{
+				throw new ConeSearchException("The table \"" + table + "\" does not exist in the catalogue \""+ catalog + "\"");				
+			}
+
+			String[] raDecArray = dbi.getRaDecColumns(catalog,table);
+			if ((raDecArray[0] == null)||(raDecArray[1] == null))
+			{
+				throw new ConeSearchException("Selected table in the catalogue "+
+						"do not have marked RA, DEC columns. Cannot run Cone Search in that case...");
+			}
+			
+			if (rad > sai_cas.Parameters.getMaxConeSearchRadius())
+			{
+				throw new ConeSearchException("ERROR: Sorry we currently do not allow queries with search radius greater than "+sai_cas.Parameters.getMaxConeSearchRadius()+" degrees.");
+			}
+			
+			String catalogDescription = dbi.getCatalogDescription(catalog);
+			
+
+			/** !!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!!!!!
+			 * I'm not really sure that that's logic of treating verbose
+			 * parameter is fine. Probably For VERB=1 I should probably 
+			 * output something with ucd="ID_MAIN" ... But currently I don't
+			 * know what to do
+			 */
+			String columnSelection;
+			if (verbosity == 1)
+			{
+				columnSelection = raDecArray[0] + "," + raDecArray[1];
+			}
+			else
+			{
+				columnSelection = "*";
+			}
+
+			/* Now we execute the query */
+			
+			dbi.executeQuery("select " + columnSelection + " from " + 
+				catalog + "." + table + " where q3c_radial_query("+raDecArray[0] +","+raDecArray[1]+","+ra+","+dec+","+rad+")");
+				
+			if (format.equals("xml"))
+			{
+				VOTableQueryResultsOutputter voqro = (VOTableQueryResultsOutputter) qro;
+				voqro.setResource(catalog);
+				voqro.setResourceDescription(catalogDescription);
+				voqro.setResourceInfo("Cone search result from catalogue: "+catalog +
+					", table: "+ table+"\n" +
+					"RA="+ra+" DEC="+dec+" SR="+rad+"\n"+
+					"Contact saicas@sai.msu.ru in case of problems");
+				voqro.setTable(table);
+//				qro=voqro;
+			}
+			
+			qro.print(out, dbi);
+
+		}
+		catch (java.sql.SQLException e)
+		{
+			logger.error("Got the SQL exception...",e);
+//			out.println(
+			qro.printError(out, "ERROR:\nSQL Exception: " + e.getMessage() +
+						"\nContact saicas@sai.msu.ru in case of problems\n");    
+		}
+		catch (ConeSearchException e)
+		{
+			qro.printError(out, "ERROR: " + e.getMessage() +
+						"\nContact saicas@sai.msu.ru in case of problems\n");    
+//			out.println("<DESCRIPTION>ERROR: " + e.getMessage() +
+//						"\nContact saicas@sai.msu.ru in case of problems\n"+
+//						"</DESCRIPTION>");    
+		}
+				
+		try 
+		{
+			if (conn != null)
+			{
+				dbi.close();
+			}
+		}
+		catch (SQLException e)
+		{
+/* 
+
+ !!!!!!!!!!!!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ 
+  Add the handler for the SQLException in the case of problems with .close() calls.
+*/
+
+		}    
+	}
+	
+	public static void printVOTableConeSearch1(PrintWriter out, String catalog,
 			String inputTable, double ra, double dec, double rad, int verbosity)
 	throws java.io.IOException
 	{
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		/** !!!!!!!!!! TODO !!!!!!!!!!!!!
-		 *  The XSL URL should be in some global variable 
-		 */
 		out.println("<?xml-stylesheet type=\"text/xsl\" href=\""+sai_cas.Parameters.getVOTableXSLURL()+"\"?>");
 		out.println("<!DOCTYPE VOTABLE SYSTEM \"http://us-vo.org/xml/VOTable.dtd\">");
 		out.print("<VOTABLE version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
@@ -213,7 +356,8 @@ public class ConeSearch
 
 		}    
 	}
-	
+
+
 	public static void printVOTableConeSearchError(PrintWriter out, String error_message) 
 		throws IOException
 		{
