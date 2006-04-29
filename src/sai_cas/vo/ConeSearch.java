@@ -30,7 +30,7 @@ public class ConeSearch
 		}
 	}
 	public static void printVOTableConeSearch(PrintWriter out, String catalog,
-			String inputTable, double ra, double dec, double rad)
+			String inputTable, double ra, double dec, double rad, int verbosity)
 	throws java.io.IOException
 	{
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -79,7 +79,7 @@ public class ConeSearch
 				throw new ConeSearchException("The table \"" + table + "\" does not exist in the catalogue \""+ catalog + "\"");				
 			}
 
-			String[] raDecArray=dbi.getRaDecColumns(catalog,table);
+			String[] raDecArray = dbi.getRaDecColumns(catalog,table);
 			if ((raDecArray[0] == null)||(raDecArray[1] == null))
 			{
 				throw new ConeSearchException("Selected table in the catalogue "+
@@ -93,7 +93,30 @@ public class ConeSearch
 			
 			String catalogDescription = dbi.getCatalogDescription(catalog);
 			
-			dbi.executeQuery("select * from " + catalog + "." + table + " where q3c_radial_query("+raDecArray[0] +","+raDecArray[1]+","+ra+","+dec+","+rad+")");
+
+			/** !!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!!!!!
+			 * I'm not really sure that that's logic of treating verbose
+			 * parameter is fine. Probably For VERB=1 I should probably 
+			 * output something with ucd="ID_MAIN" ... But currently I don't
+			 * know what to do
+			 */
+			String columnSelection;
+			if (verbosity == 1)
+			{
+				columnSelection = raDecArray[0] + "," + raDecArray[1];
+			}
+			else
+			{
+				columnSelection = "*";
+			}
+
+			/* Now we execute the query */
+			
+			dbi.executeQuery("select " + columnSelection + " from " + 
+				catalog + "." + table + " where q3c_radial_query("+raDecArray[0] +","+raDecArray[1]+","+ra+","+dec+","+rad+")");
+
+
+
 			out.println("<RESOURCE name=\"" + catalog + "\">");
 			out.println("<DESCRIPTION>"+catalogDescription+"</DESCRIPTION>");
 			out.println("<INFO>Cone search result from catalogue: "+catalog +

@@ -36,6 +36,24 @@ public class ConeSearchServlet extends GenericServlet {
 		String sdec = request.getParameter("DEC");
 		String ssr = request.getParameter("SR");
 
+		String sverbosity = request.getParameter("VERB");
+		/* We set up the the default maximal verbosity */
+		int verbosity;
+		try 
+		{
+			verbosity = Integer.parseInt(sverbosity);
+			if ((verbosity < 1) || (verbosity > 3))
+			{
+				throw new Exception();
+			}
+		}
+		catch (Exception e) 
+		{
+			verbosity = 3;
+		}
+		
+
+
 		if (sra == null)
 		{
 			sra = request.getParameter("ra");
@@ -49,10 +67,11 @@ public class ConeSearchServlet extends GenericServlet {
 			ssr = request.getParameter("sr");
 		}
 
-		double ra, dec, sr;
 
 		try 
 		{
+			double ra, dec, sr;
+			
 			if ((sra == null) || (sdec == null) || (ssr == null))
 			{
 				throw new ConeSearchServletException("ERROR: RA, DEC and SR must be defined");
@@ -67,8 +86,7 @@ public class ConeSearchServlet extends GenericServlet {
 			dec = Double.parseDouble(sdec);
 			sr = Double.parseDouble(ssr);
 			
-			ConeSearch.printVOTableConeSearch(out, cat, tab, ra, dec, sr);
-
+			ConeSearch.printVOTableConeSearch(out, cat, tab, ra, dec, sr, verbosity);
 		}	
 		catch (NumberFormatException e) 
 		{
