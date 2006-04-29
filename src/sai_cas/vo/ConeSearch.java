@@ -37,7 +37,7 @@ public class ConeSearch
 		/** !!!!!!!!!! TODO !!!!!!!!!!!!!
 		 *  The XSL URL should be in some global variable 
 		 */
-		out.println("<?xml-stylesheet type=\"text/xsl\" href=\"http://vo.astronet.ru/files/VOTable2XHTML.xsl\"?>");
+		out.println("<?xml-stylesheet type=\"text/xsl\" href=\""+sai_cas.Parameters.getVOTableXSLURL()+"\"?>");
 		out.println("<!DOCTYPE VOTABLE SYSTEM \"http://us-vo.org/xml/VOTable.dtd\">");
 		out.print("<VOTABLE version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
 		out.println("xsi:noNamespaceSchemaLocation=\"http://www.ivoa.net/xml/VOTable/v1.1\">");
@@ -85,6 +85,12 @@ public class ConeSearch
 				throw new ConeSearchException("Selected table in the catalogue "+
 						"do not have marked RA, DEC columns. Cannot run Cone Search in that case...");
 			}
+			
+			if (rad > sai_cas.Parameters.getMaxConeSearchRadius())
+			{
+				throw new ConeSearchException("ERROR: Sorry we currently do not allow queries with search radius greater than "+sai_cas.Parameters.getMaxConeSearchRadius()+" degrees.");
+			}
+			
 			String catalogDescription = dbi.getCatalogDescription(catalog);
 			
 			dbi.executeQuery("select * from " + catalog + "." + table + " where q3c_radial_query("+raDecArray[0] +","+raDecArray[1]+","+ra+","+dec+","+rad+")");
