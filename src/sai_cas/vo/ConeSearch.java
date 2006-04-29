@@ -124,7 +124,7 @@ public class ConeSearch
 			dbi.executeQuery("select " + columnSelection + " from " + 
 				catalog + "." + table + " where q3c_radial_query("+raDecArray[0] +","+raDecArray[1]+","+ra+","+dec+","+rad+")");
 				
-			if (format.equals("xml"))
+			if (format.equals("votable"))
 			{
 				VOTableQueryResultsOutputter voqro = (VOTableQueryResultsOutputter) qro;
 				voqro.setResource(catalog);
@@ -134,9 +134,7 @@ public class ConeSearch
 					"RA="+ra+" DEC="+dec+" SR="+rad+"\n"+
 					"Contact saicas@sai.msu.ru in case of problems");
 				voqro.setTable(table);
-//				qro=voqro;
 			}
-			
 			qro.print(out, dbi);
 
 		}
