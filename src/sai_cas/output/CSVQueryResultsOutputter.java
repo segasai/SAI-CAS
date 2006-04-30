@@ -49,11 +49,11 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 					if (s == null) s = "";
 					if (i != 0) 
 					{
-						out.print(s + ",");
+						out.print("," + s);
 					}
 					else
 					{
-						out.print(s + ",");					
+						out.print(s);					
 					}	
 				}
 				out.println("");        
