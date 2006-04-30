@@ -50,6 +50,10 @@ public class DBInterface  extends Object
 		{
 			conn.commit();
 		}
+		else 
+		{
+			conn.rollback();
+		}
 		conn.close();
 	}
 
@@ -68,6 +72,14 @@ public class DBInterface  extends Object
 			}
 			else if (conn!=null)
 			{
+				if (commit_flag)
+				{
+					conn.commit();
+				}
+				else
+				{
+					conn.rollback();
+				}
 				conn.close();
 			}
 		}
