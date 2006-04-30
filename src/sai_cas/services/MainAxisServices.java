@@ -378,14 +378,14 @@ public class MainAxisServices {
 
 
 
-	public static String getConeSearch(String cat, String tab, double ra, double dec, double sr) 
+	public static String getConeSearchAsString(String cat, String tab, double ra, double dec, double sr, String format) 
 	{	
 		StringBuffer sb;
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		try
 		{
-			ConeSearch.printVOTableConeSearch(pw, cat, tab, ra, dec, sr);
+			ConeSearch.printVOTableConeSearch(pw, cat, tab, ra, dec, sr, format, 3);
 		}
 		catch (IOException e)
 		{
