@@ -46,9 +46,13 @@ public class ConeSearchServlet extends GenericServlet {
 		{
 			response.setContentType("text/xml");
 		}
+		else if (format.equals("csv"))
+		{
+			response.setContentType("text/csv");
+		}
 		else 
 		{
-			/* TODO */
+			response.setContentType("text/plain");
 		}
 
 
