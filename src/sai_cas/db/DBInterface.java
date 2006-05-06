@@ -17,7 +17,6 @@ public class DBInterface  extends Object
 	{
 		this.conn = conn;
 /*     !!!!!!!!!!!!!!1    TEMPORARY         !!!!!!!!!!!!!!!     */
-		conn.setAutoCommit(false);
 		
 		String query = "SET search_path TO cas_metadata,public;";
 		stmt = conn.createStatement(); 

@@ -49,11 +49,25 @@ public class DBConnection
 		logger.info("The pooled DB connection successfully retrieved");
 
 		//this.conn = conn;
+
+		/* By default we always return the notAutoCommited connection */ 
+		try
+		{
+			conn.setAutoCommit(false);
+		}
+		catch (SQLException e)
+		{
+			logger.warn("Failed to disable the AutoCommit mode...")
+		}
+
 		return conn;
 	}
 
 	public static Connection getPooledPerUserConnection() throws SQLException
 	{
+		/** TODO
+		 * This parameters should be defined somewhere in the global properties
+		 */
 		return getPooledPerUserConnection("cas_user","aspen");
 	}
 	
@@ -92,6 +106,15 @@ public class DBConnection
 			logger.error("The cause of that" + e.getMessage()+" "+e.getCause());
 			return null;
 		}
+		try
+		{
+			conn.setAutoCommit(false);
+		}
+		catch (SQLException e)
+		{
+			logger.warn("Failed to disable the AutoCommit mode...")
+		}
+
 		logger.info("The pooled DB connection successfully retrieved");
 		//this.conn = conn;
 		return conn;
