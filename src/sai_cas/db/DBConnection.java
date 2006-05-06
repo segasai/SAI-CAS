@@ -57,7 +57,7 @@ public class DBConnection
 		}
 		catch (SQLException e)
 		{
-			logger.warn("Failed to disable the AutoCommit mode...")
+			logger.warn("Failed to disable the AutoCommit mode...");
 		}
 
 		return conn;
@@ -112,7 +112,7 @@ public class DBConnection
 		}
 		catch (SQLException e)
 		{
-			logger.warn("Failed to disable the AutoCommit mode...")
+			logger.warn("Failed to disable the AutoCommit mode...");
 		}
 
 		logger.info("The pooled DB connection successfully retrieved");
