@@ -16,7 +16,6 @@ public class DBInterface  extends Object
 	public DBInterface(Connection conn) throws java.sql.SQLException
 	{
 		this.conn = conn;
-/*     !!!!!!!!!!!!!!1    TEMPORARY         !!!!!!!!!!!!!!!     */
 		
 		String query = "SET search_path TO cas_metadata,public;";
 		stmt = conn.createStatement(); 
@@ -65,11 +64,11 @@ public class DBInterface  extends Object
 	{
 		try 
 		{
-			if (dbi!=null)
+			if (dbi != null)
 			{
 				dbi.close(commit_flag);
 			}
-			else if (conn!=null)
+			else if (conn != null)
 			{
 				if (commit_flag)
 				{
@@ -89,12 +88,10 @@ public class DBInterface  extends Object
 
 	public void insertCatalog(String catalog) throws SQLException
 	{
-
-		String query = "INSERT INTO catalog_list (name) VALUES ('"+catalog+"')";
+		String query = "INSERT INTO catalog_list (name) VALUES ('" + catalog + "')";
 		stmt.execute(query);     
 		query = "CREATE SCHEMA "+catalog;
 		stmt.execute(query);            
-
 	}
 
 	public void prepareInsertingData(String catalog, String table, String[] datatypeArray) throws SQLException, DBException
@@ -107,19 +104,11 @@ public class DBInterface  extends Object
 		 */
 		for (int i = 0; i < datatypeArray.length; i++)
 		{	
-			String query0 = "select cas_get_internal_datatype('"+datatypeArray[i]+"')";
-
-			ResultSet rs = stmt.executeQuery(query0);
-			if (!rs.next())
-			{
-				throw new DBException("Unknown datatype");
-			}
-			internalDatatypeArray[i]=rs.getString(1);
-			rs.close();
+			internalDatatypeArray[i] = getInternalDatatype(datatypeArray[i]);
 		}
 		
 		StringBuffer query =  new StringBuffer(1000);
-		query.append("INSERT INTO "+catalog+"."+table+" VALUES (");
+		query.append("INSERT INTO " + catalog + "." + table + " VALUES (");
 		
 		ss = new StatementSetter[internalDatatypeArray.length];
 		for(int i = 0, len = internalDatatypeArray.length; i < len; i++)
@@ -140,9 +129,9 @@ public class DBInterface  extends Object
 				ss[i] = new StatementSetter(internalDatatypeArray[i]);
 			query.append(ss[i].getInsert());
 		}
-		query.setCharAt(query.length()-1,')');		
+		query.setCharAt(query.length() - 1, ')');		
 		System.out.println(query);		
-		pstmtBuffered=conn.prepareStatement(query.toString());
+		pstmtBuffered = conn.prepareStatement(query.toString());
 		//org.postgresql.PGStatement pgstmt = 
 //		((org.postgresql.PGStatement)pstmtBuffered).setPrepareThreshold(3);
 		for(int i = 0, len = internalDatatypeArray.length; i < len; i++)
@@ -165,7 +154,7 @@ public class DBInterface  extends Object
 		}
 		public void setStatement (PreparedStatement pstmt)
 		{
-			this.pstmt=pstmt;
+			this.pstmt = pstmt;
 		}		
 		public void set(int i, String value) throws java.sql.SQLException
 		{
@@ -173,7 +162,7 @@ public class DBInterface  extends Object
 		}
 		public String getInsert()
 		{
-			return "CAST(? AS "+datatype+"),";
+			return "CAST(? AS " + datatype + "),";
 		}
 		protected PreparedStatement pstmt;	
 	}
@@ -188,10 +177,10 @@ public class DBInterface  extends Object
 				pstmt.setNull(i,Types.INTEGER);
 				return;
 			}
-			int offset=0;
-			if (value1.charAt(0) =='+')
+			int offset = 0;
+			if (value1.charAt(0) == '+')
 			{
-					offset=1;
+					offset = 1;
 			}			
 			pstmt.setInt(i, Integer.parseInt(value1.substring(offset)));
 		}
@@ -206,16 +195,16 @@ public class DBInterface  extends Object
 		public void set(int i, String value) throws java.sql.SQLException
 		{
 			String value1 = value.trim();
-			int offset=0;
-			if (value1.length()==0)
+			int offset = 0;
+			if (value1.length() == 0)
 			{
-				pstmt.setNull(i,Types.BIGINT);
+				pstmt.setNull(i, Types.BIGINT);
 				return;
 			}
 
-			if (value1.charAt(0)=='+')
+			if (value1.charAt(0) == '+')
 			{
-					offset=1;
+					offset = 1;
 			}
 			
 			pstmt.setLong(i, Long.parseLong(value1.substring(offset)));
@@ -236,7 +225,7 @@ public class DBInterface  extends Object
 			String value1 = value.trim();
 			if (value1.length() == 0)
 			{
-				pstmt.setNull(i,Types.DOUBLE);
+				pstmt.setNull(i, Types.DOUBLE);
 				return;
 			}			
 			pstmt.setDouble(i, Double.parseDouble(value1));
@@ -255,7 +244,7 @@ public class DBInterface  extends Object
 			String value1 = value.trim();
 			if (value1.length() == 0)
 			{
-				pstmt.setNull(i,Types.FLOAT);
+				pstmt.setNull(i, Types.FLOAT);
 				return;
 			}			
 			pstmt.setFloat(i, Float.parseFloat(value1));
@@ -287,7 +276,7 @@ public class DBInterface  extends Object
 //		System.out.println(usingServerPrepare);
 		for(int i=0, len = stringArray.length; i < len; i++)
 		{
-			ss[i].set(i+1 , stringArray[i]);
+			ss[i].set(i + 1, stringArray[i]);
 		}
 		//pstmtBuffered.executeUpdate();
 		pstmtBuffered.addBatch();
@@ -303,26 +292,27 @@ public class DBInterface  extends Object
 	{
 		StringBuffer query =  new StringBuffer(1000);
 		query.append("INSERT INTO "+catalog+"."+table+" VALUES (");
-		for(int i=0,len = stringArray.length;i<len; i++)
+		for(int i=0, len = stringArray.length; i < len; i++)
 		{
 			query.append("'" + stringArray[i] + "',");
 		}
-		query.setCharAt(query.length()-1,')');
+		query.setCharAt(query.length() - 1, ')');
 		stmt.execute(query.toString());
 	}
 
 	public void insertCatalog(String catalog, String catalogInfo, String catalogDescription) throws SQLException
 	{
-		String query = "INSERT INTO catalog_list (name, info, description) VALUES ('"+catalog+"','"+catalogInfo+"','"+catalogDescription+"')";
+		String query = "INSERT INTO catalog_list (name, info, description) VALUES ('" +
+			catalog + "','" + catalogInfo + "','" + catalogDescription + "')";
 		stmt.execute(query);     
-		query = "CREATE SCHEMA "+catalog;
+		query = "CREATE SCHEMA " + catalog;
 		stmt.execute(query);
 	}
 
 
 	public boolean checkCatalogExists(String catalog) throws SQLException
 	{
-		String query="SELECT cas_catalog_exists('"+catalog+"')";
+		String query="SELECT cas_catalog_exists('" + catalog + "')";
 		stmt.executeQuery(query);            
 		ResultSet rs = stmt.getResultSet();
 		rs.next();
@@ -333,7 +323,7 @@ public class DBInterface  extends Object
 
 	public boolean checkCatalogPropertyExists(String property) throws SQLException
 	{
-		String query="SELECT cas_catalog_property_exists('"+property+"')";
+		String query="SELECT cas_catalog_property_exists('" + property + "')";
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
 		rs.next();
@@ -352,8 +342,8 @@ public class DBInterface  extends Object
 	{
 		String query="INSERT INTO catalog_property_map"+
 		"(property_id, catalog_id, value) VALUES"+
-		"(cas_get_catalog_property_id( '" +property+"' ),"+
-		" cas_get_catalog_id ( '"+catalog+"' ), '"+value+"' )";
+		"(cas_get_catalog_property_id( '" + property + "' )," +
+		" cas_get_catalog_id ( '" + catalog + "' ), '" + value + "' )";
 		stmt.execute(query);
 	}
 	/**
@@ -386,8 +376,8 @@ public class DBInterface  extends Object
 		String query="UPDATE catalog_list SET info = ? WHERE" +
 		" id = cas_get_catalog_id ( ? )";
 		PreparedStatement pstmt = conn.prepareStatement(query); 
-		pstmt.setString(1,info);
-		pstmt.setString(2,catalog);
+		pstmt.setString(1, info);
+		pstmt.setString(2, catalog);
 		pstmt.executeUpdate();
 		pstmt.close();
 
@@ -398,8 +388,8 @@ public class DBInterface  extends Object
 		String query="UPDATE catalog_list SET description = ? WHERE " +
 		" id = cas_get_catalog_id ( ? )";
 		PreparedStatement pstmt = conn.prepareStatement(query); 
-		pstmt.setString(1,description);
-		pstmt.setString(2,catalog);
+		pstmt.setString(1, description);
+		pstmt.setString(2, catalog);
 		pstmt.executeUpdate();
 		pstmt.close();
 	}
@@ -422,8 +412,8 @@ public class DBInterface  extends Object
 		String column, columnType, columnInternalType, columnUnit, columnDescription, columnInfo;
 		sb.append("CREATE TABLE "+catalog + "." + table + " ( ");
 
-		query = "INSERT INTO attribute_list "+
-		"(table_id, name ,datatype_id, unit, info, description) "+
+		query = "INSERT INTO attribute_list " +
+		"(table_id, name ,datatype_id, unit, info, description) " +
 		" VALUES (cas_get_table_id(?,?),? ,cas_get_datatype_id(?),?,?,?)";
 		PreparedStatement pstmt = conn.prepareStatement(query);      
 
@@ -440,15 +430,7 @@ public class DBInterface  extends Object
 			columnDescription = cdit.next();
 
 			//System.out.println(columnType);
-			query = "select cas_get_internal_datatype('"+columnType+"')";
-			//stmt = conn.createStatement(); 
-			rs = stmt.executeQuery(query);
-			if (!rs.next()) 
-			{
-				throw new DBException("Unknown datatype");
-			}
-			
-			columnInternalType = rs.getString(1);
+			columnInternalType = getInternalDatatype(columnType);
 			//System.out.println(columnInternalType);
 			
 			sb.append(column + " " + columnInternalType+",");
@@ -467,6 +449,23 @@ public class DBInterface  extends Object
 		sb.append(")");
 
 		stmt.execute(new String(sb)); 
+	}
+
+	private String getInternalDatatype(String columnType) throws SQLException, DBException {
+		String query;
+		ResultSet rs;
+		String columnInternalType;
+		query = "select cas_get_internal_datatype('" + columnType + "')";
+		//stmt = conn.createStatement(); 
+		rs = stmt.executeQuery(query);
+		if (!rs.next()) 
+		{
+			throw new DBException("Unknown datatype");
+		}
+		
+		columnInternalType = rs.getString(1);
+		rs.close();
+		return columnInternalType;
 	}
 
 	public boolean checkTableExists(String catalog, String table) throws SQLException
