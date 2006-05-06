@@ -43,6 +43,7 @@ public class DBConnection
 		if (conn == null)
 		{
 			logger.error("Cannot get the pooled connection");
+			return null;
 		}
 
 		logger.info("The pooled DB connection successfully retrieved");
