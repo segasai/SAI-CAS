@@ -98,10 +98,6 @@ public class DBInterface  extends Object
 	{
 		String[] internalDatatypeArray = new String[datatypeArray.length];
 
-		/* !!!!!!!!!!!!!!!  TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-		/* The external datatype should be put into the separate function since the code 
-		 * here duplicate the code from the insertTODB 
-		 */
 		for (int i = 0; i < datatypeArray.length; i++)
 		{	
 			internalDatatypeArray[i] = getInternalDatatype(datatypeArray[i]);
@@ -406,9 +402,8 @@ public class DBInterface  extends Object
 		ListIterator<String> ciit = infoList.listIterator();
 		ListIterator<String> cdit = descriptionList.listIterator();
 
-		List columnInternalTypes = new ArrayList();
+//		List columnInternalTypes = new ArrayList();
 		StringBuffer sb = new StringBuffer();
-		ResultSet rs; 
 		String column, columnType, columnInternalType, columnUnit, columnDescription, columnInfo;
 		sb.append("CREATE TABLE "+catalog + "." + table + " ( ");
 
