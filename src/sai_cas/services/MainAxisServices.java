@@ -301,7 +301,7 @@ public class MainAxisServices {
 		{
 			conn = DBConnection.getPooledPerUserConnection();
 			dbi = new DBInterface(conn);
-			result = dbi.getColumnUCDs(catalogName,tableName);
+			result = dbi.getColumnUnits(catalogName,tableName);
 		}
 		catch(SQLException e)
 		{
