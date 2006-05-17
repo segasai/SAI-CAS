@@ -147,7 +147,7 @@ public class ConeSearch
 		if (verbosity == 1)
 		{
 			outputColumnSelection =
-				(column_ID_MAIN_UCD == null ? "" : column_ID_MAIN_UCD) + "," + 
+				(column_ID_MAIN_UCD == null ? "" : column_ID_MAIN_UCD + ",") + 
 				raDecArray[0] + "," + raDecArray[1];
 		}
 		else

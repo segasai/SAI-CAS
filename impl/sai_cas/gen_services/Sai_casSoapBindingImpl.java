@@ -182,21 +182,18 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 		}
 	}
 	
-	public String getConeSearchAsString(String cat, String tab, double ra,
-		double dec, double sr, String format) 
+	public String getConeSearchAsString(String cat, String tab, double ra, double dec, double sr, String format) 
 	{
 		return MainAxisServices.getConeSearchAsString(cat, tab, ra, dec, sr, format);
 	}
 
-	public String getConeSearchAsString(String cat, String tab, double ra,
-		double dec, double sr, String format, int verbosity) 
+	public String getConeSearchAsString(String cat, String tab, double ra, double dec, double sr, String format, int verbosity) 
 	{
 		return MainAxisServices.getConeSearchAsString(cat, tab, ra, dec, sr,
 			format, verbosity);
 	}
 
-	public String getConeSearchAsString(String cat, String tab, double ra,
-		double dec, double sr, String format, String columnList[])
+	public String getConeSearchAsString(String cat, String tab, double ra, double dec, double sr, String format, String columnList[])
 	{
 		return MainAxisServices.getConeSearchAsString(cat, tab, ra, dec, sr, format, columnList);
 	}
