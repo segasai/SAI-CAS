@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.IOException;
+import java.sql.Date;
+import java.util.Calendar;
 
 import javax.naming.NamingException;
 import javax.xml.bind.JAXBException;
@@ -26,18 +28,19 @@ public class MainAxisServices {
 	 * @return void
 	 */
 	
-	public static void insertCatalogfromURI(URI uriCatalog) throws Exception
+	public static void insertCatalogFromURI(String uriCatalog) throws Exception
 	{
 		
 		Connection conn = null;
 		DBInterface dbi = null;
 		XMLCatalog xmlc;
+		URI uri = new URI (uriCatalog);
 		
 		try
 		{
 			conn = DBConnection.getPooledPerUserConnection();
 			dbi = new DBInterface(conn);
-			xmlc = new XMLCatalog(uriCatalog);
+			xmlc = new XMLCatalog(uri);
 			xmlc.insertDataToDB(dbi);
 			DBInterface.close(dbi, conn);
 		}
@@ -392,7 +395,16 @@ public class MainAxisServices {
 			logger.error("Got an exception... ", e);
 		}
 		return sw.toString();	
+	}	
+	
+	public static Calendar getDBLastChangedDate()
+	{
+		//return Calendar.getInstance();
+		Calendar c = Calendar.getInstance();
+		c.set(2006,05,17);
+		return c;
 	}
+
 }
 
 

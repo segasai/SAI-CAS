@@ -6,6 +6,10 @@
  */
 
 package sai_cas.gen_services;
+
+import java.sql.Date; 
+import java.util.Calendar; 
+
 import org.apache.log4j.Logger;
 
 import sai_cas.services.MainAxisServices;
@@ -14,14 +18,25 @@ import sai_cas.services.MainAxisServices;
 public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServices
 {
 	static Logger logger = Logger.getLogger("sai_cas.AXIS_SERVICES");
-	public void insertCatalogfromURI(java.lang.Object uriCatalog) throws java.rmi.RemoteException
+	public void insertCatalogFromURI(java.lang.String uriCatalog) throws java.rmi.RemoteException
 	{
+		logger.info("Running insertCatalogFromURI...");
+		logger.debug("The following catalogue is being inserted " + uriCatalog);
+		
+		try 
+		{
+			sai_cas.services.MainAxisServices.insertCatalogFromURI(uriCatalog);
+		}
+		catch (Exception e)
+		{
+			logger.error("Catched exception ",e);
+		}		
 	}
 
 	public void insertCatalog(java.lang.String catalogString) throws java.rmi.RemoteException
 	{
 		logger.info("Running insertCatalog...");
-		logger.debug("The following catalogue has been inserted" + catalogString);
+		logger.debug("The following catalogue is being inserted" + catalogString);
 		
 		try 
 		{
@@ -159,9 +174,20 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 			return null;			
 		}
 	}
+	
 	public String getConeSearchAsString(String cat, String tab, double ra, double dec, double sr, String format) 
 	{
 		return MainAxisServices.getConeSearchAsString(cat, tab, ra, dec, sr, format);
 	}
+	
+/*	public Date getDBLastChangedDate()
+	{
+		return (MainAxisServices.getDBLastChangedDate());
+	}*/
+	public Calendar getDBLastChangedDate()
+	{
+		return (MainAxisServices.getDBLastChangedDate());
+	}
+
 	
 }

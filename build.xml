@@ -30,6 +30,8 @@
 	<taskdef resource="axis-tasks.properties">
 		<classpath>
 			<fileset dir="${axis.lib}" includes="*.jar"/>
+			<fileset dir="${javamail.lib}" includes="*.jar"/>
+			<fileset dir="${activation.lib}" includes="*.jar"/>
 		</classpath>
 	</taskdef>
 	
@@ -135,9 +137,12 @@
 			overwrite="true"/>
 		<javac debug="on" srcdir="${gen.src.axis}"
 			destdir="${build.classes}">
-			<compilerarg line="-Xlint:unchecked"/>
+			<compilerarg line="-Xlint:-unchecked"/>
 			<classpath>
 				<fileset dir="${axis.lib}" includes="*.jar"/>
+				<fileset dir="${javamail.lib}" includes="*.jar"/>
+				<fileset dir="${activation.lib}" includes="*.jar"/>
+
 				<!--<fileset dir="${jwsdp.home}" includes="jwsdp-shared/lib/*.jar" />
 				<fileset dir="${jwsdp.home}" includes="jaxp/lib/**/*.jar" />-->
 			</classpath>
