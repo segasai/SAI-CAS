@@ -55,7 +55,7 @@ public class ConeSearch
 		else 
 		{
 			VOTableQueryResultsOutputter voqro = new VOTableQueryResultsOutputter();
-			qro = voqro;		
+			qro = voqro;
 		}
 	}
 	
@@ -102,7 +102,7 @@ public class ConeSearch
 				throw new ConeSearchException("The table \"" + table + "\" does not exist in the catalogue \""+ catalog + "\"");				
 			}
 
-			String catalogDescription = dbi.getCatalogDescription(catalog);
+			catalogDescription = dbi.getCatalogDescription(catalog);
 
 
 			raDecArray = dbi.getRaDecColumns(catalog, table);
