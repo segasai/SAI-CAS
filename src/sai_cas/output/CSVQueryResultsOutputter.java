@@ -14,7 +14,8 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 		
 	public void printError(PrintWriter out, String message)
 	{
-		out.print("#"+message);
+		String messageCorrected = "#" + message.replace("\n","\n#");
+		out.print("#"+messageCorrected);
 	}
 
 	public void print(PrintWriter out, DBInterface dbi)

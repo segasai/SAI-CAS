@@ -355,19 +355,4 @@ public class ConeSearch
 		}    
 	}
 
-
-	public static void printVOTableConeSearchError(PrintWriter out, String error_message) 
-		throws IOException
-		{
-		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		out.println("<!DOCTYPE VOTABLE SYSTEM \"http://us-vo.org/xml/VOTable.dtd\">");
-		out.print("<VOTABLE version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
-		out.println("xsi:noNamespaceSchemaLocation=\"http://www.ivoa.net/xml/VOTable/v1.1\">");
-		out.print("<DESCRIPTION>");
-		out.println(error_message);
-		out.println("Contact email: saicas@sai.msu.ru");
-		out.println("</DESCRIPTION>");
-		out.println("</VOTABLE>");
-		} 
-	
 }
