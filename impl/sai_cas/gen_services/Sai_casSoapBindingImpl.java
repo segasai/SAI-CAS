@@ -86,7 +86,8 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 		}	
 	}
 
-	public java.lang.String[] getTableNames(java.lang.String catalogName) throws java.rmi.RemoteException {
+	public java.lang.String[] getTableNames(java.lang.String catalogName) throws java.rmi.RemoteException
+	{
 		try
 		{
 			return MainAxisServices.getTableNames(catalogName);
@@ -98,7 +99,8 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 		}
 	}
 
-	public java.lang.String[] getColumnNames(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException {
+	public java.lang.String[] getColumnNames(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException
+	{
 		try
 		{
 			return MainAxisServices.getColumnNames(catalogName, tableName);
@@ -111,7 +113,8 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 	}
 
 
-	public java.lang.String[] getColumnInfos(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException {
+	public java.lang.String[] getColumnInfos(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException
+	{
 		try
 		{
 			return MainAxisServices.getColumnInfos(catalogName, tableName);
@@ -124,7 +127,8 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 	}
 	
 
-	public java.lang.String[] getColumnDescriptions(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException {
+	public java.lang.String[] getColumnDescriptions(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException
+	{
 		try
 		{
 			return MainAxisServices.getColumnDescriptions(catalogName, tableName);
@@ -137,7 +141,8 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 	}
 
 
-	public java.lang.String[] getColumnUnits(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException {
+	public java.lang.String[] getColumnUnits(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException
+	{
 		try
 		{
 			return MainAxisServices.getColumnUnits(catalogName, tableName);
@@ -150,7 +155,8 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 	}
 
 
-	public java.lang.String[] getColumnUCDs(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException {
+	public java.lang.String[] getColumnUCDs(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException
+	{
 		try
 		{
 			return MainAxisServices.getColumnUCDs(catalogName, tableName);
@@ -163,7 +169,8 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 	}
 
 
-	public java.lang.String[][] getIndexes(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException {
+	public java.lang.String[][] getIndexes(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException
+	{
 		try
 		{
 			return MainAxisServices.getIndexes(catalogName,tableName);
