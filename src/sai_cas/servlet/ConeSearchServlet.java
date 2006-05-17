@@ -71,7 +71,13 @@ public class ConeSearchServlet extends GenericServlet {
 		{
 			verbosity = 3;
 		}
-
+		
+		String columnListAsString = request.getParameter("COLUMNS");
+		String columnList[] = null;
+		if (columnListAsString!=null)
+		{
+			columnList = columnListAsString.split(",");
+		}
 
 
 		if (sra == null)
@@ -109,7 +115,14 @@ public class ConeSearchServlet extends GenericServlet {
 
 			if (cs.initConeSearch(cat, tab, ra, dec, sr))
 			{
-				cs.setVerbosity(verbosity);
+				if (columnList == null)
+				{
+					cs.setVerbosity(verbosity);
+				}
+				else
+				{
+					cs.setColumnList(columnList);
+				}
 				cs.printConeSearch();
 			}
 		}	
