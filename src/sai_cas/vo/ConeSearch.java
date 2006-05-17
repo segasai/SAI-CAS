@@ -169,10 +169,13 @@ public class ConeSearch
 		}
 		if (sb.length() == 0)
 		{
-			return "*";
+			outputColumnSelection = "*";
 		}
-		sb.setLength(sb.length()-1);
-		outputColumnSelection = sb.toString();
+		else
+		{
+			sb.setLength(sb.length()-1);
+			outputColumnSelection = sb.toString();
+		}
 	}
 
 	public void printConeSearch()
