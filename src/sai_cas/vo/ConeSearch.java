@@ -167,6 +167,10 @@ public class ConeSearch
 				sb.append(columnList[i] + ",");
 			}
 		}
+		if (sb.length() == 0)
+		{
+			return "*";
+		}
 		sb.setLength(sb.length()-1);
 		outputColumnSelection = sb.toString();
 	}
