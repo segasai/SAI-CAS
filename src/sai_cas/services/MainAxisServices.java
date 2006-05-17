@@ -381,21 +381,51 @@ public class MainAxisServices {
 
 
 
-	public static String getConeSearchAsString(String cat, String tab, double ra, double dec, double sr, String format) 
+	public static String getConeSearchAsString(String cat, String tab,
+		double ra, double dec, double sr, String format, int verbosity) 
 	{	
 		StringBuffer sb;
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
-		try
+		ConeSearch cs = new ConeSearch(pw, format);
+		if (cs.initConeSearch(cat, tab, ra, dec, sr))
 		{
-			ConeSearch.printVOTableConeSearch(pw, cat, tab, ra, dec, sr, format, 3);
-		}
-		catch (IOException e)
-		{
-			logger.error("Got an exception... ", e);
+			cs.setVerbosity(verbosity);
+			cs.printConeSearch();
 		}
 		return sw.toString();	
 	}	
+
+	public static String getConeSearchAsString(String cat, String tab,
+		double ra, double dec, double sr, String format) 
+	{	
+		StringBuffer sb;
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		ConeSearch cs = new ConeSearch(pw, format);
+		if (cs.initConeSearch(cat, tab, ra, dec, sr))
+		{
+			cs.setVerbosity(3);
+			cs.printConeSearch();
+		}
+		return sw.toString();	
+	}	
+
+	public static String getConeSearchAsString(String cat, String tab,
+		double ra, double dec, double sr, String format, String columnList[] ) 
+	{	
+		StringBuffer sb;
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		ConeSearch cs = new ConeSearch(pw, format);
+		if (cs.initConeSearch(cat, tab, ra, dec, sr))
+		{
+			cs.setColumnList(columnList);
+			cs.printConeSearch();
+		}
+		return sw.toString();	
+	}	
+
 	
 	public static Calendar getDBLastChangedDate()
 	{

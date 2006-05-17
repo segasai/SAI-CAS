@@ -86,7 +86,8 @@ public class ConeSearchServlet extends GenericServlet {
 		{
 			ssr = request.getParameter("sr");
 		}
-
+		
+		ConeSearch cs = new ConeSearch(out, format);
 
 		try 
 		{
@@ -105,16 +106,20 @@ public class ConeSearchServlet extends GenericServlet {
 			ra = Double.parseDouble(sra);
 			dec = Double.parseDouble(sdec);
 			sr = Double.parseDouble(ssr);
-			
-			ConeSearch.printVOTableConeSearch(out, cat, tab, ra, dec, sr, format, verbosity);
+
+			if (cs.initConeSearch(cat, tab, ra, dec, sr))
+			{
+				cs.setVerbosity(verbosity);
+				cs.printConeSearch();
+			}
 		}	
 		catch (NumberFormatException e) 
 		{
-			ConeSearch.printVOTableConeSearchError(out, "ERROR: Invalid input for (RA,DEC,SR)");
+			cs.printConeSearchError("ERROR: Invalid input for (RA,DEC,SR)");
 		}
 		catch (ConeSearchServletException e) 
 		{
-			ConeSearch.printVOTableConeSearchError(out, e.getMessage());
+			cs.printConeSearchError(e.getMessage());
 		}
 	}
 }

@@ -21,20 +21,7 @@ public class SQLQueryExecutorServlet extends GenericServlet
 		
 		String query = request.getParameter("query");
 		
-		try 
-		{
-			
-//			ConeSearch.printVOTableConeSearch(out, cat, tab, ra, dec, sr);
-			
-		}	
-		catch (NumberFormatException e) 
-		{
-			ConeSearch.printVOTableConeSearchError(out, e.toString());
-		}
-/*		catch (ConeSearchServletException e) 
-		{
-			ConeSearch.printVOTableConeSearchError(out, e.getMessage());
-		}
-*/
+
+
 	}
 }

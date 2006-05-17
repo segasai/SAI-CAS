@@ -21,38 +21,45 @@ public class DBInterface  extends Object
 		stmt = conn.createStatement(); 
 		stmt.execute(query);
 		logger.info("The DB interface is successfully created...");
-		curNBatchStatements =0 ;
+		curNBatchStatements = 0 ;
 	}
 
-	public void close() throws SQLException
+	public void close()
 	{
 		close(true);
 	}
 
-	public void close(boolean commit_flag) throws SQLException
+	public void close(boolean commit_flag)
 	{
-		if (stmt != null)
+		try
 		{
-			stmt.close();
+			if (stmt != null)
+			{
+				stmt.close();
+			}
+			if (pstmtBuffered != null)
+			{
+				pstmtBuffered.executeBatch();
+				pstmtBuffered.close();
+			}
+			if (qr != null)
+			{
+				qr.close();
+			}
+			if (commit_flag)
+			{
+				conn.commit();
+			}
+			else 
+			{
+				conn.rollback();
+			}
+			conn.close();
 		}
-		if (pstmtBuffered != null)
+		catch (SQLException e)
 		{
-			pstmtBuffered.executeBatch();
-			pstmtBuffered.close();
+			logger.error("Exception during DBInterface closing ... " + e);
 		}
-		if (qr != null)
-		{
-			qr.close();
-		}
-		if (commit_flag)
-		{
-			conn.commit();
-		}
-		else 
-		{
-			conn.rollback();
-		}
-		conn.close();
 	}
 
 	public static void close(DBInterface dbi, Connection conn)
@@ -813,7 +820,7 @@ public class DBInterface  extends Object
 	public String[] getRaDecColumns(String catalogName, String tableName) throws SQLException
 	{
 //		String query="?=CALL cas_get_table_ra_dec(?,?)";
-		String query="SELECT * from cas_get_table_ra_dec('"+catalogName+"','"+tableName+"') as (a varchar, b varchar)";
+		String query = "SELECT * from cas_get_table_ra_dec('"+catalogName+"','"+tableName+"') as (a varchar, b varchar)";
 		logger.debug("Running query: "+query);
 /*		Statement stmt = conn.prepareCall(query);
 		stmt.setString(2,catalogName);
@@ -823,11 +830,25 @@ public class DBInterface  extends Object
 		ResultSet rs = stmt.executeQuery(query);
 		String [] res = new String[2];
 		rs.next();
-		res[0]= rs.getString(1);
-		res[1]= rs.getString(2);
+		res[0] = rs.getString(1);
+		res[1] = rs.getString(2);
 		rs.close();
 		return res;
 	}
+
+	public String getColumn_ID_MAIN_UCD(String catalogName, String tableName) throws SQLException
+	{
+		String query="SELECT cas_get_table_id_main_ucd('" + catalogName +
+			"','" + tableName + "');";
+		logger.debug("Running query: "+query);
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		String result = rs.getString(1);
+		rs.close();
+		return result;
+	}
+
 	
 	/**
 	 * 
