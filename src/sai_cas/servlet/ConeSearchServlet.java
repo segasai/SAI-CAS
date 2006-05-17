@@ -72,7 +72,12 @@ public class ConeSearchServlet extends GenericServlet {
 			verbosity = 3;
 		}
 		
-		String columnListAsString = request.getParameter("COLUMNS");
+		String columnListAsString = request.getParameter("columns");
+		if (columnListAsString==null)
+		{
+			columnListAsString = request.getParameter("COLUMNS");
+		}
+
 		String columnList[] = null;
 		if (columnListAsString!=null)
 		{
