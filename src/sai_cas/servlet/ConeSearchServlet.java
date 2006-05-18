@@ -5,10 +5,12 @@ import java.io.*;
 //import javax.sql.*;
 
 import javax.servlet.*;
+import javax.servlet.http.*;
+
 import sai_cas.db.*;
 import sai_cas.vo.*;
 
-public class ConeSearchServlet extends GenericServlet {
+public class ConeSearchServlet extends HttpServlet {
 	
 	public class ConeSearchServletException extends Exception
 	{
@@ -22,7 +24,7 @@ public class ConeSearchServlet extends GenericServlet {
 		}
 
 	}
-	public void service(ServletRequest request, ServletResponse response) 
+	public void doGet(HttpServletRequest request, HttpServletResponse response) 
 		throws ServletException, java.io.IOException
 	{
 
@@ -120,6 +122,8 @@ public class ConeSearchServlet extends GenericServlet {
 
 			if (cs.initConeSearch(cat, tab, ra, dec, sr))
 			{
+
+				response.setHeader("Content-Disposition", "attachment; filename=" + cat+"."+tab+"_"+sra+"_"+sdec+"_"+ssr);
 				if (columnList == null)
 				{
 					cs.setVerbosity(verbosity);
