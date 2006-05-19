@@ -123,7 +123,11 @@ public class ConeSearchServlet extends HttpServlet {
 			if (cs.initConeSearch(cat, tab, ra, dec, sr))
 			{
 
-				response.setHeader("Content-Disposition", "attachment; filename=" + cat+"."+tab+"_"+sra+"_"+sdec+"_"+ssr);
+				response.setHeader("Content-Disposition",
+					"attachment; filename=" + cat + "." +
+					(tab == null ? "" : tab) + "_" + sra + "_" +
+					sdec + "_" + ssr);
+				
 				if (columnList == null)
 				{
 					cs.setVerbosity(verbosity);

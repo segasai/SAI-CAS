@@ -59,10 +59,9 @@ public class ConeSearch
 		}
 	}
 	
-	public boolean initConeSearch(String catalog, String table, double ra, double dec, double rad)
+	public boolean initConeSearch(String catalog, String tableIn, double ra, double dec, double rad)
 	{
 		this.catalog = catalog;
-		this.table = table;
 		this.ra = ra;
 		this.dec = dec;
 		this.rad = rad;
@@ -84,7 +83,7 @@ public class ConeSearch
 				throw new ConeSearchException("Catalog " + catalog + " does not exist in our system");
 			}
 
-			if (table == null)
+			if (tableIn == null)
 			{
 				String[] tableArray = dbi.getTableNames(catalog);
 				if (tableArray.length > 1)
