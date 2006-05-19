@@ -96,9 +96,14 @@ public class ConeSearch
 				}
 				table = tableArray[0];
 			}
-			else if (!dbi.checkTableExists(catalog, table))
+						
+			else 
 			{
-				throw new ConeSearchException("The table \"" + table + "\" does not exist in the catalogue \""+ catalog + "\"");				
+				if (!dbi.checkTableExists(catalog, tableIn))
+				{
+				throw new ConeSearchException("The table \"" + tableIn + "\" does not exist in the catalogue \""+ catalog + "\"");				
+				}
+				table = tableIn;
 			}
 
 			catalogDescription = dbi.getCatalogDescription(catalog);
