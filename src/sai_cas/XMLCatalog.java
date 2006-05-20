@@ -48,7 +48,6 @@ public class XMLCatalog
 		}
 		try
 		{
-//			cat=(Catalog)
 			JAXBElement<?> catElement = (JAXBElement<?>)um.unmarshal(new StreamSource ( new StringReader( catalogString )));
 			cat = (Catalog)catElement.getValue();
 		}
@@ -65,22 +64,38 @@ public class XMLCatalog
 		logger.info("The catalog successfully unmarshalled");
 	}
 	
-	public XMLCatalog(URI uri)throws  javax.xml.bind.JAXBException
+	public XMLCatalog(URI uri) throws  XMLCatalogException
 	{
-		JAXBContext jc = JAXBContext.newInstance("sai_cas.XMLCatalogFile");
-		Unmarshaller um = jc.createUnmarshaller();
-		//try
-		//{
-			cat=(Catalog)um.unmarshal(new File(uri));
-/*		}
-		catch (javax.xml.bind.UnmarshalException e)
+		Unmarshaller um;
+		JAXBContext jc;
+		try
 		{
-			throw new Exception("Error during unmarshalling:\n Message: " + e.getMessage());
-		}*/
-		
+			jc = JAXBContext.newInstance("sai_cas.XMLCatalogFile");
+			um = jc.createUnmarshaller();
+		}
+		catch (JAXBException e)
+		{
+			logger.error("Error in unmarshaller creation:", e);
+			throw new XMLCatalogException("Error in creating unmarshaller:\n Message: " + e.getMessage());			
+		}
+
+		try
+		{
+			cat=(Catalog)um.unmarshal(new File(uri));
+		}
+		catch (UnmarshalException e) 
+		{
+			logger.error("Error during unmarshalling:", e);
+			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
+		}
+		catch (JAXBException e)
+		{
+			logger.error("Error during unmarshalling:", e);
+			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
+		}
 	}
 	
-	public XMLCatalog(File file)throws XMLCatalogException
+	public XMLCatalog(File file) throws XMLCatalogException
 	{
 		logger.info("The XMLCatalog constructor is running");
 		Unmarshaller um = null;

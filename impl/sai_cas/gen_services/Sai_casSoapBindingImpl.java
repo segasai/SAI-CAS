@@ -23,14 +23,7 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 		logger.info("Running insertCatalogFromURI...");
 		logger.debug("The following catalogue is being inserted " + uriCatalog);
 		
-		try 
-		{
-			sai_cas.services.MainAxisServices.insertCatalogFromURI(uriCatalog);
-		}
-		catch (Exception e)
-		{
-			logger.error("Catched exception ",e);
-		}		
+		sai_cas.services.MainAxisServices.insertCatalogFromURI(uriCatalog);
 	}
 
 	public void insertCatalog(java.lang.String catalogString) throws java.rmi.RemoteException
@@ -38,26 +31,11 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 		logger.info("Running insertCatalog...");
 		logger.debug("The following catalogue is being inserted" + catalogString);
 		
-		try 
-		{
-			sai_cas.services.MainAxisServices.insertCatalog(catalogString);
-		}
-		catch (Exception e)
-		{
-			logger.error("Catched exception ",e);
-		}
+		sai_cas.services.MainAxisServices.insertCatalog(catalogString);
 	}
 	public java.lang.String[] getCatalogNames() throws java.rmi.RemoteException
 	{
-		try 
-		{
-			return MainAxisServices.getCatalogNames();
-		}
-		catch (Exception e)
-		{
-			logger.error("Catched exception ",e);
-			return null;
-		}
+		return MainAxisServices.getCatalogNames();
 	}
 
 	public java.lang.String getCatalogInfo(String cat) throws java.rmi.RemoteException

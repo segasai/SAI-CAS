@@ -1,5 +1,7 @@
 package sai_cas.services;
 import java.net.URI;
+import java.net.URISyntaxException;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.io.PrintWriter;
@@ -17,7 +19,7 @@ import sai_cas.XMLCatalog;
 import sai_cas.XMLCatalogException;
 import sai_cas.db.*;
 import sai_cas.vo.ConeSearch;
-
+import java.rmi.RemoteException;
 public class MainAxisServices {
 	static Logger logger = Logger.getLogger("sai_cas.MainAxisServices");
 	
@@ -28,13 +30,21 @@ public class MainAxisServices {
 	 * @return void
 	 */
 	
-	public static void insertCatalogFromURI(String uriCatalog) throws Exception
+	public static void insertCatalogFromURI(String uriCatalog) throws RemoteException
 	{
 		
 		Connection conn = null;
 		DBInterface dbi = null;
 		XMLCatalog xmlc;
-		URI uri = new URI (uriCatalog);
+		URI uri;
+		try
+		{
+			uri = new URI (uriCatalog);
+		}
+		catch(URISyntaxException e)
+		{
+			throw new RemoteException(e.getMessage());
+		}
 		
 		try
 		{
@@ -42,14 +52,26 @@ public class MainAxisServices {
 			dbi = new DBInterface(conn);
 			xmlc = new XMLCatalog(uri);
 			xmlc.insertDataToDB(dbi);
-			DBInterface.close(dbi, conn);
 		}
 		catch (SQLException e)
 		{
 			logger.error("Got an exception... ", e);
 			DBInterface.close(dbi, conn, false);
+			throw new RemoteException(e.getMessage());			
 		}
-			
+		catch (XMLCatalogException e)
+		{
+			logger.error("Got an XMLCatalog exception... ", e);
+			DBInterface.close(dbi, conn, false);		
+			throw new RemoteException(e.getMessage());
+		}
+		catch (DBException e)
+		{
+			logger.error("Got an DB exception... ", e);
+			DBInterface.close(dbi, conn, false);
+			throw new RemoteException(e.getMessage());
+		}			
+		DBInterface.close(dbi, conn);
 	}
 	
 	/**
@@ -58,7 +80,7 @@ public class MainAxisServices {
 	 * @throws Exception
 	 * @return void
 	 */
-	public static void insertCatalog(String catalogString) throws SQLException
+	public static void insertCatalog(String catalogString) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -70,24 +92,26 @@ public class MainAxisServices {
 			dbi = new DBInterface(conn);
 			xmlc = new XMLCatalog(catalogString);
 			xmlc.insertDataToDB(dbi);
-			DBInterface.close(dbi, conn);
 		}
 		catch (SQLException e)
 		{
 			logger.error("Got an exception... ", e);
 			DBInterface.close(dbi, conn, false);
+			throw new RemoteException(e.getMessage());			
 		}
 		catch (XMLCatalogException e)
 		{
 			logger.error("Got an XMLCatalog exception... ", e);
-			DBInterface.close(dbi, conn, false);
-		
+			DBInterface.close(dbi, conn, false);		
+			throw new RemoteException(e.getMessage());
 		}
 		catch (DBException e)
 		{
 			logger.error("Got an DB exception... ", e);
 			DBInterface.close(dbi, conn, false);
+			throw new RemoteException(e.getMessage());
 		}
+		DBInterface.close(dbi, conn);
 	}
 	
 	/**
@@ -95,7 +119,7 @@ public class MainAxisServices {
 	 * @return String[] -- the array of catalogues in the system
 	 * @throws Exception
 	 */
-	public static String[] getCatalogNames() 
+	public static String[] getCatalogNames() throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -108,12 +132,11 @@ public class MainAxisServices {
 		}
 		catch(SQLException e)
 		{
-			logger.error("Caught an exception... ", e);			
-		}
-		finally
-		{
+			logger.error("Caught an exception... ", e);
 			DBInterface.close(dbi, conn);
+			throw new RemoteException(e.getMessage());
 		}
+		DBInterface.close(dbi, conn);
 		return result;
 	}
 
