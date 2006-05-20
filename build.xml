@@ -59,9 +59,16 @@
 			<produces dir="${gen.src}/sai_cas/XMLCatalogFile"/>
 		</xjc>
 	</target>
+
+	<target name="xsd2java1" depends="init">
+		<xjc schema="schema/VOTable-1.1.xsd" target="${gen.src}"
+			package="sai_cas.VOTABLE" binding="schema/VOTable-1.1.xjb">
+			<produces dir="${gen.src}/sai_cas/VOTABLE"/>
+		</xjc>
+	</target>
 	
 	
-	<target name="compile" depends="xsd2java">
+	<target name="compile" depends="xsd2java,xsd2java1">
 		<javac debug="on" srcdir="${gen.src}" destdir="${build.classes}">
 			<compilerarg line="-Xlint:unchecked"/>
 			<classpath>

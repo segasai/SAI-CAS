@@ -10,4 +10,9 @@ public class Parameters
 	{
 		return "http://vo.astronet.ru/files/VOTable2XHTML.xsl";
 	}
+	public static String[] getDefaultDBUserPasswd()
+	{
+		String[] res={"cas_user","aspen"};
+		return res;
+	}
 }

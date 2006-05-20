@@ -1,0 +1,20 @@
+<jxb:bindings version="1.0"
+               xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <jxb:bindings schemaLocation="VOTable-1.1.xsd" node="/xs:schema">
+
+<!--    <jxb:schemaBindings>
+      <jxb:package name="fr.u_strasbg.vizier.xml"/>
+    </jxb:schemaBindings>-->
+
+    <jxb:bindings node="//xs:element[@name='INFO']">
+
+      <!-- resolve name collision between attribute and element "zip" -->
+      <jxb:bindings node=".//xs:attribute[@name='value']">
+        <jxb:property name="valueAttribute"/>
+      </jxb:bindings>
+
+    </jxb:bindings> <!-- node="/xs:element[@name='VOTABLE']/xs:complexType[@name='FooBar']" -->
+  </jxb:bindings>
+
+</jxb:bindings>

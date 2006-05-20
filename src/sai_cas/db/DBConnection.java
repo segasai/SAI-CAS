@@ -8,6 +8,8 @@ import javax.naming.*;
 import org.apache.log4j.Logger;
 import org.apache.tomcat.dbcp.dbcp.datasources.*;
 
+import sai_cas.Parameters;
+
 public class DBConnection
 {
 	static Logger logger = Logger.getLogger("sai_cas.DBConnection");
@@ -65,10 +67,8 @@ public class DBConnection
 
 	public static Connection getPooledPerUserConnection() throws SQLException
 	{
-		/** TODO
-		 * This parameters should be defined somewhere in the global properties
-		 */
-		return getPooledPerUserConnection("cas_user","aspen");
+		String[] defaultDBUserPasswd = Parameters.getDefaultDBUserPasswd();
+		return getPooledPerUserConnection(defaultDBUserPasswd[0], defaultDBUserPasswd[1]);
 	}
 	
 	public static Connection getPooledPerUserConnection(String user, String password) throws SQLException
