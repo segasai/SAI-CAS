@@ -32,9 +32,9 @@ public class Votable
 	static Logger logger = Logger.getLogger("sai_cas.Votable");
 	private VOTABLE vot;
 
-	public Votable(String catalogString) throws  XMLCatalogException
+	public Votable(String catalogString) throws  VotableException
 	{
-		logger.info("The XMLCatalog constructor is running");
+		logger.info("The Votable constructor is running");
 		Unmarshaller um = null;
 		try
 		{
@@ -44,102 +44,111 @@ public class Votable
 		catch (JAXBException e)
 		{
 			logger.error("Error in unmarshaller creation:", e);
-			throw new XMLCatalogException("Error in creating unmarshaller:\n Message: " + e.getMessage());			
+			throw new VotableException("Error in creating unmarshaller:\n Message: " + e.getMessage());			
 		}
 		try
 		{
-			JAXBElement<?> catElement = (JAXBElement<?>)um.unmarshal(new StreamSource ( new StringReader( catalogString )));
-			vot = (VOTABLE) catElement.getValue();
+			JAXBElement<?> votElement = (JAXBElement<?>)um.unmarshal(new StreamSource ( new StringReader( catalogString )));
+			vot = (VOTABLE) votElement.getValue();
 		}
 		catch (UnmarshalException e) 
 		{
 			logger.error("Error during unmarshalling:", e);
-			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
+			throw new VotableException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
 		}
 		catch (JAXBException e)
 		{
 			logger.error("Error during unmarshalling:", e);
-			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
+			throw new VotableException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
 		}
 		logger.info("The catalog successfully unmarshalled");
 	}
 	
-	public Votable(URI uri) throws  XMLCatalogException
+	public Votable(URI uri) throws  VotableException
 	{
 		Unmarshaller um;
 		JAXBContext jc;
 		try
 		{
-			jc = JAXBContext.newInstance("sai_cas.XMLCatalogFile");
+			jc = JAXBContext.newInstance("sai_cas.VOTABLEFile");
 			um = jc.createUnmarshaller();
 		}
 		catch (JAXBException e)
 		{
 			logger.error("Error in unmarshaller creation:", e);
-			throw new XMLCatalogException("Error in creating unmarshaller:\n Message: " + e.getMessage());			
+			throw new VotableException("Error in creating unmarshaller:\n Message: " + e.getMessage());			
 		}
 
 		try
 		{
-			vot =(VOTABLE) um.unmarshal(new File(uri));
+			vot = (VOTABLE) um.unmarshal(new File(uri));
 		}
 		catch (UnmarshalException e) 
 		{
 			logger.error("Error during unmarshalling:", e);
-			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
+			throw new VotableException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
 		}
 		catch (JAXBException e)
 		{
 			logger.error("Error during unmarshalling:", e);
-			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
+			throw new VotableException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
 		}
 	}
 	
-	public Votable(File file) throws XMLCatalogException
+	public Votable(File file) throws VotableException
 	{
-		logger.info("The XMLCatalog constructor is running");
+		logger.info("The Votable constructor is running");
 		Unmarshaller um = null;
 		try
 		{
-			JAXBContext jc = JAXBContext.newInstance("sai_cas.XMLCatalogFile");
+			JAXBContext jc = JAXBContext.newInstance("sai_cas.VOTABLEFile");
 			um = jc.createUnmarshaller();
 		}
 		catch (JAXBException e)
 		{
 			logger.error("Error in unmarshaller creation:", e);
-			throw new XMLCatalogException("Error in creating unmarshaller:\n Message: " + e.getMessage());			
+			throw new VotableException("Error in creating unmarshaller:\n Message: " + e.getMessage());			
 		}
 		try
 		{
-//			cat=(Catalog)
-			JAXBElement<?> catElement = (JAXBElement<?>)um.unmarshal(file);
-			vot = (VOTABLE) catElement.getValue();
+			JAXBElement<?> votElement = (JAXBElement<?>) um.unmarshal(file);
+			vot = (VOTABLE) votElement.getValue();
 		}
 		catch (UnmarshalException e) 
 		{
 			logger.error("Error during unmarshalling:", e);
-			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
+			throw new VotableException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
 		}
 		catch (JAXBException e)
 		{
 			logger.error("Error during unmarshalling:", e);
-			throw new XMLCatalogException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
+			throw new VotableException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
 		}
 		logger.info("The catalog successfully unmarshalled");
 		
 	}
 
+	public void insertDataToDB(DBInterface dbi) throws SQLException, DBException, VotableException
+	{
+		insertDataToDB(dbi,null);
+	}
 	
-	public void insertDataToDB(DBInterface dbi) throws SQLException, DBException, XMLCatalogException
+	public void insertDataToDB(DBInterface dbi, String catalogName0) throws SQLException, DBException, VotableException
 	{
 		/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
 		 *  I do the convertion to lower case.
 		 */
 		logger.debug("Beginning of DB work in inserting the catalogue... ");
+
 		RESOURCE res = vot.getRESOURCE().get(0);
 		/* Just to get the first resource */
+
 		String catalogName = res.getName().toLowerCase();
+
+		catalogName = (catalogName0==null)?catalogName:catalogName0;
+
 		String catalogInfo=null;
+
 		for (Object obj : res.getINFOOrCOOSYSOrPARAM())
 		{
 			if (obj instanceof INFO)
@@ -147,7 +156,12 @@ public class Votable
 				catalogInfo = ((INFO) obj).getValue();
 			}
 		}
-		String catalogDescription = vot.getDESCRIPTION().toString();
+
+		StringBuffer buf=new StringBuffer();
+		
+		String catalogDescription ;
+		catalogDescription=vot.getDESCRIPTION().getContent().get(0).toString();
+
 /*		List<String[]> catalogProperties;	
 		try
 		{
@@ -159,10 +173,12 @@ public class Votable
 		}
 		dbi.setCatalogProperties(catalogName, catalogProperties);
 */
+
 		logger.debug("Inserting the catalogue metadata... ");		
 		dbi.insertCatalog(catalogName);
-		dbi.setCatalogInfo(catalogName, catalogInfo);
-//		dbi.setCatalogDescription(catalogName, catalogDescription);
+//		dbi.setCatalogInfo(catalogName, catalogInfo);
+
+		dbi.setCatalogDescription(catalogName, catalogDescription);
 		
 		List<TABLE> tableList = res.getTABLE();
 
@@ -177,7 +193,7 @@ public class Votable
 			logger.debug("Inserting the table: "+tableName);				
 			
 //			String tableInfo = table.getInfo();
-			String tableDescription = table.getDESCRIPTION().toString();
+			String tableDescription = table.getDESCRIPTION().getContent().get(0).toString();
 /*			List<String[]> tableProperties;
 			try
 			{
@@ -217,7 +233,7 @@ public class Votable
 				columnName = field.getName().toLowerCase();
 				unit =  field.getUnit();
 				ucd = field.getUcd();
-				columnDescription = field.getDESCRIPTION().toString();
+				columnDescription = field.getDESCRIPTION().getContent().get(0).toString();
 //				columnInfo = column.getInfo();
 				/* TODO 
 				 * I should write the handling of the column properties too
@@ -248,89 +264,21 @@ public class Votable
 				/* That means that there is no data, or data reference for that table */
 			}
 			
-			TABLEDATA td = d.getTABLEDATA();
-			
-			if (td != null)
-			
+			TABLEDATA tdata = d.getTABLEDATA();
+			List <TR> trList = tdata.getTR();
+			String[] values = new String[ncols];
+			for (TR tr: trList)
 			{
-				throw new XMLCatalogException("The data directly embedded (in <tabledata> tags) in the XML file  is not supported\nStore the data in the separate file (and use <externaldata> tag)");
+				int i=0;
+				for (TD td: tr.getTD())
+				{
+					values[i++]=td.getValue();
+				}
+				dbi.insertData(catalogName, tableName, values);
 			}
-			
-/*			Externaldata ed = d.getExternaldata();
-			DataReader dr; 
-			
-			if (ed != null)
-			{
-				String format = ed.getFormat().value();
-				
-				if (format.equals("delimited"))
-				{
-					dr = new DelimitedDataReader(ed, ncols);
-				}
-				else if (format.equals("fixed-width"))
-				{
-					dr = new FixedWidthDataReader(ed, ncols);				
-				}
-				else
-				{
-					throw new XMLCatalogException("The format '"+format+"' of the data is not supported");
-				}
-
-				String[] datatypeArray = new String[datatypeList.size()];
-				logger.debug("Preparing to insert the data into the DB... ");							
-				dbi.prepareInsertingData(catalogName, tableName, datatypeList.toArray(datatypeArray));
-				logger.debug("Inserting the data into the DB... ");							
-				while (true)
-				{
-					String []sarr;
-					try 
-					{
-						sarr = dr.getData();
-					}
-					catch (IOException e)
-					{
-						throw new XMLCatalogException("Problem with reading data from " + dr.currentURL.toString());
-					}
-					if (sarr == null)
-					{
-						break;
-					}
-					if (sarr.length!=ncols)
-					{
-						throw new XMLCatalogException("The number of columns in the data file ("+sarr.length+") is not equal to the number of the fields in the XML declaration("+ncols+")");
-					}
-
-					try
-					{
-						dbi.insertData(sarr);
-					}
-					catch (NumberFormatException e)
-					{
-						throw new XMLCatalogException("NumberFormatException in "+ dr.currentURL.toString()+ " "+e.getMessage());					
-					}
-
-				}
-				logger.debug("The data seems to be ingested correctly");
-			}
-			*/
-			
 			
 		}  
 	}
-	
-/*	public List<String[]> convertProperties(List<Property> propertyList)
-	{
-		List<String[]> result = new ArrayList<String[]>();
-		//String[] propertyPair = new String[2];
-		for (Property p: propertyList)
-		{
-			String[] propertyPair = {p.getName(),p.getValue()};
-			result.add(propertyPair);
-		}
-		return result;		
-	}
-*/	
-	
 	
 	public static void main(String args[]) throws Exception
 	{
@@ -345,9 +293,7 @@ public class Votable
 			Date xx=new Date();
 			long date = xx.getTime();
 			
-			//XMLCatalog xmlc = new XMLCatalog("tmp/"+file);//"demo_cat.xml");
 			Votable vot = new Votable(new File(args[0]));
-			//"schema/xx.xml");
 			vot.insertDataToDB(dbi);
 			dbcon.commit();
 
@@ -361,328 +307,5 @@ public class Votable
 		dbcon.close();
 	}
 	
-/*	private abstract class DataReader
-	{
-		public DataReader(Externaldata ed, int ncols) throws XMLCatalogException
-		{
-			this.ncols = ncols;
-			EncodingType et = ed.getEncoding();
-			if (et != null)
-			{
-				encoding = ed.getEncoding().value();
-			}
-			else
-			{
-				encoding="none";
-			}
-			List<Property> propertyList = ed.getPropertyList().getProperty();	
-			properties  = new Properties();
-			for (Property property: propertyList)
-			{
-				properties.setProperty(property.getName(),property.getValue());
-			}
-			List<Datasource> sourceList = ed.getSource();
-			if (sourceList == null)
-			{
-				throw new XMLCatalogException("If there is the externaldata field, you should put the link for the data source");				
-			}
 
-			ArrayList<URL> urlList = new ArrayList<URL>();
-			for (Datasource source: sourceList)
-			{
-				try
-				{
-					urlList.add((new URI(source.getUri())).toURL());
-				}
-				catch(URISyntaxException e)
-				{
-					throw new XMLCatalogException("Invalid URI in the Catalog description: \n"+source);
-				}
-				catch(MalformedURLException e)
-				{
-					throw new XMLCatalogException("Malformed URL in the Catalog: "+source);
-				}
-			}
-			urlIterator = urlList.listIterator();
-		}
-		
-		public boolean getReader() throws XMLCatalogException
-		{
-			InputStream is;
-			InputStream is1;
-			
-			logger.debug("Retrieving the reader ...");
-			if (urlIterator.hasNext())
-			{
-				currentURL = urlIterator.next();
-				logger.debug("Reading from the URL: "+currentURL);
-			}
-			else
-			{
-				return false;
-			}
-			
-			try
-			{
-				is = currentURL.openStream();
-			}
-			catch (IOException e)
-			{
-				throw new XMLCatalogException("Problem with opening the URI of the data\n:"+e.getMessage());
-			}
-			if (encoding.equals("none"))
-			{
-				is1 = is;
-			}
-			else if (encoding.equals("base64"))
-			{
-				throw new XMLCatalogException("base64 encoding is not yet supported...");
-			}
-			else if (encoding.equals("gzip"))
-			{
-				try
-				{
-					is1 = new GZIPInputStream(is);
-				}
-				catch (IOException e)
-				{
-					throw new XMLCatalogException("Problems with opening the gzip encoded URI:\n" + e.getMessage());
-				}
-			}
-			else 
-			{
-				throw new XMLCatalogException("'"+encoding+"' is not yet supported...");
-			}
-			try
-			{
-				br = new BufferedReader(new InputStreamReader(is1,"US-ASCII"));
-			}
-			catch (UnsupportedEncodingException e) 
-			{
-			}
-			return true;
-		}
-		
-		abstract String[] getData() throws IOException, XMLCatalogException;
-//		private ArrayList<String> uriList;
-		protected ListIterator<URL> urlIterator;
-		protected BufferedReader br;		
-		protected Properties properties;
-		protected URL currentURL;
-		protected int ncols;
-		private String encoding;
-		private String format;
-	}
-
-	private class FixedWidthDataReader extends DataReader
-	{
-		public FixedWidthDataReader(Externaldata ed, int ncols) throws XMLCatalogException 
-		{
-			super(ed,ncols);
-			String widthsIn = properties.getProperty("widths");
-			String fieldsIn = properties.getProperty("fields");
-			String widthsArray[], fieldsArray[];
-			
-			if ((widthsIn == null)&&(fieldsIn==null))
-			{
-				throw new XMLCatalogException ("You should define the \"widths\" or \"fields\" property when you select the 'fixed-width' format");
-			}
-			if ((fieldsIn!=null)&&(widthsIn!=null))
-			{
-				throw new XMLCatalogException ("You must not define the \"widths\" and \"fields\" properties together when you select the 'fixed-width' format");				
-			}
-			if (widthsIn!=null)
-			{
-				withoutNewLines = (properties.getProperty("withoutNewLines")!=null);
-				
-				widthsArray = widthsIn.split(" ",0);
-				int len = widthsArray.length;
-				
-				if (len != ncols)
-				{
-					throw new XMLCatalogException("The number of elements in the list of widths must be equal to the number of columns ("+ncols+")");
-				}
-				
-				try 
-				{
-					this.fieldsLeft = new int[len];
-					this.fieldsRight = new int[len];
-					int cur_pos = 0;
-					for (int i = 0; i < len; i++)
-					{
-						this.fieldsLeft[i]=cur_pos;
-						this.fieldsRight[i]=(cur_pos+=Integer.parseInt(widthsArray[i]));
-					}
-				}
-				catch (NumberFormatException e)
-				{
-					throw new XMLCatalogException("Invalid field list for the fixed-width format");
-				}
-			}
-			else
-			{
-				fieldsArray = fieldsIn.split(" ",0);
-				int len = fieldsArray.length;
-				
-				if (len != 2*ncols)
-				{
-					throw new XMLCatalogException("The number of elements in the list of fields must be twice the number of columns ("+ncols+")");
-				}
-				
-				try 
-				{
-					this.fieldsLeft = new int[ncols];
-					this.fieldsRight = new int[ncols];
-					for (int i = 0; i < ncols; i++)
-					{
-						this.fieldsLeft[i]=Integer.parseInt(fieldsArray[i*2])-1;
-						this.fieldsRight[i]=Integer.parseInt(fieldsArray[2*i+1]);
-					}
-				}
-				catch (NumberFormatException e)
-				{
-					throw new XMLCatalogException("Invalid field list for the fixed-width format");
-				}
-				
-			}
-			stringBuffer = new ArrayList<String>();
-			stringBuffer.ensureCapacity(bufLen);
-			stringBufferIterator = stringBuffer.listIterator();
-			getReader();
-
-		}
-		public String[] getData() throws IOException, XMLCatalogException
-		{
-			String s;
-			String result[]=new String[ncols];
-			while (!stringBufferIterator.hasNext())
-			{
-				stringBuffer.clear();
-				if (!withoutNewLines)
-				{
-					int i;
-					for(i = 1; i <= bufLen; i++)
-					{
-						String s1 = br.readLine();
-						if (s1 == null) break; 
-						stringBuffer.add(s1);	
-					}
-					
-					if (i == 1)
-					{
-						if (!getReader())
-						{
-							return null;
-						}
-					}
-				}
-				else
-				{
-					char buf[]=new char[totalWidth*bufLen];
-					int nChars = br.read(buf,0,totalWidth*bufLen);
-					if (nChars == -1)
-					{
-						if (!getReader())
-						{
-							return null;
-						}						
-					}
-					else
-					{
-						if  (nChars%totalWidth!=0)
-						{
-							throw new XMLCatalogException("Wrong datasource: the size of the file is not the multiplier of the total width of the fields");
-						}
-						for (int i = 0; i < nChars/totalWidth; i++)
-						{
-							stringBuffer.add(new String(buf,i*totalWidth,totalWidth));
-						}
-					}
-				}
-				stringBufferIterator = stringBuffer.listIterator();
-			}
-			s = stringBufferIterator.next();
-
-			for(int i = 0; i < ncols; i++)
-			{
-				result[i] = s.substring(fieldsLeft[i],fieldsRight[i]);
-			}
-			return result;
-		}
-
-		int fieldsLeft[];
-		int fieldsRight[];
-		int totalWidth;
-		boolean withoutNewLines;
-		final int bufLen = 1000;
-		ArrayList<String> stringBuffer;
-		ListIterator<String> stringBufferIterator;
-		
-	}
-	private class DelimitedDataReader extends DataReader
-	{
-		public DelimitedDataReader(Externaldata ed, int ncols) throws XMLCatalogException
-		{
-			super(ed, ncols);
-			delimiter = properties.getProperty("delimiter");
-			nullMarker = properties.getProperty("null");
-
-			if (delimiter == null)
-			{
-				throw new XMLCatalogException ("You should define the delimiter when you select the 'delimited' format");
-			}
-			stringBuffer = new ArrayList<String>();
-			stringBuffer.ensureCapacity(bufLen);
-			stringBufferIterator = stringBuffer.listIterator();
-			getReader();
-		}
-		public String[] getData() throws IOException, XMLCatalogException
-		{
-			String s;
-			while (!stringBufferIterator.hasNext())
-			{
-				int i;
-				stringBuffer.clear();
-				for(i = 1; i <= bufLen; i++)
-				{
-					String s1 = br.readLine();
-					if (s1 == null) break; 
-					stringBuffer.add(s1);	
-				}
-				
-				if (i == 1)
-				{
-					if (!getReader())
-					{
-						return null;
-					}
-				} 
-				stringBufferIterator = stringBuffer.listIterator();
-			}
-			s = stringBufferIterator.next();
-//			logger.debug("Read string: "+s);
-//			logger.debug("Delim: "+delimiter);
-			
-			String sArr[] = s.split("\\"+delimiter);
-//			logger.debug("Length: "+sArr.length);
-
-			if (nullMarker != null)
-			{
-				int n = sArr.length;
-				for (int i = 0; i < n; i++)
-				{
-					if (nullMarker.equals(sArr[i]))
-					{
-						sArr[i]="";
-					} 
-				}
-			}
-			return sArr;
-		}
-		private String delimiter, nullMarker;
-		ArrayList<String> stringBuffer;
-		ListIterator<String> stringBufferIterator;
-		final int bufLen = 100;
-	}
-*/
 }

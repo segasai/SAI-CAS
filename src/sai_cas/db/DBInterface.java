@@ -24,6 +24,19 @@ public class DBInterface  extends Object
 		curNBatchStatements = 0 ;
 	}
 
+	/* TODO need to be refactored (concerning user_schema) */
+	public DBInterface(Connection conn, String user_schema) throws java.sql.SQLException
+	{
+		this.conn = conn;
+		
+		String query = "SET search_path TO "+user_schema+",cas_metadata,public;";
+		stmt = conn.createStatement(); 
+		stmt.execute(query);
+		logger.info("The DB interface is successfully created...");
+		curNBatchStatements = 0 ;
+	}
+
+
 	public void close()
 	{
 		close(true);

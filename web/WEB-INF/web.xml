@@ -25,11 +25,6 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>HelloServlet</servlet-name>
-		<url-pattern>/xxx</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping>
 		<servlet-name>ConeSearchServlet</servlet-name>
 		<url-pattern>/ConeSearch</url-pattern>
 	</servlet-mapping>
@@ -38,6 +33,17 @@
 		<servlet-name>ConeSearchServlet</servlet-name>
 		<url-pattern>/conesearch</url-pattern>
 	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>CrossMatchServlet</servlet-name>
+		<url-pattern>/CrossMatch</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>CrossMatchServlet</servlet-name>
+		<url-pattern>/crossmatch</url-pattern>
+	</servlet-mapping>
+
 	
 	<servlet-mapping>
 		<servlet-name>SQLQueryExecutorServlet</servlet-name>

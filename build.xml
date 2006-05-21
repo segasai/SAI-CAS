@@ -85,7 +85,7 @@
 		<javac srcdir="src" debug="on" destdir="${build.classes}" classpath="${build.classes}">
 			<compilerarg line="-Xlint:unchecked" />
 			<classpath>
-				<!-- <fileset dir="${build.classes}/"/> -->
+				<fileset dir="${commons.fileupload}" includes="*.jar" />
 				<fileset dir="${jwsdp.home}" includes="jaxb/lib/*.jar" />
 				<fileset dir="${jwsdp.home}" includes="jwsdp-shared/lib/*.jar" />
 				<fileset dir="${tomcat.common.lib}" includes="*.jar" />

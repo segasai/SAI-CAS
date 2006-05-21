@@ -13,13 +13,17 @@ import java.util.Calendar;
 import javax.naming.NamingException;
 import javax.xml.bind.JAXBException;
 
+import java.rmi.RemoteException;
+
 import org.apache.log4j.Logger;
 
 import sai_cas.XMLCatalog;
 import sai_cas.XMLCatalogException;
 import sai_cas.db.*;
 import sai_cas.vo.ConeSearch;
-import java.rmi.RemoteException;
+import sai_cas.Votable;
+import sai_cas.VotableException;
+
 public class MainAxisServices {
 	static Logger logger = Logger.getLogger("sai_cas.MainAxisServices");
 	
@@ -113,6 +117,49 @@ public class MainAxisServices {
 		}
 		DBInterface.close(dbi, conn);
 	}
+
+
+	/**
+	 *
+	 * @param catalogString -- The whole catalogue as a string
+	 * @throws Exception
+	 * @return void
+	 */
+	public static void insertCatalogFromVotable(String catalogString) throws RemoteException
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		Votable vot;
+		
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			vot = new Votable(catalogString);
+			vot.insertDataToDB(dbi);
+		}
+		catch (SQLException e)
+		{
+			logger.error("Got an exception... ", e);
+			DBInterface.close(dbi, conn, false);
+			throw new RemoteException(e.getMessage());			
+		}
+		catch (VotableException e)
+		{
+			logger.error("Got an Votable exception... ", e);
+			DBInterface.close(dbi, conn, false);		
+			throw new RemoteException(e.getMessage());
+		}
+		catch (DBException e)
+		{
+			logger.error("Got an DB exception... ", e);
+			DBInterface.close(dbi, conn, false);
+			throw new RemoteException(e.getMessage());
+		}
+		DBInterface.close(dbi, conn);
+	}
+
+
 	
 	/**
 	 * 
