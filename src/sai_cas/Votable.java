@@ -1,9 +1,8 @@
 package sai_cas;
 import sai_cas.db.*;
-import sai_cas.XMLCatalogFile.*;
+import sai_cas.VOTABLEFile.*;
 
 import javax.xml.transform.stream.StreamSource;
-//import javax.xml.stream.XMLEventReader;
 import javax.xml.bind.*;
 
 import org.apache.log4j.Logger;
@@ -28,19 +27,18 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.sql.*;
 
-public class XMLCatalog
+public class Votable
 {
-	static Logger logger = Logger.getLogger("sai_cas.XMLCatalog");
+	static Logger logger = Logger.getLogger("sai_cas.Votable");
+	private VOTABLE vot;
 
-	private Catalog cat;
-
-	public XMLCatalog(String catalogString) throws  XMLCatalogException
+	public Votable(String catalogString) throws  XMLCatalogException
 	{
 		logger.info("The XMLCatalog constructor is running");
 		Unmarshaller um = null;
 		try
 		{
-			JAXBContext jc = JAXBContext.newInstance("sai_cas.XMLCatalogFile");
+			JAXBContext jc = JAXBContext.newInstance("sai_cas.VOTABLEFile");
 			um = jc.createUnmarshaller();
 		}
 		catch (JAXBException e)
@@ -51,7 +49,7 @@ public class XMLCatalog
 		try
 		{
 			JAXBElement<?> catElement = (JAXBElement<?>)um.unmarshal(new StreamSource ( new StringReader( catalogString )));
-			cat = (Catalog)catElement.getValue();
+			vot = (VOTABLE) catElement.getValue();
 		}
 		catch (UnmarshalException e) 
 		{
@@ -66,7 +64,7 @@ public class XMLCatalog
 		logger.info("The catalog successfully unmarshalled");
 	}
 	
-	public XMLCatalog(URI uri) throws  XMLCatalogException
+	public Votable(URI uri) throws  XMLCatalogException
 	{
 		Unmarshaller um;
 		JAXBContext jc;
@@ -83,7 +81,7 @@ public class XMLCatalog
 
 		try
 		{
-			cat=(Catalog)um.unmarshal(new File(uri));
+			vot =(VOTABLE) um.unmarshal(new File(uri));
 		}
 		catch (UnmarshalException e) 
 		{
@@ -97,7 +95,7 @@ public class XMLCatalog
 		}
 	}
 	
-	public XMLCatalog(File file) throws XMLCatalogException
+	public Votable(File file) throws XMLCatalogException
 	{
 		logger.info("The XMLCatalog constructor is running");
 		Unmarshaller um = null;
@@ -113,8 +111,9 @@ public class XMLCatalog
 		}
 		try
 		{
+//			cat=(Catalog)
 			JAXBElement<?> catElement = (JAXBElement<?>)um.unmarshal(file);
-			cat = (Catalog)catElement.getValue();
+			vot = (VOTABLE) catElement.getValue();
 		}
 		catch (UnmarshalException e) 
 		{
@@ -137,10 +136,19 @@ public class XMLCatalog
 		 *  I do the convertion to lower case.
 		 */
 		logger.debug("Beginning of DB work in inserting the catalogue... ");
-		String catalogName = cat.getName().toLowerCase();
-		String catalogInfo = cat.getInfo();
-		String catalogDescription = cat.getDescription();
-		List<String[]> catalogProperties;	
+		RESOURCE res = vot.getRESOURCE().get(0);
+		/* Just to get the first resource */
+		String catalogName = res.getName().toLowerCase();
+		String catalogInfo=null;
+		for (Object obj : res.getINFOOrCOOSYSOrPARAM())
+		{
+			if (obj instanceof INFO)
+			{
+				catalogInfo = ((INFO) obj).getValue();
+			}
+		}
+		String catalogDescription = vot.getDESCRIPTION().toString();
+/*		List<String[]> catalogProperties;	
 		try
 		{
 			catalogProperties = convertProperties(cat.getPropertyList().getProperty());	
@@ -150,15 +158,16 @@ public class XMLCatalog
 			catalogProperties = new ArrayList<String[]>();
 		}
 		dbi.setCatalogProperties(catalogName, catalogProperties);
+*/
 		logger.debug("Inserting the catalogue metadata... ");		
 		dbi.insertCatalog(catalogName);
 		dbi.setCatalogInfo(catalogName, catalogInfo);
-		dbi.setCatalogDescription(catalogName, catalogDescription);
+//		dbi.setCatalogDescription(catalogName, catalogDescription);
 		
-		List<Table> tableList = cat.getTable();
+		List<TABLE> tableList = res.getTABLE();
 
 		logger.debug("Looping through tables in the catalogue... ");				
-		for(Table table : tableList)
+		for(TABLE table : tableList)
 		{
 			/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
 			 * I do the convertion to lower case.
@@ -167,9 +176,9 @@ public class XMLCatalog
 			String tableName = table.getName().toLowerCase();
 			logger.debug("Inserting the table: "+tableName);				
 			
-			String tableInfo = table.getInfo();
-			String tableDescription = table.getDescription();
-			List<String[]> tableProperties;
+//			String tableInfo = table.getInfo();
+			String tableDescription = table.getDESCRIPTION().toString();
+/*			List<String[]> tableProperties;
 			try
 			{
 				tableProperties = convertProperties(table.getPropertyList().getProperty());	
@@ -178,9 +187,16 @@ public class XMLCatalog
 			{
 				tableProperties = new ArrayList<String[]>();
 			}
-
+*/
 			
-			List<Column> columnList = table.getColumn();			
+			List<FIELD> fieldList =new ArrayList<FIELD>();
+			for (Object obj : table.getFIELDOrPARAMOrGROUP())
+			{
+				if (obj instanceof FIELD)
+				{
+					fieldList.add((FIELD)obj);
+				}
+			}
 			List<String> datatypeList = new ArrayList<String>();
 			List<String> columnNameList = new ArrayList<String>();
 			List<String> unitList = new ArrayList<String>();
@@ -188,27 +204,28 @@ public class XMLCatalog
 
 			List<String> columnDescriptionList = new ArrayList<String>();
 			List<String> columnInfoList = new ArrayList<String>();
-			String unit, ucd, columnName, datatype, columnInfo, columnDescription;
-			int ncols = columnList.size();
+			String unit, ucd, columnName, columnInfo=null, columnDescription;
+			DataType datatype;
+			int ncols = fieldList.size();
 			
-			for (Column column : columnList)
+			for (FIELD field : fieldList)
 			{
-				datatype = column.getDatatype();
+				datatype = field.getDatatype();
 				/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
 				 *   I do the convertion to lower case.
 				 */
-				columnName = column.getName().toLowerCase();
-				unit =  column.getUnit();
-				ucd = column.getUcd();
-				columnDescription = column.getDescription();
-				columnInfo = column.getInfo();
+				columnName = field.getName().toLowerCase();
+				unit =  field.getUnit();
+				ucd = field.getUcd();
+				columnDescription = field.getDESCRIPTION().toString();
+//				columnInfo = column.getInfo();
 				/* TODO 
 				 * I should write the handling of the column properties too
 				 * Now I don't do that since in that loop I should kind of 
 				 * create the list of lists of properties ... 
 				 */
 //				List<Property> columnProperties = table.getPropertyList().getProperty();
-				datatypeList.add(datatype);
+				datatypeList.add(datatype.value());
 				columnNameList.add(columnName);
 				unitList.add(unit);
 				ucdList.add(ucd);
@@ -218,12 +235,12 @@ public class XMLCatalog
 			logger.debug("Inserting the columns, table metadata... ");				
 			dbi.insertTable(catalogName, tableName, columnNameList, datatypeList, unitList, columnInfoList, columnDescriptionList);
 			dbi.setUcds(catalogName, tableName, columnNameList, ucdList);
-			dbi.setTableInfo(catalogName, tableName, tableInfo);
+//			dbi.setTableInfo(catalogName, tableName, tableInfo);
 			dbi.setTableDescription(catalogName, tableName, tableDescription);
-			dbi.setTableProperties(catalogName, tableName, tableProperties);
+//			dbi.setTableProperties(catalogName, tableName, tableProperties);
 			logger.debug("Preparing to read the data... ");							
 			/* Now we are handling the data in the table */			
-			Data d = table.getData();
+			DATA d = table.getDATA();
 			
 			if (d == null)
 			{
@@ -231,7 +248,7 @@ public class XMLCatalog
 				/* That means that there is no data, or data reference for that table */
 			}
 			
-			Tabledata td = d.getTabledata();
+			TABLEDATA td = d.getTABLEDATA();
 			
 			if (td != null)
 			
@@ -239,7 +256,7 @@ public class XMLCatalog
 				throw new XMLCatalogException("The data directly embedded (in <tabledata> tags) in the XML file  is not supported\nStore the data in the separate file (and use <externaldata> tag)");
 			}
 			
-			Externaldata ed = d.getExternaldata();
+/*			Externaldata ed = d.getExternaldata();
 			DataReader dr; 
 			
 			if (ed != null)
@@ -295,10 +312,13 @@ public class XMLCatalog
 				}
 				logger.debug("The data seems to be ingested correctly");
 			}
+			*/
+			
+			
 		}  
 	}
 	
-	public List<String[]> convertProperties(List<Property> propertyList)
+/*	public List<String[]> convertProperties(List<Property> propertyList)
 	{
 		List<String[]> result = new ArrayList<String[]>();
 		//String[] propertyPair = new String[2];
@@ -307,10 +327,9 @@ public class XMLCatalog
 			String[] propertyPair = {p.getName(),p.getValue()};
 			result.add(propertyPair);
 		}
-		return result;
-		
+		return result;		
 	}
-	
+*/	
 	
 	
 	public static void main(String args[]) throws Exception
@@ -327,9 +346,9 @@ public class XMLCatalog
 			long date = xx.getTime();
 			
 			//XMLCatalog xmlc = new XMLCatalog("tmp/"+file);//"demo_cat.xml");
-			XMLCatalog xmlc = new XMLCatalog(new File(args[0]));
+			Votable vot = new Votable(new File(args[0]));
 			//"schema/xx.xml");
-			xmlc.insertDataToDB(dbi);
+			vot.insertDataToDB(dbi);
 			dbcon.commit();
 
 			xx = new Date();
@@ -342,7 +361,7 @@ public class XMLCatalog
 		dbcon.close();
 	}
 	
-	private abstract class DataReader
+/*	private abstract class DataReader
 	{
 		public DataReader(Externaldata ed, int ncols) throws XMLCatalogException
 		{
@@ -665,4 +684,5 @@ public class XMLCatalog
 		ListIterator<String> stringBufferIterator;
 		final int bufLen = 100;
 	}
+*/
 }

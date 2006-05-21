@@ -62,8 +62,8 @@
 
 	<target name="xsd2java1" depends="init">
 		<xjc schema="schema/VOTable-1.1.xsd" target="${gen.src}"
-			package="sai_cas.VOTABLE" binding="schema/VOTable-1.1.xjb">
-			<produces dir="${gen.src}/sai_cas/VOTABLE"/>
+			package="sai_cas.VOTABLEFile" binding="schema/VOTable-1.1.xjb">
+			<produces dir="${gen.src}/sai_cas/VOTABLEFile"/>
 		</xjc>
 	</target>
 	
@@ -77,8 +77,6 @@
 				<fileset dir="${jwsdp.home}" includes="jaxp/lib/**/*.jar" />
 			</classpath>
 		</javac>
-<!--		<copy file="${gen.src}/sai_cas/XMLCatalogFile/jaxb.properties"
-			todir="${build.classes}/sai_cas/XMLCatalogFile"/>-->
 	</target>
 	
 	
