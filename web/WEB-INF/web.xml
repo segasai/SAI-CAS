@@ -10,13 +10,14 @@
 	</description>
 
 	<servlet>
-		<servlet-name>HelloServlet</servlet-name>
-		<servlet-class>sai_cas.ServerSnoop</servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>ConeSearchServlet</servlet-name>
 		<servlet-class>sai_cas.servlet.ConeSearchServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>CrossMatchServlet</servlet-name>
+		<servlet-class>sai_cas.servlet.CrossMatchServlet</servlet-class>
+	</servlet>
+
 	<servlet>
 		<servlet-name>SQLQueryExecutorServlet</servlet-name>
 		<servlet-class>
