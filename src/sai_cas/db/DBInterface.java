@@ -12,6 +12,14 @@ import org.postgresql.*;
 public class DBInterface  extends Object
 {
 	static Logger logger = Logger.getLogger("sai_cas.DBInterface");
+	private PreparedStatement pstmtBuffered;
+	private StatementSetter[] ss;
+	public QueryResults qr;
+	private Connection conn;
+	Statement stmt;
+	final int maxBatchStatement = 1000;
+	int curNBatchStatements;
+
 	
 	public DBInterface(Connection conn) throws java.sql.SQLException
 	{
@@ -156,8 +164,6 @@ public class DBInterface  extends Object
 		}
 	}	
 
-	private PreparedStatement pstmtBuffered;
-	private StatementSetter[] ss;
 	private class StatementSetter
 	{
 		String datatype;
@@ -1140,9 +1146,4 @@ public class DBInterface  extends Object
 		private int ncols;
 	};
 	
-	public QueryResults qr;
-	private Connection conn;
-	Statement stmt;
-	final int maxBatchStatement = 1000;
-	int curNBatchStatements;
 }
