@@ -130,6 +130,15 @@ public class XMLCatalog
 		
 	}
 
+	public void XMLCatalog(DBInterface dbi, String catalog) throws SQLException, DBException, XMLCatalogException
+	{
+		if (!dbi.checkCatalogExists(catalog))
+		{
+			return;
+		}
+		cat = new Catalog();
+		//cat.set
+	}
 	
 	public void insertDataToDB(DBInterface dbi) throws SQLException, DBException, XMLCatalogException
 	{
@@ -298,6 +307,8 @@ public class XMLCatalog
 		}  
 	}
 	
+
+
 	public List<String[]> convertProperties(List<Property> propertyList)
 	{
 		List<String[]> result = new ArrayList<String[]>();
