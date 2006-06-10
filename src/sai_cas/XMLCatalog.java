@@ -14,9 +14,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.zip.GZIPInputStream;
 import java.util.Properties;
+import java.util.Arrays;
+
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -130,14 +133,86 @@ public class XMLCatalog
 		
 	}
 
-	public void XMLCatalog(DBInterface dbi, String catalog) throws SQLException, DBException, XMLCatalogException
+	public XMLCatalog(DBInterface dbi, String catalog) throws SQLException, DBException, XMLCatalogException
 	{
 		if (!dbi.checkCatalogExists(catalog))
 		{
 			return;
 		}
 		cat = new Catalog();
-		//cat.set
+		cat.setDescription(dbi.getCatalogDescription(catalog));
+		cat.setInfo(dbi.getCatalogInfo(catalog));
+		cat.setName(catalog);
+		PropertyList pl = new PropertyList();
+		Property p = new Property();
+		List <Property> lpc = pl.getProperty();
+		for (String s[]: dbi.getCatalogProperties(catalog))
+		{
+			p.setName(s[0]);
+			p.setValue(s[1]);
+			lpc.add(p);
+		}
+				
+		List<Table> lt = cat.getTable();	
+		for (String st: Arrays.asList(dbi.getTableNames(catalog)))
+		{
+			Table t = new Table();
+			t.setName(st);
+			t.setInfo(dbi.getTableInfo(catalog,st));
+			t.setDescription(dbi.getTableInfo(catalog,st));
+			pl = new PropertyList();
+			List <Property> lpt = pl.getProperty();
+			
+			for (String s[]: dbi.getTableProperties(catalog, st))
+			{
+				p.setName(s[0]);
+				p.setValue(s[1]);
+				lpt.add(p);
+			}
+			t.setPropertyList(pl);
+
+			List <Column> lc = t.getColumn();
+			String [] units = dbi.getColumnUnits(catalog,st);
+			String [] ucds = dbi.getColumnUCDs(catalog,st);
+			String [] infos = dbi.getColumnInfos(catalog,st);
+			String [] descriptions = dbi.getColumnDescriptions(catalog,st);
+			String [] datatypes = dbi.getColumnDatatypes(catalog,st);
+
+			int i = 0;
+
+			for (String sc: Arrays.asList(dbi.getColumnNames(catalog, st)))
+			{
+				Column col = new Column();
+				col.setName(sc);
+				col.setInfo(infos[i]);
+				col.setDescription(descriptions[i]);
+				col.setUnit(units[i]);
+				col.setUcd(ucds[i]);
+				col.setDatatype(datatypes[i]);
+				i++;
+				lc.add(col);
+			}
+			lt.add(t);
+		}
+
+	}
+	
+	public String toString()
+	{
+		StringWriter sw = new StringWriter();
+		try
+		{
+			JAXBContext context1 = JAXBContext.newInstance("sai_cas.XMLCatalogFile");        
+			Marshaller m = context1.createMarshaller();
+			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			m.marshal(cat, sw);
+		}
+		catch (javax.xml.bind.JAXBException e)
+		{
+			/* Don't do anything right now */
+			System.err.println(e.getMessage()+e.getCause());
+		}
+		return  sw.toString();
 	}
 	
 	public void insertDataToDB(DBInterface dbi) throws SQLException, DBException, XMLCatalogException
@@ -332,9 +407,10 @@ public class XMLCatalog
 		Statement stmt = dbcon.createStatement(); 
 		stmt.execute("set search_path to cas_metadata, public");        
 		DBInterface dbi = new DBInterface(dbcon);
-		//for (String file : Arrays.asList((new File("tmp")).list()))
 		{
-			Date xx=new Date();
+			XMLCatalog xmlc = new XMLCatalog(dbi,args[0]);
+			System.out.println(xmlc);
+/*			Date xx=new Date();
 			long date = xx.getTime();
 			
 			//XMLCatalog xmlc = new XMLCatalog("tmp/"+file);//"demo_cat.xml");
@@ -349,6 +425,7 @@ public class XMLCatalog
 			stmt = dbcon.createStatement(); 
 			stmt.execute("analyze;");        
 			dbcon.commit();
+*/
 		}
 		dbcon.close();
 	}

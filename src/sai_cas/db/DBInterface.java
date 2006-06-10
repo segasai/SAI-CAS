@@ -392,6 +392,32 @@ public class DBInterface  extends Object
 			}
 		}
 	}
+
+	/**
+	 * This function just do the bulk get of properties for the catalogue
+	 * @param catalog -- the name of the catalogue
+	 * @throws SQLException
+	 */
+	public List<String[]> getCatalogProperties(String catalog) throws SQLException
+	{
+		logger.debug("Getting catalog properties...");
+
+		String []propertyPair = new String[2];
+		List<String[]> propertiesList = new ArrayList<String[]>();
+		String query="SELECT * FROM cas_get_catalog_properties ('"+catalog+"') as (a varchar,b varchar);";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+
+		while(rs.next())
+		{
+			propertyPair[0]=rs.getString(1);
+			propertyPair[1]=rs.getString(2);
+			propertiesList.add(propertyPair);
+		}
+		rs.close();
+		return propertiesList;
+	}
+
 	
 	public void setCatalogInfo(String catalog, String info) throws SQLException
 	{
@@ -547,6 +573,33 @@ public class DBInterface  extends Object
 		}
 	}
 
+	/**
+	 * This function just do the bulk get of properties for the table
+	 * in the catalogue
+	 * @param catalog -- the name of the catalogue
+	 * @throws SQLException
+	 */
+	public List<String[]> getTableProperties(String catalog, String table) throws SQLException
+	{
+		logger.debug("Getting table properties...");
+
+		String []propertyPair = new String[2];
+		List<String[]> propertiesList = new ArrayList<String[]>();
+		String query="SELECT * FROM cas_get_table_properties ('"+catalog+"','"+table+"') as (a varchar, b varchar);";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+
+		while(rs.next())
+		{
+			propertyPair[0]=rs.getString(1);
+			propertyPair[1]=rs.getString(2);
+			propertiesList.add(propertyPair);
+		}
+		rs.close();
+		return propertiesList;
+	}
+
+
 	
 	public void setTableInfo(String catalog, String table, String info) throws SQLException
 	{
@@ -584,6 +637,34 @@ public class DBInterface  extends Object
 		rs.close();
 		return result;
 	}
+
+	/**
+	 * This function just do the bulk get of properties for the table
+	 * in the catalogue
+	 * @param catalog -- the name of the catalogue
+	 * @throws SQLException
+	 */
+	public List<String[]> getAttributeProperties(String catalog, String table, String attribute) throws SQLException
+	{
+		logger.debug("Getting column properties...");
+
+		String []propertyPair = new String[2];
+		List<String[]> propertiesList = new ArrayList<String[]>();
+		String query="SELECT * FROM cas_get_column_properties ('"+catalog+"','"+table+"','"+attribute+"') as (a varchar, b varchar);";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+
+		while(rs.next())
+		{
+			propertyPair[0]=rs.getString(1);
+			propertyPair[1]=rs.getString(2);
+			propertiesList.add(propertyPair);
+		}
+		rs.close();
+		return propertiesList;
+	}
+
+
 
 	public boolean checkAttributePropertyExists(String property) throws SQLException
 	{
@@ -723,6 +804,30 @@ public class DBInterface  extends Object
 		return als.toArray(result);
 	}
 
+	public String getTableInfo(String catalog, String table) throws SQLException
+	{
+		String query="SELECT cas_get_table_info('"+catalog+"','"+table+"');";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		String result = rs.getString(1);
+		rs.close();
+		return result;
+	}
+
+	public String getTableDescription(String catalog, String table) throws SQLException
+	{
+		String query="SELECT cas_get_table_description('"+catalog+"','"+table+"');";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		String result = rs.getString(1);
+		rs.close();
+		return result;
+	}
+
+
+
 	public String[] getTableNames(String catalogName) throws SQLException
 	{
 		String query="SELECT cas_get_table_names('"+catalogName+"');";
@@ -783,10 +888,25 @@ public class DBInterface  extends Object
 		return als.toArray(result);
 	}
 
+	public String[] getColumnDatatypes(String catalogName,String tableName) throws SQLException
+	{
+		String query="SELECT * FROM cas_get_column_external_datatypes('"+catalogName+"','"+tableName+"');";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ArrayList<String> als = new ArrayList<String>();
+		while(rs.next())
+		{
+			als.add(rs.getString(1));
+		}
+		String[] result = new String[1];
+		rs.close();
+		return als.toArray(result);
+	}
+
 
 	public String[] getColumnUnits(String catalogName,String tableName) throws SQLException
 	{
-		String query="SELECT cas_get_column_units('"+catalogName+"','"+tableName+"');";
+		String query="SELECT * FROM cas_get_column_units('"+catalogName+"','"+tableName+"');";
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
 		ArrayList<String> als = new ArrayList<String>();
@@ -802,7 +922,7 @@ public class DBInterface  extends Object
 
 	public String[] getColumnUCDs(String catalogName,String tableName) throws SQLException
 	{
-		String query="SELECT cas_get_column_ucds('"+catalogName+"','"+tableName+"');";
+		String query="SELECT * FROM cas_get_column_ucds('"+catalogName+"','"+tableName+"');";
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
 		ArrayList<String> als = new ArrayList<String>();
@@ -1061,7 +1181,7 @@ public class DBInterface  extends Object
 		{
 			if (datatypeArray[n - 1] == null)
 			{
-				PreparedStatement stmt = conn.prepareStatement("select cas_get_external_datatype(?, ?, ?)");
+				PreparedStatement stmt = conn.prepareStatement("select cas_get_column_external_datatype(?, ?, ?)");
 				stmt.setString(1, getBaseCatalogName(n));
 				stmt.setString(2, getBaseTableName(n));
 				stmt.setString(3, getBaseColumnName(n));

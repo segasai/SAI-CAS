@@ -125,7 +125,7 @@ public class MainAxisServices {
 	 * @throws Exception
 	 * @return void
 	 */
-	public static void insertCatalogFromVotable(String catalogString) throws RemoteException
+	public static void insertCatalogFromVotable(String catalogString, String user, String password) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -133,8 +133,8 @@ public class MainAxisServices {
 		
 		try
 		{
-			conn = DBConnection.getPooledPerUserConnection();
-			dbi = new DBInterface(conn);
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
 			vot = new Votable(catalogString);
 			vot.insertDataToDB(dbi);
 		}

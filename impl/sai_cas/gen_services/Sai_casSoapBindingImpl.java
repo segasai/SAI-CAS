@@ -34,12 +34,12 @@ public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServ
 		sai_cas.services.MainAxisServices.insertCatalog(catalogString);
 	}
 
-	public void insertCatalogFromVotable(java.lang.String catalogString) throws java.rmi.RemoteException
+	public void insertCatalogFromVotable(java.lang.String catalogString, String user, String password) throws java.rmi.RemoteException
 	{
 		logger.info("Running insertCatalogFromVotable...");
 		logger.debug("The following catalogue is being inserted" + catalogString);
 		
-		sai_cas.services.MainAxisServices.insertCatalogFromVotable(catalogString);
+		sai_cas.services.MainAxisServices.insertCatalogFromVotable(catalogString,user,password);
 	}
 
 	public java.lang.String[] getCatalogNames() throws java.rmi.RemoteException
