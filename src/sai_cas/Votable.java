@@ -111,8 +111,7 @@ public class Votable
 		}
 		try
 		{
-			JAXBElement<?> votElement = (JAXBElement<?>) um.unmarshal(file);
-			vot = (VOTABLE) votElement.getValue();
+			vot = (VOTABLE) um.unmarshal(file);
 		}
 		catch (UnmarshalException e) 
 		{
@@ -267,6 +266,10 @@ public class Votable
 			TABLEDATA tdata = d.getTABLEDATA();
 			List <TR> trList = tdata.getTR();
 			String[] values = new String[ncols];
+			String[] datatypeArray = new String[datatypeList.size()];
+
+			dbi.prepareInsertingData(catalogName, tableName, datatypeList.toArray(datatypeArray));
+
 			for (TR tr: trList)
 			{
 				int i=0;
@@ -274,7 +277,7 @@ public class Votable
 				{
 					values[i++]=td.getValue();
 				}
-				dbi.insertData(catalogName, tableName, values);
+				dbi.insertData(values);
 			}
 			
 		}  
@@ -295,7 +298,8 @@ public class Votable
 			
 			Votable vot = new Votable(new File(args[0]));
 			vot.insertDataToDB(dbi);
-			dbcon.commit();
+			dbi.close();
+//			dbcon.commit();
 
 			xx = new Date();
 			System.out.println(xx.getTime() - date);

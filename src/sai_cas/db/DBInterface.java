@@ -154,7 +154,6 @@ public class DBInterface  extends Object
 			query.append(ss[i].getInsert());
 		}
 		query.setCharAt(query.length() - 1, ')');		
-		System.out.println(query);		
 		pstmtBuffered = conn.prepareStatement(query.toString());
 		//org.postgresql.PGStatement pgstmt = 
 //		((org.postgresql.PGStatement)pstmtBuffered).setPrepareThreshold(3);
@@ -319,7 +318,15 @@ public class DBInterface  extends Object
 			query.append("'" + stringArray[i] + "',");
 		}
 		query.setCharAt(query.length() - 1, ')');
-		stmt.execute(query.toString());
+		try 
+		{
+			stmt.execute(query.toString());
+		}
+		catch(SQLException e)
+		{
+			logger.error("Error during insertion of the data: \n"+query);
+			throw e;
+		}
 	}
 
 	public void insertCatalog(String catalog, String catalogInfo, String catalogDescription) throws SQLException
@@ -491,6 +498,7 @@ public class DBInterface  extends Object
 			pstmt.setString(7,columnDescription);      
 			pstmt.execute();
 		}
+		
 		pstmt.close();
 		sb.deleteCharAt(sb.length()-1);
 		sb.append(")");
