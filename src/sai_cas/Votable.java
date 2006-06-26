@@ -304,11 +304,11 @@ public class Votable
 			xx = new Date();
 			System.out.println(xx.getTime() - date);
 
-			stmt = dbcon.createStatement(); 
-			stmt.execute("analyze;");        
-			dbcon.commit();
+//			stmt = dbcon.createStatement(); 
+//			stmt.execute("analyze;");        
+//			dbcon.commit();
 		}
-		dbcon.close();
+//		dbcon.close();
 	}
 	
 

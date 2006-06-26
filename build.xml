@@ -16,6 +16,7 @@
 	<property name="gen.src" value="${basedir}/gen_src/"/>
 	<property name="gen.src.axis" value="${basedir}/gen_src_axis/"/>
 	<property name="impl" value="${basedir}/impl/"/>
+	<property name="debug" value="off"/>
 	
 	<!-- Definition of various Ant tasks -->
 	
@@ -69,7 +70,7 @@
 	
 	
 	<target name="compile" depends="xsd2java,xsd2java1">
-		<javac debug="on" srcdir="${gen.src}" destdir="${build.classes}">
+		<javac debug="${debug}" srcdir="${gen.src}" destdir="${build.classes}">
 			<compilerarg line="-Xlint:unchecked"/>
 			<classpath>
 				<fileset dir="${jwsdp.home}" includes="jaxb/lib/*.jar" />
@@ -82,7 +83,7 @@
 	
 	
 	<target name="compile1" depends="compile">
-		<javac srcdir="src" debug="on" destdir="${build.classes}" classpath="${build.classes}">
+		<javac srcdir="src" debug="${debug}" destdir="${build.classes}" classpath="${build.classes}">
 			<compilerarg line="-Xlint:unchecked" />
 			<classpath>
 				<fileset dir="${commons.fileupload.lib}" includes="*.jar" />
@@ -140,7 +141,7 @@
 		<copy file="${impl}/sai_cas/gen_services/Sai_casSoapBindingImpl.java"
 			todir="${gen.src.axis}/sai_cas/gen_services/"
 			overwrite="true"/>
-		<javac debug="on" srcdir="${gen.src.axis}"
+		<javac debug="${debug}" srcdir="${gen.src.axis}"
 			destdir="${build.classes}">
 			<compilerarg line="-Xlint:-unchecked"/>
 			<classpath>
@@ -163,7 +164,7 @@
 	<target name="deploy_cas_ws" depends="axisjar">
 		<copy file="${build}/sai_cas_ws.jar" todir="${axis.web-inf.lib}"/>
 		<axis-admin xmlfile="${gen.src.axis}/sai_cas/gen_services/deploy.wsdd"
-			debug="on" hostname="${axis.host}" port="${axis.port}"/>
+			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
 	</target>
 		
 		
