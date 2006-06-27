@@ -57,11 +57,25 @@ public class CrossMatchServlet extends HttpServlet {
 			/* Nothing ...*/
 		}
 		
-		/* First file */
+		FileItem fi = null;
 		
-		FileItem fi = fileItemList.get(0);
+		for (FileItem fi0: fileItemList)
+		{
+		    if (!fi0.isFormField())
+		    {
+		    	fi = fi0;
+		    }
+		}
+		
+		if (fi == null)
+		{
+			throw new ServletException("File should be specified");			
+		}
 		long size = fi.getSize();
-		if (size > 10000000) {throw new ServletException("File is too big");}
+		if (size > 10000000) 
+		{
+			throw new ServletException("File is too big");
+		}
 		File uploadedFile = null;
 		Connection conn = null;
 		DBInterface dbi = null;
