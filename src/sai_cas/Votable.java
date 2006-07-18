@@ -8,23 +8,12 @@ import javax.xml.bind.*;
 import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.util.zip.GZIPInputStream;
-import java.util.Properties;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.StringWriter;
 import java.net.URI;
 import java.util.List;
 import java.util.Date;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
 import java.sql.*;
 
 public class Votable
@@ -132,7 +121,7 @@ public class Votable
 		insertDataToDB(dbi,null);
 	}
 	
-	public void insertDataToDB(DBInterface dbi, String catalogName0) throws SQLException, DBException, VotableException
+	public String insertDataToDB(DBInterface dbi, String catalogName0) throws SQLException, DBException, VotableException
 	{
 		/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
 		 *  I do the convertion to lower case.
@@ -155,11 +144,9 @@ public class Votable
 				catalogInfo = ((INFO) obj).getValue();
 			}
 		}
-
-		StringBuffer buf=new StringBuffer();
 		
 		String catalogDescription ;
-		catalogDescription=vot.getDESCRIPTION().getContent().get(0).toString();
+		catalogDescription = vot.getDESCRIPTION().getContent().get(0).toString();
 
 /*		List<String[]> catalogProperties;	
 		try
@@ -174,12 +161,13 @@ public class Votable
 */
 
 		logger.debug("Inserting the catalogue metadata... ");		
-		dbi.insertCatalog(catalogName);
+//		dbi.insertCatalog(catalogName);
 //		dbi.setCatalogInfo(catalogName, catalogInfo);
 
-		dbi.setCatalogDescription(catalogName, catalogDescription);
+		//dbi.setCatalogDescription(catalogName, catalogDescription);
 		
 		List<TABLE> tableList = res.getTABLE();
+		List<String> tableNameList = new ArrayList<String>();
 
 		logger.debug("Looping through tables in the catalogue... ");				
 		for(TABLE table : tableList)
@@ -189,6 +177,7 @@ public class Votable
 			 */
 			
 			String tableName = table.getName().toLowerCase();
+			tableNameList.add(tableName);
 			logger.debug("Inserting the table: "+tableName);				
 			
 //			String tableInfo = table.getInfo();
@@ -249,8 +238,10 @@ public class Votable
 			}
 			logger.debug("Inserting the columns, table metadata... ");				
 			dbi.insertTable(catalogName, tableName, columnNameList, datatypeList, unitList, columnInfoList, columnDescriptionList);
+			logger.debug("Setting UCDs... ");	
 			dbi.setUcds(catalogName, tableName, columnNameList, ucdList);
 //			dbi.setTableInfo(catalogName, tableName, tableInfo);
+			logger.debug("Setting tableDescs... ");	
 			dbi.setTableDescription(catalogName, tableName, tableDescription);
 //			dbi.setTableProperties(catalogName, tableName, tableProperties);
 			logger.debug("Preparing to read the data... ");							
@@ -281,6 +272,7 @@ public class Votable
 			}
 			
 		}  
+		return tableNameList.get(0);
 	}
 	
 	public static void main(String args[]) throws Exception

@@ -19,13 +19,14 @@ public class DBInterface  extends Object
 	Statement stmt;
 	final int maxBatchStatement = 1000;
 	int curNBatchStatements;
+	String userLogged = null;
 
 	
 	public DBInterface(Connection conn) throws java.sql.SQLException
 	{
 		this.conn = conn;
 		
-		String query = "SET search_path TO cas_metadata,public;";
+		String query = "SET search_path TO cas_metadata, public;";
 		stmt = conn.createStatement(); 
 		stmt.execute(query);
 		logger.info("The DB interface is successfully created...");
@@ -33,15 +34,16 @@ public class DBInterface  extends Object
 	}
 
 	/* TODO need to be refactored (concerning user_schema) */
-	public DBInterface(Connection conn, String user_schema) throws java.sql.SQLException
+	public DBInterface(Connection conn, String userSchema) throws java.sql.SQLException
 	{
 		this.conn = conn;
 		
-		String query = "SET search_path TO "+user_schema+",cas_metadata,public;";
-		stmt = conn.createStatement(); 
+		String query = "SET search_path TO " + userSchema + ", cas_metadata, public;";
+		stmt = conn.createStatement();
 		stmt.execute(query);
 		logger.info("The DB interface is successfully created...");
-		curNBatchStatements = 0 ;
+		curNBatchStatements = 0;
+		userLogged = userSchema;
 	}
 
 
@@ -496,9 +498,8 @@ public class DBInterface  extends Object
 			pstmt.setString(5,columnUnit);      
 			pstmt.setString(6,columnInfo);      
 			pstmt.setString(7,columnDescription);      
-			pstmt.execute();
+			pstmt.execute();			
 		}
-		
 		pstmt.close();
 		sb.deleteCharAt(sb.length()-1);
 		sb.append(")");
@@ -738,11 +739,28 @@ public class DBInterface  extends Object
 		rs.next();
 		boolean result = rs.getBoolean(1);
 		rs.close();
-		return result;
-		
+		return result;		
 	}
+	/** Checks whether the UCD exists in the list of user UCDs (not system-wide UCD)
+	 * 
+	 * @param ucd
+	 * @return boolean
+	 * @throws SQLException
+	 */
+	public boolean checkUserUcdExists(String ucd) throws SQLException
+	{
+		String query="SELECT cas_user_ucd_exists('"+ucd+"')";
+		stmt.executeQuery(query);            
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		boolean result = rs.getBoolean(1);
+		rs.close();
+		return result;		
+	}
+
 	
-	public void setUcds (String catalog, String table, List<String> columnList, List<String> ucdList) throws SQLException
+	public void setUcds (String catalog, String table, List<String> columnList,
+			List<String> ucdList) throws SQLException
 	{
 		
 		String query = "UPDATE attribute_list SET ucd_id = cas_get_ucd_id(?)" +
@@ -760,15 +778,15 @@ public class DBInterface  extends Object
 			{
 				continue;
 			}
-			if (!checkUcdExists(ucd))
+			if (((userLogged == null) && !checkUcdExists(ucd)) ||
+					((userLogged != null) && !checkUserUcdExists(ucd)))
 			{
 				String query1 = "INSERT INTO ucd_list (name) VALUES ('" + ucd+"')";
-				stmt.execute(query1);
+				stmt.executeUpdate(query1);
 			}
 			pstmt.setString(1,ucd);
 			pstmt.setString(2,column);
-			pstmt.execute();				
-			
+			pstmt.executeUpdate();	
 		}
 		pstmt.close();
 		
@@ -996,9 +1014,33 @@ public class DBInterface  extends Object
 		return result;
 	}
 
+	public String[] getRaDecColumnsFromUCD(String catalogName, String tableName) throws SQLException
+	{
+		String query="SELECT * FROM cas_get_table_ra_dec_from_ucd('" + catalogName + "'," +
+		"'" + tableName + "');";
+		logger.debug("Running query: "+query);
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		
+		if (!rs.next())
+		{
+			logger.debug("Resultset is null");			
+		}
+		
+		String raDecArr[] = new String[2];
+		raDecArr[0] = rs.getString(1);
+		
+		if (!rs.next())
+		{
+			logger.debug("Resultset has 1 elt");
+		}
+
+		raDecArr[1] = rs.getString(1);
+		rs.close();
+		return raDecArr;
+	}
 	
 	/**
-	 * 
 	 * @param catalogName -- The name of catalogue
 	 * @return the table name if the catalogue contains only one table
 	 * and null, if the catalogue has more than one table
@@ -1027,34 +1069,8 @@ public class DBInterface  extends Object
 		stmt.setFetchSize(100);
 		this.qr = new QueryResults(stmt.executeQuery());
 	}
-
 	
 
-/*
-	public static void main(String args[]) throws Exception
-	{
-		Class.forName("org.postgresql.Driver");
-		Connection dbcon =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas","math","");
-		Statement stmt = dbcon.createStatement(); 
-		stmt.execute("set search_path to cas_metadata, public");        
-		DBInterface dbi = new DBInterface(dbcon);
-		dbi.insertCatalog("catxxx");
-		List<String> col =new ArrayList<String> ();
-		List<String> colt =new ArrayList<String> ();
-		col.add("col1");
-		col.add("col2");
-		col.add("col3");
-		colt.add("int");
-		colt.add("double");
-		colt.add("long");
-
-		dbi.insertTable("catxxx","tabxxx",col,colt);
-		dbi.setCatalogProperty("catxxx","Author","XXXX");
-		dbi.setTableProperty("catxxx","tabxxx","Author","XXXX");
-		dbi.setAttributeProperty("catxxx","tabxxx","col1","Author","XXXX");
-
-	}
-*/
 	public class QueryResults
 	{
 		public QueryResults(ResultSet rs) throws SQLException
