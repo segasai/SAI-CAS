@@ -524,6 +524,12 @@ public class DBInterface  extends Object
 		return columnInternalType;
 	}
 
+	public void analyze(String catalog, String  table) throws SQLException
+	{
+		logger.debug("Analyzing "+catalog+"."+table +" ...");
+		stmt.executeUpdate("ANALYZE "+catalog+"."+table);
+	}
+	
 	public boolean checkTableExists(String catalog, String table) throws SQLException
 	{
 		String query="SELECT cas_table_exists('"+catalog+"','"+table+"')";

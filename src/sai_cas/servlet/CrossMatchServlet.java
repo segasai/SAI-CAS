@@ -117,7 +117,7 @@ public class CrossMatchServlet extends HttpServlet {
 			Votable vot = new Votable (uploadedFile);
 			String userDataSchema = "cas_data_user_tmp";
 			String tableName = vot.insertDataToDB(dbi,userDataSchema);
-			
+			dbi.analyze(userDataSchema, tableName);
 			String[] raDecArray = dbi.getRaDecColumns(cat, tab);
 			String[] raDecArray1 = dbi.getRaDecColumnsFromUCD(userDataSchema,
 				tableName);
