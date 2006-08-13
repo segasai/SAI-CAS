@@ -60,11 +60,6 @@ public class DBInterface  extends Object
 			{
 				stmt.close();
 			}
-			if (pstmtBuffered != null)
-			{
-				pstmtBuffered.executeBatch();
-				pstmtBuffered.close();
-			}
 			if (qr != null)
 			{
 				qr.close();
@@ -122,6 +117,7 @@ public class DBInterface  extends Object
 		{
 			pstmtBuffered.executeBatch();
 			pstmtBuffered.close();
+			pstmtBuffered = null;
 		}
 	}
 
