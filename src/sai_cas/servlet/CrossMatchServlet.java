@@ -122,9 +122,10 @@ public class CrossMatchServlet extends HttpServlet {
 			String[] raDecArray1 = dbi.getRaDecColumnsFromUCD(userDataSchema,
 				tableName);
 			dbi.executeQuery("select * from " + userDataSchema + "." + tableName +
-					" AS a, " + cat + "." + tab + " AS b "+
-					"WHERE q3c_join(a."+raDecArray1[0]+",a."+raDecArray1[1]+",b."+
+					" AS a LEFT JOIN " + cat + "." + tab + " AS b "+
+					"ON q3c_join(a."+raDecArray1[0]+",a."+raDecArray1[1]+",b."+
 					raDecArray[0]+",b."+raDecArray[1]+","+rad+")");
+
 			VOTableQueryResultsOutputter voqro = new VOTableQueryResultsOutputter();
 			voqro.print(out,dbi);
 			

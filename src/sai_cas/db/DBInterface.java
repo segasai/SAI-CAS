@@ -116,6 +116,15 @@ public class DBInterface  extends Object
 		}
 	}
 
+	public void flushData() throws SQLException
+	{
+		if (pstmtBuffered != null)
+		{
+			pstmtBuffered.executeBatch();
+			pstmtBuffered.close();
+		}
+	}
+
 	public void insertCatalog(String catalog) throws SQLException
 	{
 		String query = "INSERT INTO catalog_list (name) VALUES ('" + catalog + "')";

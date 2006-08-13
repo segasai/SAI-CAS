@@ -273,6 +273,7 @@ public class Votable
 				}
 				dbi.insertData(values);
 			}
+			dbi.flushData();
 			
 		}  
 		return tableNameList.get(0);
