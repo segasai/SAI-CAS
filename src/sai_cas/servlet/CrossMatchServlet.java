@@ -49,6 +49,9 @@ public class CrossMatchServlet extends HttpServlet {
 		String tab = request.getParameter("tab");
 		String rad = request.getParameter("rad");
 		*/
+		response.setContentType("text/xml");
+
+		
 		String cat = null, tab = null, rad = null;
 
 		List<FileItem> fileItemList = null;
@@ -116,10 +119,8 @@ public class CrossMatchServlet extends HttpServlet {
 			String tableName = vot.insertDataToDB(dbi,userDataSchema);
 			
 			String[] raDecArray = dbi.getRaDecColumns(cat, tab);
-			//dbi.close();
 			String[] raDecArray1 = dbi.getRaDecColumnsFromUCD(userDataSchema,
 				tableName);
-			
 			dbi.executeQuery("select * from " + userDataSchema + "." + tableName +
 					" AS a, " + cat + "." + tab + " AS b "+
 					"WHERE q3c_join(a."+raDecArray1[0]+",a."+raDecArray1[1]+",b."+

@@ -81,7 +81,7 @@ public class DBInterface  extends Object
 		}
 		catch (SQLException e)
 		{
-			logger.error("Exception during DBInterface closing ... " + e);
+			logger.error("Exception during DBInterface closing ... " + e + e.getCause());
 		}
 	}
 

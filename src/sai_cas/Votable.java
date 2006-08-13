@@ -173,10 +173,11 @@ public class Votable
 		for(TABLE table : tableList)
 		{
 			/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
-			 * I do the convertion to lower case.
+			 * I do the convertion to lower case. And I also convert slashes to 
+			 * subscript
 			 */
 			
-			String tableName = table.getName().toLowerCase();
+			String tableName = table.getName().toLowerCase().replace('/','_');
 			tableNameList.add(tableName);
 			logger.debug("Inserting the table: "+tableName);				
 			
@@ -216,9 +217,11 @@ public class Votable
 			{
 				datatype = field.getDatatype();
 				/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
-				 *   I do the convertion to lower case.
+				 *   I do the convertion to lower case. 
+				 *   Also I replace '-','(',')' and '.' to '_'
 				 */
-				columnName = field.getName().toLowerCase();
+				columnName = field.getName().toLowerCase().replace('-','_')
+					.replace('.','_').replace('(','_').replace(')','_');
 				unit =  field.getUnit();
 				ucd = field.getUcd();
 				columnDescription = field.getDESCRIPTION().getContent().get(0).toString();
