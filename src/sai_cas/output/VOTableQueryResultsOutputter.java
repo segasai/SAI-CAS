@@ -21,9 +21,9 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 		out.print("<VOTABLE version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
 		out.println("xmlns=\"http://www.ivoa.net/xml/VOTable/v1.1\">");
 		out.print("<DESCRIPTION>");
-		message.replace("<","&lt;");
-		message.replace(">","&gt;");
+		out.print("<![CDATA[")
 		out.print(message);
+		out.print("]]>");
 		out.println("</DESCRIPTION>");
 		out.println("</VOTABLE>");
 	}
