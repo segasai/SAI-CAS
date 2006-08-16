@@ -107,6 +107,8 @@ public class CrossMatchServlet extends HttpServlet {
 		File uploadedFile = null;
 		Connection conn = null;
 		DBInterface dbi = null;
+		VOTableQueryResultsOutputter voqro = new VOTableQueryResultsOutputter();
+
 		try
 		{
 			uploadedFile = File.createTempFile("crossmatch",".dat",new File("/tmp/"));
@@ -126,13 +128,13 @@ public class CrossMatchServlet extends HttpServlet {
 					"ON q3c_join(a."+raDecArray1[0]+",a."+raDecArray1[1]+",b."+
 					raDecArray[0]+",b."+raDecArray[1]+","+rad+")");
 
-			VOTableQueryResultsOutputter voqro = new VOTableQueryResultsOutputter();
 			voqro.print(out,dbi);
 			
 		}
 		catch (Exception e)
 		{
 			logger.error("Something is wrong "+e);
+			voqro.printError(out, "Error occured: " + e +"\nCause: " +e.getCause());
 		}
 		finally 
 		{
@@ -143,7 +145,8 @@ public class CrossMatchServlet extends HttpServlet {
 				uploadedFile.delete();
 			}
 			catch (Exception e)
-			{}
+			{
+			}
 		}
 		
 	}
