@@ -494,7 +494,7 @@ public class DBInterface  extends Object
 			columnInternalType = getInternalDatatype(columnType);
 			//System.out.println(columnInternalType);
 			
-			sb.append(column + " \"" + columnInternalType+"\",");
+			sb.append("\""+column + "\" " + columnInternalType+",");
 			
 			pstmt.setString(1,catalog);      
 			pstmt.setString(2,table);      
