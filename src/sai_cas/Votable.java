@@ -226,7 +226,7 @@ public class Votable
 				unit =  field.getUnit();
 				if (unit == null) {unit ="";}
 				ucd = field.getUcd();
-				if (ucd==null) {ucd=""}
+				if (ucd == null) {ucd="";}
 				try {
 					columnDescription = field.getDESCRIPTION().getContent().get(0).toString();
 				} catch (NullPointerException e)
