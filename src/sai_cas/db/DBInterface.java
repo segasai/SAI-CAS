@@ -156,6 +156,8 @@ public class DBInterface  extends Object
 				ss[i] = new StatementSetterFloat();
 			else if (internalDatatypeArray[i].equals( "bigint"))
 				ss[i] = new StatementSetterLong();
+			else if (internalDatatypeArray[i].equals( "boolean"))
+				ss[i] = new StatementSetterBoolean();
 			else 
 				ss[i] = new StatementSetter(internalDatatypeArray[i]);
 			query.append(ss[i].getInsert());
@@ -282,6 +284,40 @@ public class DBInterface  extends Object
 			return "?,";
 		}
 	}
+
+	private class StatementSetterBoolean extends StatementSetter
+	{
+		public void set(int i, String value) throws java.sql.SQLException
+		{
+			String value1 = value.trim();
+			if (value1.length() == 0)
+			{
+				pstmt.setNull(i, Types.FLOAT);
+				return;
+			}
+
+			if (value1.equalsIgnoreCase("t"))
+			{
+				pstmt.setBoolean(i, true);
+			}
+			else if (value1.equalsIgnoreCase("f"))
+			{
+				pstmt.setBoolean(i, false);
+			}
+			else
+			{
+				pstmt.setBoolean(i, Boolean.parseBoolean(value1));
+			}
+		}		
+		public String getInsert()
+		{
+			return "?,";
+		}
+	}
+
+
+
+
 
 	private class StatementSetterVarchar extends StatementSetter
 	{
@@ -505,6 +541,7 @@ public class DBInterface  extends Object
 			pstmt.setString(7,columnDescription);      
 			pstmt.execute();			
 		}
+		logger.debug("Finished inserting attributes");
 		pstmt.close();
 		sb.deleteCharAt(sb.length()-1);
 		sb.append(")");
@@ -1035,7 +1072,8 @@ public class DBInterface  extends Object
 		
 		if (!rs.next())
 		{
-			logger.debug("Resultset is null");			
+			logger.debug("No columns with alpha delta columns in the table");
+			return null;
 		}
 		
 		String raDecArr[] = new String[2];

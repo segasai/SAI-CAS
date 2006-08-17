@@ -142,6 +142,7 @@ public class Votable
 		}
 			
 		catalogName = (catalogName0 == null)?catalogName:catalogName0;
+		catalogName.replace('.','_');
 
 		String catalogInfo=null;
 
@@ -193,7 +194,7 @@ public class Votable
 			 * subscript
 			 */
 			
-			String tableName = table.getName().toLowerCase().replace('/','_');
+			String tableName = table.getName().toLowerCase().replace('/','_').replace('.','_');
 			tableNameList.add(tableName);
 			logger.debug("Inserting the table: "+tableName);				
 			String tableDescription;

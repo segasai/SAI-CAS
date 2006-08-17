@@ -123,12 +123,18 @@ public class CrossMatchServlet extends HttpServlet {
 			String[] raDecArray = dbi.getRaDecColumns(cat, tab);
 			String[] raDecArray1 = dbi.getRaDecColumnsFromUCD(userDataSchema,
 				tableName);
-			dbi.executeQuery("select * from " + userDataSchema + "." + tableName +
-					" AS a LEFT JOIN " + cat + "." + tab + " AS b "+
-					"ON q3c_join(a."+raDecArray1[0]+",a."+raDecArray1[1]+",b."+
-					raDecArray[0]+",b."+raDecArray[1]+","+rad+")");
-
-			voqro.print(out,dbi);
+			if (raDecArray1 == null)
+			{
+				voqro.printError(out, "Error occured: " + "You must have the columns in the table having the UCD of alpha or delta ('POS_EQ_RA_MAIN', 'POS_EQ_DEC_MAIN') to do the crossmatch");
+			}
+			else
+			{
+				dbi.executeQuery("select * from " + userDataSchema + "." + tableName +
+						" AS a LEFT JOIN " + cat + "." + tab + " AS b "+
+						"ON q3c_join(a."+raDecArray1[0]+",a."+raDecArray1[1]+",b."+
+						raDecArray[0]+",b."+raDecArray[1]+","+rad+")");
+				voqro.print(out,dbi);
+			}
 			
 		}
 		catch (Exception e)
