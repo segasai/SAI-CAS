@@ -22,6 +22,8 @@ import sai_cas.db.*;
 import sai_cas.output.VOTableQueryResultsOutputter;
 import sai_cas.vo.*;
 import sai_cas.Votable;
+import sai_cas.VotableException;
+
 //import org.apache.log4j.Logger;
 
 public class CrossMatchServlet extends HttpServlet {
@@ -136,6 +138,10 @@ public class CrossMatchServlet extends HttpServlet {
 				voqro.print(out,dbi);
 			}
 			
+		}
+		catch (VotableException e)
+		{
+			voqro.printError(out, "Error occured: " + "Cannot read the VOTable, probably it is not well formed (remember that you must have 'xmlns=\"http://www.ivoa.net/xml/VOTable/v1.1\"' in the VOTABLE tag)");
 		}
 		catch (Exception e)
 		{
