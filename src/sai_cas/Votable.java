@@ -131,8 +131,15 @@ public class Votable
 		RESOURCE res = vot.getRESOURCE().get(0);
 		/* Just to get the first resource */
 
-		String catalogName = res.getName().toLowerCase();
-
+		try
+		{
+			String catalogName = res.getName().toLowerCase();
+		}
+		catch(NullPointerException e)
+		{
+			catalogName = null;
+		}
+			
 		catalogName = (catalogName0 == null)?catalogName:catalogName0;
 
 		String catalogInfo=null;
