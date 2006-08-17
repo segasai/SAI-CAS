@@ -146,8 +146,16 @@ public class Votable
 		}
 		
 		String catalogDescription ;
-		catalogDescription = vot.getDESCRIPTION().getContent().get(0).toString();
-
+		try 
+		{
+			catalogDescription = vot.getDESCRIPTION().getContent().get(0).toString();
+		}
+		catch (NullPointerException e)
+		{
+			catalogDescription = null;
+		}
+		if (catalogDescription == null) {catalogDescription ="";}
+		
 /*		List<String[]> catalogProperties;	
 		try
 		{
@@ -180,9 +188,18 @@ public class Votable
 			String tableName = table.getName().toLowerCase().replace('/','_');
 			tableNameList.add(tableName);
 			logger.debug("Inserting the table: "+tableName);				
+			String tableDescription;
 			
+			try
+			{
+				tableDescription = table.getDESCRIPTION().getContent().get(0).toString();
+			}
+			catch (NullPointerException e)
+			{
+				tableDescription = null;
+			}
+			if (tableDescription == null) {tableDescription = "";}
 //			String tableInfo = table.getInfo();
-			String tableDescription = table.getDESCRIPTION().getContent().get(0).toString();
 /*			List<String[]> tableProperties;
 			try
 			{
