@@ -133,7 +133,7 @@ public class Votable
 
 		String catalogName = res.getName().toLowerCase();
 
-		catalogName = (catalogName0==null)?catalogName:catalogName0;
+		catalogName = (catalogName0 == null)?catalogName:catalogName0;
 
 		String catalogInfo=null;
 
@@ -222,9 +222,19 @@ public class Votable
 				 */
 				columnName = field.getName().toLowerCase().replace('-','_')
 					.replace('.','_').replace('(','_').replace(')','_');
+
 				unit =  field.getUnit();
+				if (unit == null) {unit ="";}
 				ucd = field.getUcd();
-				columnDescription = field.getDESCRIPTION().getContent().get(0).toString();
+				if (ucd==null) {ucd=""}
+				try {
+					columnDescription = field.getDESCRIPTION().getContent().get(0).toString();
+				} catch (NullPointerException e)
+				{
+					columnDescription = null;
+				}
+				if (columnDescription == null) {columnDescription="";}
+					
 //				columnInfo = column.getInfo();
 				/* TODO 
 				 * I should write the handling of the column properties too
