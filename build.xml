@@ -55,6 +55,7 @@
 		<mkdir dir="${build.wsdl}"/>
 	</target>
 	
+	
 	<target name="xsd2java1" depends="init">
 		<xjc schema="schema/cas1.xsd" target="${gen.src}"
 			package="sai_cas.XMLCatalogFile">
@@ -62,6 +63,7 @@
 		</xjc>
 	</target>
 
+	
 	<target name="xsd2java2" depends="init">
 		<xjc schema="schema/VOTable-1.1.xsd" target="${gen.src}"
 			package="sai_cas.VOTABLEFile" binding="schema/VOTable-1.1.xjb">
@@ -82,7 +84,6 @@
 	</target>
 	
 	
-	
 	<target name="compile2" depends="compile1">
 		<javac srcdir="src" debug="${debug}" destdir="${build.classes}" classpath="${build.classes}">
 			<compilerarg line="-Xlint:unchecked" />
@@ -95,10 +96,12 @@
 		</javac>
 	</target>
 
+	
 	<target name="jar" depends="compile2">
 		<jar basedir="${build.classes}" destfile="${build}/sai_cas.jar">
 		</jar>
 	</target>
+	
 	
 	<target name="war" depends="jar">
 		<war destfile="${build}/sai_cas.war" webxml="web/WEB-INF/web.xml">
@@ -112,12 +115,14 @@
 		</war>
 	</target>
 	
+	
 	<target name="deploy_cas" depends="war">
 		<deploy war="${build}/sai_cas.war" url="${tomcat.manager.url}" 
 			username="${tomcat.user}" password="${tomcat.password}"
 			path="/sai_cas" update="true"/>
 	</target>
 
+	
 	<target name="java2wsdl1" depends="compile2">
 		<axis-java2wsdl namespace="gen_services.sai_cas"
 			namespaceimpl="gen_services.sai_cas"
@@ -130,6 +135,7 @@
 			</classpath>
 		</axis-java2wsdl>
 	</target>
+	
 	
 	<target name="java2wsdl2" depends="compile2">
 		<axis-java2wsdl namespace="gen_services.sai_cas"
@@ -145,16 +151,18 @@
 		</axis-java2wsdl>
 	</target>
 	
-
 	
 	<target name="wsdl2java1" depends="java2wsdl1">
 		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
 			url="${build.wsdl}/sai_cas.wsdl" serverside="true"
 			skeletondeploy="true"/>
+		<move file="${gen.src.axis}/sai_cas/gen_services/deploy.wsdd"
+			tofile="${gen.src.axis}/sai_cas/gen_services/deploy1.wsdd"/>
 		<move file="${gen.src.axis}/sai_cas/gen_services/undeploy.wsdd"
 			tofile="${gen.src.axis}/sai_cas/gen_services/undeploy1.wsdd"/>
 	</target>
 
+	
 	<target name="wsdl2java2" depends="java2wsdl2">
 		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
 			url="${build.wsdl}/sai_cas_edit.wsdl" serverside="true"
@@ -197,6 +205,7 @@
 		</jar>
 	</target>
 
+	
 	<target name="deploy_cas_ws" depends="axisjar">
 		<copy file="${build}/sai_cas_ws.jar" todir="${axis.web-inf.lib}"/>
 		<axis-admin
@@ -207,6 +216,7 @@
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
 	</target>
 
+	
 	<target name="undeploy_cas_ws" depends="axisjar">
 		<copy file="${build}/sai_cas_ws.jar" todir="${axis.web-inf.lib}"/>
 		<axis-admin
@@ -216,9 +226,10 @@
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/undeploy2.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
 	</target>
-		
-		
+				
+	
 	<target name="all" depends="deploy_cas,deploy_cas_ws"/>
+	
 	
 	<target name="clean">
 		<delete includeemptydirs="true">

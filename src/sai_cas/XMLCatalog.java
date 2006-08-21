@@ -53,8 +53,7 @@ public class XMLCatalog
 		}
 		try
 		{
-			JAXBElement<?> catElement = (JAXBElement<?>)um.unmarshal(new StreamSource ( new StringReader( catalogString )));
-			cat = (Catalog)catElement.getValue();
+			cat = (Catalog) um.unmarshal(new StreamSource ( new StringReader( catalogString ))); 
 		}
 		catch (UnmarshalException e) 
 		{
@@ -116,8 +115,7 @@ public class XMLCatalog
 		}
 		try
 		{
-			JAXBElement<?> catElement = (JAXBElement<?>)um.unmarshal(file);
-			cat = (Catalog)catElement.getValue();
+			cat = (Catalog) um.unmarshal(file);
 		}
 		catch (UnmarshalException e) 
 		{
