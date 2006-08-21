@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import sai_cas.services.MainAxisServices;
 
 
-public class Sai_casSoapBindingImpl implements sai_cas.gen_services.MainAxisServices
+public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxisServices
 {
 	static Logger logger = Logger.getLogger("sai_cas.AXIS_SERVICES");
 	public void insertCatalogFromURI(java.lang.String uriCatalog) throws java.rmi.RemoteException
