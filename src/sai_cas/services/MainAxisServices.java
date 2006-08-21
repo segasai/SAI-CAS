@@ -419,6 +419,27 @@ public class MainAxisServices {
 		return result;
 	}
 
+	public static String[] getColumnDatatypes(String catalogName, String tableName) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getColumnDatatypes(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
 
 	/**
 	 * 

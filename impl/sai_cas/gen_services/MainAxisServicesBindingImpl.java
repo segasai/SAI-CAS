@@ -141,6 +141,21 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		}
 	}
 
+	public java.lang.String[] getColumnDatatypes(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException
+	{
+		try
+		{
+			return MainAxisServices.getColumnDatatypes(catalogName, tableName);
+		}
+		catch(Exception e)
+		{
+			logger.error("Catched exception ",e);
+			return null;			
+		}
+	}
+
+
+
 
 	public java.lang.String[] getColumnUCDs(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException
 	{
