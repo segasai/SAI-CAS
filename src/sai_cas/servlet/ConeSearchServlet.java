@@ -10,8 +10,13 @@ import javax.servlet.http.*;
 import sai_cas.db.*;
 import sai_cas.vo.*;
 
+import org.apache.log4j.Logger;
+         
+
 public class ConeSearchServlet extends HttpServlet {
 	
+	static Logger logger = Logger.getLogger("sai_cas.vo.ConeSearch");
+
 	public class ConeSearchServletException extends Exception
 	{
 		ConeSearchServletException()
