@@ -150,7 +150,7 @@ public class ConeSearchServlet extends HttpServlet {
 				
 				if (columnList == null)
 				{
-					cs.setVerbosity(verbosity);
+					cs.setVerbosity(verbosity, withDistanceFlag);
 				}
 				else
 				{
