@@ -511,7 +511,7 @@ public class MainAxisServices {
 		ConeSearch cs = new ConeSearch(pw, format);
 		if (cs.initConeSearch(cat, tab, ra, dec, sr))
 		{
-			cs.setColumnList(columnList);
+			cs.setColumnList(columnList, false);
 			cs.printConeSearch();
 		}
 		return sw.toString();	
