@@ -146,7 +146,7 @@ public class ConeSearch
 		return true;
 	}
 
-	public void setVerbosity(int verbosity)
+	public void setVerbosity(int verbosity, boolean withDistance)
 	{
 		if (verbosity == 1)
 		{
@@ -156,7 +156,11 @@ public class ConeSearch
 		}
 		else
 		{
-		/* Left the default outputColumnSelection (which is * ) */
+		/* Leave the default outputColumnSelection (which is * ) */
+		}
+		if (withDistance)
+		{
+			outputColumnSelection = "q3c_dist("+raDecArray[0]+","+raDecArray[1]+","+ra+","+dec+")," + outputColumnSelection;
 		}
 	}
 	
