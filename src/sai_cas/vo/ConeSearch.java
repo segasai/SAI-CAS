@@ -160,7 +160,7 @@ public class ConeSearch
 		}
 		if (withDistance)
 		{
-			outputColumnSelection = "q3c_dist("+raDecArray[0]+","+raDecArray[1]+","+ra+","+dec+")," + outputColumnSelection;
+			outputColumnSelection = "q3c_dist("+raDecArray[0]+","+raDecArray[1]+","+ra+","+dec+") AS __dist," + outputColumnSelection;
 		}
 	}
 	
@@ -171,7 +171,7 @@ public class ConeSearch
 		
 		if (withDistance)
 		{
-			sb.append("q3c_dist("+raDecArray[0]+","+raDecArray[1]+","+ra+","+dec+"),"); 
+			sb.append("q3c_dist("+raDecArray[0]+","+raDecArray[1]+","+ra+","+dec+") AS __dist,"); 
 		}
 		
 		for (int i = 0 ; i < columnList.length ; i++)
