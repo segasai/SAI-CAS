@@ -80,6 +80,21 @@ public class ConeSearchServlet extends HttpServlet {
 			columnListAsString = request.getParameter("COLUMNS");
 		}
 
+		String withDistance = request.getParameter("withdist");
+		if (withDistance == null)
+		{
+			withDistance = request.getParameter("WITHDIST");
+		}
+		boolean withDistanceFlag;
+		try 
+		{
+			withDistanceFlag = (Integer.parseInt(withDistance)!=0);
+		} 
+		catch(Exception e)
+		{
+			withDistanceFlag = false;
+		}
+
 		String columnList[] = null;
 		if (columnListAsString!=null)
 		{
@@ -134,7 +149,7 @@ public class ConeSearchServlet extends HttpServlet {
 				}
 				else
 				{
-					cs.setColumnList(columnList);
+					cs.setColumnList(columnList, withDistanceFlag);
 				}
 				cs.printConeSearch();
 			}
