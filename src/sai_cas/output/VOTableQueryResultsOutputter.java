@@ -83,7 +83,7 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 						"\" ucd=\"" + dbi.qr.getUcd(i) +
 						"\" unit=\"" + dbi.qr.getUnit(i) +
 						"\" datatype=\"" + datatype + "\"" +
-						((datatype.equals("char"))?" arraysize=\"*\" ":"") +
+						(((datatype != null) && datatype.equals("char"))?" arraysize=\"*\" ":"") +
 						">");
 				/* !!!!!!!!!!!  TODO  !!!!!!!!!!!!!! 
 				 * Here I inserted the stupid logic to set arraysize="*" 
