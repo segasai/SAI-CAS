@@ -8,23 +8,12 @@ import javax.xml.bind.*;
 import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.util.zip.GZIPInputStream;
-import java.util.Properties;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.StringWriter;
 import java.net.URI;
 import java.util.List;
 import java.util.Date;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
 import java.sql.*;
 
 public class Votable
@@ -111,8 +100,7 @@ public class Votable
 		}
 		try
 		{
-			JAXBElement<?> votElement = (JAXBElement<?>) um.unmarshal(file);
-			vot = (VOTABLE) votElement.getValue();
+			vot = (VOTABLE) um.unmarshal(file);
 		}
 		catch (UnmarshalException e) 
 		{
@@ -133,7 +121,7 @@ public class Votable
 		insertDataToDB(dbi,null);
 	}
 	
-	public void insertDataToDB(DBInterface dbi, String catalogName0) throws SQLException, DBException, VotableException
+	public String insertDataToDB(DBInterface dbi, String catalogName0) throws SQLException, DBException, VotableException
 	{
 		/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
 		 *  I do the convertion to lower case.
@@ -142,10 +130,19 @@ public class Votable
 
 		RESOURCE res = vot.getRESOURCE().get(0);
 		/* Just to get the first resource */
-
-		String catalogName = res.getName().toLowerCase();
-
-		catalogName = (catalogName0==null)?catalogName:catalogName0;
+		
+		String catalogName;
+		try
+		{
+			catalogName = res.getName().toLowerCase();
+		}
+		catch(NullPointerException e)
+		{
+			catalogName = null;
+		}
+			
+		catalogName = (catalogName0 == null)?catalogName:catalogName0;
+		catalogName.replace('.','_');
 
 		String catalogInfo=null;
 
@@ -156,12 +153,18 @@ public class Votable
 				catalogInfo = ((INFO) obj).getValue();
 			}
 		}
-
-		StringBuffer buf=new StringBuffer();
 		
 		String catalogDescription ;
-		catalogDescription=vot.getDESCRIPTION().getContent().get(0).toString();
-
+		try 
+		{
+			catalogDescription = vot.getDESCRIPTION().getContent().get(0).toString();
+		}
+		catch (NullPointerException e)
+		{
+			catalogDescription = null;
+		}
+		if (catalogDescription == null) {catalogDescription ="";}
+		
 /*		List<String[]> catalogProperties;	
 		try
 		{
@@ -175,25 +178,37 @@ public class Votable
 */
 
 		logger.debug("Inserting the catalogue metadata... ");		
-		dbi.insertCatalog(catalogName);
+//		dbi.insertCatalog(catalogName);
 //		dbi.setCatalogInfo(catalogName, catalogInfo);
 
-		dbi.setCatalogDescription(catalogName, catalogDescription);
+		//dbi.setCatalogDescription(catalogName, catalogDescription);
 		
 		List<TABLE> tableList = res.getTABLE();
+		List<String> tableNameList = new ArrayList<String>();
 
 		logger.debug("Looping through tables in the catalogue... ");				
 		for(TABLE table : tableList)
 		{
 			/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
-			 * I do the convertion to lower case.
+			 * I do the convertion to lower case. And I also convert slashes to 
+			 * subscript
 			 */
 			
-			String tableName = table.getName().toLowerCase();
+			String tableName = table.getName().toLowerCase().replace('/','_').replace('.','_');
+			tableNameList.add(tableName);
 			logger.debug("Inserting the table: "+tableName);				
+			String tableDescription;
 			
+			try
+			{
+				tableDescription = table.getDESCRIPTION().getContent().get(0).toString();
+			}
+			catch (NullPointerException e)
+			{
+				tableDescription = null;
+			}
+			if (tableDescription == null) {tableDescription = "";}
 //			String tableInfo = table.getInfo();
-			String tableDescription = table.getDESCRIPTION().getContent().get(0).toString();
 /*			List<String[]> tableProperties;
 			try
 			{
@@ -228,12 +243,24 @@ public class Votable
 			{
 				datatype = field.getDatatype();
 				/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
-				 *   I do the convertion to lower case.
+				 *   I do the convertion to lower case. 
+				 *   Also I replace '-','(',')' and '.' to '_'
 				 */
-				columnName = field.getName().toLowerCase();
+				columnName = field.getName().toLowerCase().replace('-','_')
+					.replace('.','_').replace('(','_').replace(')','_');
+
 				unit =  field.getUnit();
+				if (unit == null) {unit ="";}
 				ucd = field.getUcd();
-				columnDescription = field.getDESCRIPTION().getContent().get(0).toString();
+				if (ucd == null) {ucd="";}
+				try {
+					columnDescription = field.getDESCRIPTION().getContent().get(0).toString();
+				} catch (NullPointerException e)
+				{
+					columnDescription = null;
+				}
+				if (columnDescription == null) {columnDescription="";}
+					
 //				columnInfo = column.getInfo();
 				/* TODO 
 				 * I should write the handling of the column properties too
@@ -250,8 +277,10 @@ public class Votable
 			}
 			logger.debug("Inserting the columns, table metadata... ");				
 			dbi.insertTable(catalogName, tableName, columnNameList, datatypeList, unitList, columnInfoList, columnDescriptionList);
+			logger.debug("Setting UCDs... ");	
 			dbi.setUcds(catalogName, tableName, columnNameList, ucdList);
 //			dbi.setTableInfo(catalogName, tableName, tableInfo);
+			logger.debug("Setting tableDescs... ");	
 			dbi.setTableDescription(catalogName, tableName, tableDescription);
 //			dbi.setTableProperties(catalogName, tableName, tableProperties);
 			logger.debug("Preparing to read the data... ");							
@@ -267,6 +296,10 @@ public class Votable
 			TABLEDATA tdata = d.getTABLEDATA();
 			List <TR> trList = tdata.getTR();
 			String[] values = new String[ncols];
+			String[] datatypeArray = new String[datatypeList.size()];
+
+			dbi.prepareInsertingData(catalogName, tableName, datatypeList.toArray(datatypeArray));
+
 			for (TR tr: trList)
 			{
 				int i=0;
@@ -274,10 +307,12 @@ public class Votable
 				{
 					values[i++]=td.getValue();
 				}
-				dbi.insertData(catalogName, tableName, values);
+				dbi.insertData(values);
 			}
+			dbi.flushData();
 			
 		}  
+		return tableNameList.get(0);
 	}
 	
 	public static void main(String args[]) throws Exception
@@ -295,16 +330,17 @@ public class Votable
 			
 			Votable vot = new Votable(new File(args[0]));
 			vot.insertDataToDB(dbi);
-			dbcon.commit();
+			dbi.close();
+//			dbcon.commit();
 
 			xx = new Date();
 			System.out.println(xx.getTime() - date);
 
-			stmt = dbcon.createStatement(); 
-			stmt.execute("analyze;");        
-			dbcon.commit();
+//			stmt = dbcon.createStatement(); 
+//			stmt.execute("analyze;");        
+//			dbcon.commit();
 		}
-		dbcon.close();
+//		dbcon.close();
 	}
 	
 
