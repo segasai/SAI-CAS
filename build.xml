@@ -7,8 +7,7 @@
 	<property name="tomcat.server.lib" value="${tomcat.home}/server/lib/"/>
 
 	<property name="axis2.web-inf.lib" value="${tomcat.home}/webapps/axis2/WEB-INF/lib"/>	
-	<property name="axis2.services"
-	value="${tomcat.home}/webapps/axis2/WEB-INF/services"/>	
+	<property name="axis2.services" value="${tomcat.home}/webapps/axis2/WEB-INF/services"/>	
 
 	<property name="axis.codegen.plugin" value="/tmp/codegen/plugins/Axis2_Codegen_Wizard_1.2.0/"/>
 	
@@ -75,14 +74,14 @@
 		<mkdir dir="${build.wsdl}"/>
 	</target>
 	
-	<target name="xsd2java" depends="init">
+	<target name="xsd2java1" depends="init">
 		<xjc schema="schema/cas1.xsd" target="${gen.src}"
 			package="sai_cas.XMLCatalogFile">
 			<produces dir="${gen.src}/sai_cas/XMLCatalogFile"/>
 		</xjc>
 	</target>
 
-	<target name="xsd2java1" depends="init">
+	<target name="xsd2java2" depends="init">
 		<xjc schema="schema/VOTable-1.1.xsd" target="${gen.src}"
 			package="sai_cas.VOTABLEFile" binding="schema/VOTable-1.1.xjb">
 			<produces dir="${gen.src}/sai_cas/VOTABLEFile"/>
@@ -90,7 +89,7 @@
 	</target>
 	
 	
-	<target name="compile" depends="xsd2java,xsd2java1">
+	<target name="compile1" depends="xsd2java1,xsd2java2">
 		<javac debug="on" srcdir="${gen.src}" destdir="${build.classes}">
 			<compilerarg line="-Xlint:unchecked"/>
 			<classpath>
@@ -103,7 +102,7 @@
 	
 	
 	
-	<target name="compile1" depends="compile">
+	<target name="compile2" depends="compile1">
 		<javac srcdir="src" debug="on" destdir="${build.classes}" classpath="${build.classes}">
 			<compilerarg line="-Xlint:unchecked" />
 			<classpath>
@@ -116,7 +115,7 @@
 		</javac>
 	</target>
 
-	<target name="jar" depends="compile1">
+	<target name="jar" depends="compile2">
 		<jar basedir="${build.classes}" destfile="${build}/sai_cas.jar">
 		</jar>
 	</target>
@@ -139,7 +138,7 @@
 			path="/sai_cas" update="true"/>
 	</target>
 
-	<target name="java2wsdl" depends="compile1">
+	<target name="java2wsdl1" depends="compile2">
 		<axis-java2wsdl targetNamespace="gen_services.sai_cas"
 			schemaTargetNamespace="gen_services.sai_cas"
 			classname="sai_cas.services.MainAxisServices"
@@ -159,13 +158,13 @@
 
 	
 	
-	<target name="wsdl2java" depends="java2wsdl">
+	<target name="wsdl2java1" depends="java2wsdl1">
 		<axis-wsdl2java output="${gen.src.axis}"
 		WSDLFileName="${build.wsdl}/sai_cas.wsdl" serverside="true"
 		generateServiceXML="true"/>
 	</target>
 	
-	<target name="axiscompile" depends="wsdl2java">
+	<target name="axiscompile" depends="wsdl2java1">
 <!--		<copy file="${impl}/sai_cas/gen_services/Sai_casSoapBindingImpl.java"
 			todir="${gen.src.axis}/sai_cas/gen_services/"
 			overwrite="true"/>-->
