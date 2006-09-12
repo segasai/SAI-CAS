@@ -460,7 +460,7 @@ public class MainAxisServices {
 		ConeSearch cs = new ConeSearch(pw, format);
 		if (cs.initConeSearch(cat, tab, ra, dec, sr))
 		{
-			cs.setVerbosity(verbosity);
+			cs.setVerbosity(verbosity,false);
 			cs.printConeSearch();
 		}
 		return sw.toString();	
@@ -475,7 +475,7 @@ public class MainAxisServices {
 		ConeSearch cs = new ConeSearch(pw, format);
 		if (cs.initConeSearch(cat, tab, ra, dec, sr))
 		{
-			cs.setVerbosity(3);
+			cs.setVerbosity(3,false);
 			cs.printConeSearch();
 		}
 		return sw.toString();	
@@ -490,7 +490,7 @@ public class MainAxisServices {
 		ConeSearch cs = new ConeSearch(pw, format);
 		if (cs.initConeSearch(cat, tab, ra, dec, sr))
 		{
-			cs.setColumnList(columnList);
+			cs.setColumnList(columnList,false);
 			cs.printConeSearch();
 		}
 		return sw.toString();	

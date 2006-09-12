@@ -146,7 +146,7 @@ public class ConeSearch
 		return true;
 	}
 
-	public void setVerbosity(int verbosity)
+	public void setVerbosity(int verbosity, boolean withDistance)
 	{
 		if (verbosity == 1)
 		{
@@ -156,14 +156,24 @@ public class ConeSearch
 		}
 		else
 		{
-		/* Left the default outputColumnSelection (which is * ) */
+		/* Leave the default outputColumnSelection (which is * ) */
+		}
+		if (withDistance)
+		{
+			outputColumnSelection = "q3c_dist("+raDecArray[0]+","+raDecArray[1]+","+ra+","+dec+") AS __dist," + outputColumnSelection;
 		}
 	}
 	
-	public void setColumnList(String columnList[])
+	public void setColumnList(String columnList[], boolean withDistance)
 	{
 		HashSet hs = new HashSet<String>(Arrays.asList(tableColumnList));
 		StringBuffer sb = new StringBuffer();
+		
+		if (withDistance)
+		{
+			sb.append("q3c_dist("+raDecArray[0]+","+raDecArray[1]+","+ra+","+dec+") AS __dist,"); 
+		}
+		
 		for (int i = 0 ; i < columnList.length ; i++)
 		{
 			if (hs.contains(columnList[i]))

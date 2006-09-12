@@ -1,4 +1,5 @@
 package sai_cas.output;
+
 import java.io.PrintWriter;
 import org.apache.log4j.Logger;
 import sai_cas.db.DBInterface;
@@ -18,9 +19,11 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		out.println("<!DOCTYPE VOTABLE SYSTEM \"http://us-vo.org/xml/VOTable.dtd\">");
 		out.print("<VOTABLE version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
-		out.println("xsi:noNamespaceSchemaLocation=\"http://www.ivoa.net/xml/VOTable/v1.1\">");
+		out.println("xmlns=\"http://www.ivoa.net/xml/VOTable/v1.1\">");
 		out.print("<DESCRIPTION>");
+		out.print("<![CDATA[");
 		out.print(message);
+		out.print("]]>");
 		out.println("</DESCRIPTION>");
 		out.println("</VOTABLE>");
 	}
@@ -49,7 +52,7 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 		out.println("<?xml-stylesheet type=\"text/xsl\" href=\""+sai_cas.Parameters.getVOTableXSLURL()+"\"?>");
 		out.println("<!DOCTYPE VOTABLE SYSTEM \"http://us-vo.org/xml/VOTable.dtd\">");
 		out.print("<VOTABLE version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
-		out.println("xsi:noNamespaceSchemaLocation=\"http://www.ivoa.net/xml/VOTable/v1.1\">");
+		out.println("xmlns=\"http://www.ivoa.net/xml/VOTable/v1.1\">");
 //		String table = inputTable;
 		
 		try
@@ -80,7 +83,7 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 						"\" ucd=\"" + dbi.qr.getUcd(i) +
 						"\" unit=\"" + dbi.qr.getUnit(i) +
 						"\" datatype=\"" + datatype + "\"" +
-						((datatype.equals("char"))?" arraysize=\"*\" ":"") +
+						(((datatype != null) && datatype.equals("char"))?" arraysize=\"*\" ":"") +
 						">");
 				/* !!!!!!!!!!!  TODO  !!!!!!!!!!!!!! 
 				 * Here I inserted the stupid logic to set arraysize="*" 

@@ -10,8 +10,13 @@ import javax.servlet.http.*;
 import sai_cas.db.*;
 import sai_cas.vo.*;
 
+import org.apache.log4j.Logger;
+         
+
 public class ConeSearchServlet extends HttpServlet {
 	
+	static Logger logger = Logger.getLogger("sai_cas.vo.ConeSearch");
+
 	public class ConeSearchServletException extends Exception
 	{
 		ConeSearchServletException()
@@ -80,6 +85,21 @@ public class ConeSearchServlet extends HttpServlet {
 			columnListAsString = request.getParameter("COLUMNS");
 		}
 
+		String withDistance = request.getParameter("withdist");
+		if (withDistance == null)
+		{
+			withDistance = request.getParameter("WITHDIST");
+		}
+		boolean withDistanceFlag;
+		try 
+		{
+			withDistanceFlag = (Integer.parseInt(withDistance)!=0);
+		} 
+		catch(Exception e)
+		{
+			withDistanceFlag = false;
+		}
+
 		String columnList[] = null;
 		if (columnListAsString!=null)
 		{
@@ -130,11 +150,11 @@ public class ConeSearchServlet extends HttpServlet {
 				
 				if (columnList == null)
 				{
-					cs.setVerbosity(verbosity);
+					cs.setVerbosity(verbosity, withDistanceFlag);
 				}
 				else
 				{
-					cs.setColumnList(columnList);
+					cs.setColumnList(columnList, withDistanceFlag);
 				}
 				cs.printConeSearch();
 			}
