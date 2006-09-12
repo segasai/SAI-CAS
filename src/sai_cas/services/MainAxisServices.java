@@ -466,7 +466,7 @@ public class MainAxisServices {
 		return sw.toString();	
 	}	
 
-	public static String getConeSearchAsString(String cat, String tab,
+	public static String getConeSearchAsString1(String cat, String tab,
 		double ra, double dec, double sr, String format) 
 	{	
 		StringBuffer sb;
@@ -481,7 +481,7 @@ public class MainAxisServices {
 		return sw.toString();	
 	}	
 
-	public static String getConeSearchAsString(String cat, String tab,
+	public static String getConeSearchAsString2(String cat, String tab,
 		double ra, double dec, double sr, String format, String columnList[] ) 
 	{	
 		StringBuffer sb;
