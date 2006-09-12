@@ -21,6 +21,7 @@ public class DBInterface  extends Object
 	int curNBatchStatements;
 	String userLogged = null;
 
+	
 	public DBInterface(Connection conn) throws java.sql.SQLException
 	{
 		this.conn = conn;
