@@ -3,6 +3,8 @@ package sai_cas.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import java.io.File;
 
 import java.util.List;
@@ -148,7 +150,10 @@ public class CrossMatchServlet extends HttpServlet {
 		catch (Exception e)
 		{
 			logger.error("Something is wrong "+e);
-			voqro.printError(out, "Error occured: " + e +"\nCause: " +e.getCause());
+			StringWriter sw =new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			voqro.printError(out, "Error occured: " + e +"\nCause: " +e.getCause()+"\nTrace: "+sw);
 		}
 		finally 
 		{
