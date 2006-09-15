@@ -38,9 +38,9 @@ public class DBInterface  extends Object
 	{
 		this.conn = conn;
 		userLogged = user;
+		stmt = conn.createStatement();
 		String userSchema = this.getUserMetaDataSchemaName() ; 
 		String query = "SET search_path TO " + userSchema + ", cas_metadata, public;";
-		stmt = conn.createStatement();
 		stmt.execute(query);
 		logger.info("The DB interface is successfully created...");
 		curNBatchStatements = 0;
