@@ -377,7 +377,9 @@ public class XMLCatalog
 				}
 				logger.debug("The data seems to be ingested correctly");
 			}
-		}  
+		}
+		/* Set the permissions */
+		dbi.allowCatalogueUse(catalogName);  
 	}
 	
 

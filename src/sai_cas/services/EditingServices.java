@@ -37,7 +37,7 @@ public class EditingServices {
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserConnection();
+			conn = DBConnection.getPooledPerUserAdminConnection();
 			dbi = new DBInterface(conn);
 			ArrayList<String> alColumn  = new ArrayList<String>();
 			alColumn.add(column);
@@ -62,7 +62,7 @@ public class EditingServices {
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserConnection();
+			conn = DBConnection.getPooledPerUserAdminConnection();
 			dbi = new DBInterface(conn);
 			dbi.setUnit (catalog, table, column, unit);
 		}
@@ -83,7 +83,7 @@ public class EditingServices {
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserConnection();
+			conn = DBConnection.getPooledPerUserAdminConnection();
 			dbi = new DBInterface(conn);
 			dbi.setUnit (catalog, table, columnName, newColumnName);
 		}
@@ -105,7 +105,7 @@ public class EditingServices {
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserConnection();
+			conn = DBConnection.getPooledPerUserAdminConnection();
 			dbi = new DBInterface(conn);
 			dbi.setAttributeDescription(catalog, table, column, description);
 		}
@@ -126,7 +126,7 @@ public class EditingServices {
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserConnection();
+			conn = DBConnection.getPooledPerUserAdminConnection();
 			dbi = new DBInterface(conn);
 			dbi.setAttributeDescription(catalog, table, column, description);
 		}
@@ -148,7 +148,7 @@ public class EditingServices {
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserConnection();
+			conn = DBConnection.getPooledPerUserAdminConnection();
 			dbi = new DBInterface(conn);
 			dbi.setTableDescription(catalog, table, description);
 		}
@@ -169,7 +169,7 @@ public class EditingServices {
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserConnection();
+			conn = DBConnection.getPooledPerUserAdminConnection();
 			dbi = new DBInterface(conn);
 			dbi.setTableDescription(catalog, table, info);
 		}
@@ -191,7 +191,7 @@ public class EditingServices {
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserConnection();
+			conn = DBConnection.getPooledPerUserAdminConnection();
 			dbi = new DBInterface(conn);
 			dbi.setCatalogDescription(catalog, description);
 		}
@@ -212,7 +212,7 @@ public class EditingServices {
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserConnection();
+			conn = DBConnection.getPooledPerUserAdminConnection();
 			dbi = new DBInterface(conn);
 			dbi.setCatalogInfo(catalog, info);
 		}

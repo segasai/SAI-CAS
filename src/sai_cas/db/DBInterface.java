@@ -34,16 +34,16 @@ public class DBInterface  extends Object
 	}
 
 	/* TODO need to be refactored (concerning user_schema) */
-	public DBInterface(Connection conn, String userSchema) throws java.sql.SQLException
+	public DBInterface(Connection conn, String user) throws java.sql.SQLException
 	{
 		this.conn = conn;
-		
+		userLogged = user;
+		String userSchema = this.getUserMetaDataSchemaName() ; 
 		String query = "SET search_path TO " + userSchema + ", cas_metadata, public;";
 		stmt = conn.createStatement();
 		stmt.execute(query);
 		logger.info("The DB interface is successfully created...");
 		curNBatchStatements = 0;
-		userLogged = userSchema;
 	}
 
 
@@ -571,6 +571,34 @@ public class DBInterface  extends Object
 		logger.debug("Analyzing "+catalog+"."+table +" ...");
 		stmt.executeUpdate("ANALYZE "+catalog+"."+table);
 	}
+	
+	public String getUserDataSchemaName() throws SQLException
+	{
+		stmt.executeQuery("SELECT cas_metadata.cas_get_user_data_schema_name('"+userLogged+"')");
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		String result = rs.getString(1);
+		rs.close();
+		return result;
+	}
+	
+	public void allowCatalogueUse(String cat) throws SQLException
+	{
+		stmt.executeQuery("select cas_allow_catalogue_use('"+cat+"')");
+		ResultSet rs = stmt.getResultSet();
+		rs.close();
+	}
+
+	public String getUserMetaDataSchemaName() throws SQLException
+	{
+		stmt.executeQuery("SELECT cas_metadata.cas_get_user_metadata_schema_name('"+userLogged+"')");
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		String result = rs.getString(1);
+		rs.close();
+		return result;
+	}
+
 	
 	public boolean checkTableExists(String catalog, String table) throws SQLException
 	{

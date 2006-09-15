@@ -15,4 +15,10 @@ public class Parameters
 		String[] res={"cas_user","aspen"};
 		return res;
 	}
+	public static String[] getAdminDBUserPasswd()
+	{
+		String[] res={"cas_admin","aspen"};
+		return res;
+	}
+
 }

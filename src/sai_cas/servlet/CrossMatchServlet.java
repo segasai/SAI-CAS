@@ -116,10 +116,12 @@ public class CrossMatchServlet extends HttpServlet {
 			uploadedFile = File.createTempFile("crossmatch",".dat",new File("/tmp/"));
 			fi.write(uploadedFile);
 			logger.debug("File written");
-			conn = DBConnection.getPooledPerUserConnection("cas_user_tmp","aspen");
-			dbi = new DBInterface(conn,"cas_metadata_tmp");
+			String tempUser = "cas_user_tmp";
+			String tempPasswd = "aspen";
+			conn = DBConnection.getPooledPerUserConnection(tempUser, tempPasswd);
+			dbi = new DBInterface(conn,tempUser);
 			Votable vot = new Votable (uploadedFile);
-			String userDataSchema = "cas_data_user_tmp";
+			String userDataSchema = dbi.getUserDataSchemaName();
 			String tableName = vot.insertDataToDB(dbi,userDataSchema);
 			dbi.analyze(userDataSchema, tableName);
 			String[] raDecArray = dbi.getRaDecColumns(cat, tab);

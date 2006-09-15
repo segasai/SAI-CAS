@@ -70,6 +70,13 @@ public class DBConnection
 		String[] defaultDBUserPasswd = Parameters.getDefaultDBUserPasswd();
 		return getPooledPerUserConnection(defaultDBUserPasswd[0], defaultDBUserPasswd[1]);
 	}
+
+	public static Connection getPooledPerUserAdminConnection() throws SQLException
+	{
+		String[] adminDBUserPasswd = Parameters.getAdminDBUserPasswd();
+		return getPooledPerUserConnection(adminDBUserPasswd[0], adminDBUserPasswd[1]);
+	}
+
 	
 	public static Connection getPooledPerUserConnection(String user, String password) throws SQLException
 	{

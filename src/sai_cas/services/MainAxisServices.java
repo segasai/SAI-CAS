@@ -52,7 +52,7 @@ public class MainAxisServices {
 		
 		try
 		{
-			conn = DBConnection.getPooledPerUserConnection();
+			conn = DBConnection.getPooledPerUserAdminConnection();
 			dbi = new DBInterface(conn);
 			xmlc = new XMLCatalog(uri);
 			xmlc.insertDataToDB(dbi);
@@ -92,7 +92,7 @@ public class MainAxisServices {
 		
 		try
 		{
-			conn = DBConnection.getPooledPerUserConnection();
+			conn = DBConnection.getPooledPerUserAdminConnection();
 			dbi = new DBInterface(conn);
 			xmlc = new XMLCatalog(catalogString);
 			xmlc.insertDataToDB(dbi);
