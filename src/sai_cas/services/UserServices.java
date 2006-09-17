@@ -25,8 +25,7 @@ public class UserServices
 	public static String[][] listAllUsers(String adminLogin,
 			String adminPassword) throws SQLException
 	{
-		Connection conn = DBConnection.getSimpleConnection(adminLogin, adminPassword);
-		//(login, password);
+		Connection conn = DBConnection.getPooledPerUserConnection(adminLogin, adminPassword);
 		String [][] result;
 		DBInterface dbi = new DBInterface(conn);
 		result = dbi.getUserNames();
