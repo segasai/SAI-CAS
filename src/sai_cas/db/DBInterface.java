@@ -1151,7 +1151,7 @@ public class DBInterface  extends Object
 
 	public void executeSimpleQuery(String query) throws java.sql.SQLException
 	{
-		stmt.executeUpdate(query);
+		stmt.execute(query);
 	}	
 
 	public class QueryResults
