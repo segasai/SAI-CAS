@@ -16,7 +16,7 @@ public class UserServices
 			String adminPassword, String newLogin, String newPassword,
 			String email, String fullName) throws SQLException
 	{
-		Connection conn = DBConnection.getSimpleConnection(adminLogin, adminPassword);
+		Connection conn = DBConnection.getPooledPerUserConnection(adminLogin, adminPassword);
 		//(login, password);
 		DBInterface dbi = new DBInterface(conn);
 		dbi.executeSimpleQuery("select cas_create_ordinary_user('"+newLogin+"','"+newPassword+"','"+fullName+"','"+email+"');");
