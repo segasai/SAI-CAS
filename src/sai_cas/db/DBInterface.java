@@ -1144,11 +1144,15 @@ public class DBInterface  extends Object
 		 * cursor based ResultSet is working
 		 */ 
 		logger.debug("Executing Query: "+ query);
-		PreparedStatement stmt = conn.prepareStatement(query,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
-		stmt.setFetchSize(100);
-		this.qr = new QueryResults(stmt.executeQuery());
+		PreparedStatement pstmt = conn.prepareStatement(query,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+		pstmt.setFetchSize(100);
+		this.qr = new QueryResults(pstmt.executeQuery());
 	}
-	
+
+	public void executeSimpleQuery(String query) throws java.sql.SQLException
+	{
+		stmt.executeUpdate(query);
+	}	
 
 	public class QueryResults
 	{

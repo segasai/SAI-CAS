@@ -151,6 +151,20 @@
 		</axis-java2wsdl>
 	</target>
 	
+	<target name="java2wsdl3" depends="compile2">
+		<axis-java2wsdl namespace="gen_services.sai_cas"
+			namespaceimpl="gen_services.sai_cas"
+			classname="sai_cas.services.UserServices"
+			output="${build.wsdl}/sai_cas_user.wsdl"
+			location="http://${axis.host}:${axis.port}/axis/sai_cas"
+			bindingname="UserServicesBinding"
+			serviceportname="sai_cas_user">
+			<classpath>
+				<pathelement path="${build.classes}"/>
+			</classpath>
+		</axis-java2wsdl>
+	</target>
+
 	
 	<target name="wsdl2java1" depends="java2wsdl1">
 		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
@@ -171,17 +185,30 @@
 			tofile="${gen.src.axis}/sai_cas/gen_services/deploy2.wsdd"/>
 		<move file="${gen.src.axis}/sai_cas/gen_services/undeploy.wsdd"
 			tofile="${gen.src.axis}/sai_cas/gen_services/undeploy2.wsdd"/>
-
 	</target>
 
-	
-	<target name="axiscompile" depends="wsdl2java1,wsdl2java2">
+	<target name="wsdl2java3" depends="java2wsdl3">
+		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
+			url="${build.wsdl}/sai_cas_user.wsdl" serverside="true"
+			skeletondeploy="true"/>
+		<move file="${gen.src.axis}/sai_cas/gen_services/deploy.wsdd"
+			tofile="${gen.src.axis}/sai_cas/gen_services/deploy3.wsdd"/>
+		<move file="${gen.src.axis}/sai_cas/gen_services/undeploy.wsdd"
+			tofile="${gen.src.axis}/sai_cas/gen_services/undeploy3.wsdd"/>
+	</target>
+
+				
+	<target name="axiscompile" depends="wsdl2java1,wsdl2java2,wsdl2java3">
 		<copy
 			file="${impl}/sai_cas/gen_services/MainAxisServicesBindingImpl.java"
 			todir="${gen.src.axis}/sai_cas/gen_services/"
 			overwrite="true"/>
 		<copy
 			file="${impl}/sai_cas/gen_services/EditingServicesBindingImpl.java"
+			todir="${gen.src.axis}/sai_cas/gen_services/"
+			overwrite="true"/>
+		<copy
+			file="${impl}/sai_cas/gen_services/UserServicesBindingImpl.java"
 			todir="${gen.src.axis}/sai_cas/gen_services/"
 			overwrite="true"/>
 
@@ -214,6 +241,9 @@
 		<axis-admin
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/deploy2.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
+		<axis-admin
+			xmlfile="${gen.src.axis}/sai_cas/gen_services/deploy3.wsdd"
+			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
 	</target>
 
 	
@@ -224,6 +254,9 @@
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
 		<axis-admin
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/undeploy2.wsdd"
+			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
+		<axis-admin
+			xmlfile="${gen.src.axis}/sai_cas/gen_services/undeploy3.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
 	</target>
 				
