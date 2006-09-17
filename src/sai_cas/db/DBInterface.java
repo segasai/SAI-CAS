@@ -839,10 +839,13 @@ public class DBInterface  extends Object
 			List<String> ucdList) throws SQLException
 	{
 		
-		String query = "UPDATE attribute_list SET ucd_id = cas_get_ucd_id(?)" +
-				"WHERE id = cas_get_attribute_id('" + catalog + "','" +
-				table + "',?)";
-		PreparedStatement pstmt = conn.prepareStatement(query); 
+		/* TODO 
+		 * For whatever reason (seems to be related how the PG planner
+		 * works with the prepared statements), if I run the main 
+		 * UPDATE of this function as the prepared statement, it 
+		 * runs as seq. scan... So I switched back to the normal
+		 * statement
+		 */
 		ListIterator<String> columnListIterator = columnList.listIterator();
 		ListIterator<String> ucdListIterator = ucdList.listIterator();
 		String ucd, column;
@@ -860,11 +863,10 @@ public class DBInterface  extends Object
 				String query1 = "INSERT INTO ucd_list (name) VALUES ('" + ucd+"')";
 				stmt.executeUpdate(query1);
 			}
-			pstmt.setString(1,ucd);
-			pstmt.setString(2,column);
-			pstmt.executeUpdate();	
+			stmt.executeUpdate ("UPDATE attribute_list SET ucd_id = cas_get_ucd_id('"+ucd+"')" +
+				"WHERE id = cas_get_attribute_id('" + catalog + "','" +
+				table + "','"+column+"')");
 		}
-		pstmt.close();
 		
 	}
 
