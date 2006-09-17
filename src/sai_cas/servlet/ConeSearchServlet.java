@@ -145,8 +145,8 @@ public class ConeSearchServlet extends HttpServlet {
 
 				response.setHeader("Content-Disposition",
 					"attachment; filename=" + cat + "." +
-					(tab == null ? "" : tab) + "_" + sra + "_" +
-					sdec + "_" + ssr);
+					(tab == null ? "" : tab) + "_" + String.valueOf(ra) + "_" +
+					String.valueOf(dec) + "_" + String.valueOf(ssr)+".dat");
 				
 				if (columnList == null)
 				{

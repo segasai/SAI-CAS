@@ -26,8 +26,6 @@ import sai_cas.vo.*;
 import sai_cas.Votable;
 import sai_cas.VotableException;
 
-//import org.apache.log4j.Logger;
-
 public class CrossMatchServlet extends HttpServlet {
 	
 	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("sai_cas.CrossMatchServlet");
@@ -135,6 +133,9 @@ public class CrossMatchServlet extends HttpServlet {
 			}
 			else
 			{
+				response.setHeader("Content-Disposition",
+						"attachment; filename=" + cat + "_" + 
+						fi.getName() + "_" + String.valueOf(rad) + ".dat");
 				dbi.executeQuery("select * from " + userDataSchema + "." + tableName +
 						" AS a LEFT JOIN " + cat + "." + tab + " AS b "+
 						"ON q3c_join(a."+raDecArray1[0]+",a."+raDecArray1[1]+",b."+
