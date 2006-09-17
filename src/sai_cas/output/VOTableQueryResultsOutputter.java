@@ -79,7 +79,7 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 			{
 				String datatype = dbi.qr.getDatatype(i);
 				
-				out.println("<FIELD ID=\"col"+i+"\""+
+				out.println("<FIELD ID=\"col"+i+"\" "+
 						"name=\"" + dbi.qr.getColumnName(i) +
 						"\" ucd=\"" + dbi.qr.getUcd(i) +
 						"\" unit=\"" + dbi.qr.getUnit(i) +
