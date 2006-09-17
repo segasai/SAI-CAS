@@ -1060,6 +1060,25 @@ public class DBInterface  extends Object
 		return als.toArray(result);
 	}
 	
+	public String[][] getUserNames() throws SQLException
+	{
+		String query="SELECT name, fullname from user_list;";
+		logger.debug("Running query: "+query);
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ArrayList<String[]> als = new ArrayList<String[]>();
+		String[] row = new String[2];
+		while(rs.next())
+		{
+			row[0]=rs.getString(1);
+			row[1]=rs.getString(2);			
+			als.add(row);
+		}
+		String[][] result = new String[1][1];
+		rs.close();
+		return als.toArray(result);
+	}
+	
 	public String[] getRaDecColumns(String catalogName, String tableName) throws SQLException
 	{
 //		String query="?=CALL cas_get_table_ra_dec(?,?)";

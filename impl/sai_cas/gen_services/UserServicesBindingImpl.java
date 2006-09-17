@@ -24,5 +24,17 @@ public class UserServicesBindingImpl implements sai_cas.gen_services.UserService
 		}
 		
 	}
+	public String[][] listAllUsers(java.lang.String in0, java.lang.String in1) throws java.rmi.RemoteException 
+	{
+		try 
+		{
+			return UserServices.listAllUsers(in0, in1);
+		}
+		catch(SQLException e)
+		{
+			throw new RemoteException(e.toString());
+		}
+		
+	}
 
 }

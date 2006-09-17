@@ -22,4 +22,16 @@ public class UserServices
 		dbi.executeSimpleQuery("select cas_create_ordinary_user('"+newLogin+"','"+newPassword+"','"+fullName+"','"+email+"');");
 		dbi.close();
 	}
+	public static String[][] listAllUsers(String adminLogin,
+			String adminPassword) throws SQLException
+	{
+		Connection conn = DBConnection.getSimpleConnection(adminLogin, adminPassword);
+		//(login, password);
+		String [][] result;
+		DBInterface dbi = new DBInterface(conn);
+		result = dbi.getUserNames();
+		dbi.close();
+		return result;
+	}
+
 }
