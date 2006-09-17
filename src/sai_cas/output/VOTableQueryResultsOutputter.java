@@ -57,20 +57,17 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 		
 		try
 		{
-//			String catalog = dbi.qr.getBaseCatalogName(1);
-//			String table = dbi.qr.getBaseTableName(1);
-//			String catalogDescription = dbi.getCatalogDescription(catalog);
-			
-			out.println("<RESOURCE name=\"" + resource + "\">");
-			out.println("<DESCRIPTION>"+resourceDescription+"</DESCRIPTION>");
-			out.println("<INFO>"+resourceInfo+"</INFO>");
-/*			Cone search result from catalogue: "+catalog +
-						", table: "+ table+"\n" +
-						"RA="+ra+" DEC="+dec+" SR="+rad+"\n"+
-						"Contact saicas@sai.msu.ru in case of problems"+
-						"</INFO>");
-*/
-			out.println("<TABLE name=\"" + table + "\">");
+
+			out.println("<RESOURCE name=\"" +
+				((resource == null) ? "" : resource) + "\">");
+			out.println("<DESCRIPTION>" +
+				((resourceDescription == null) ? "" : resourceDescription) +
+				"</DESCRIPTION>");
+			out.println("<INFO>"+
+				((resourceInfo == null) ? "" : resourceInfo) +
+				"</INFO>");
+
+			out.println("<TABLE name=\"" + ((table==null)?"":table) + "\">");
 				
 			int ncols = dbi.qr.getColumnCount();
 			
