@@ -24,7 +24,7 @@ public class UserServicesBindingImpl implements sai_cas.gen_services.UserService
 		}
 		
 	}
-	public String[][] listAllUsers(java.lang.String in0, java.lang.String in1) throws java.rmi.RemoteException 
+	public java.lang.String[][] listAllUsers(java.lang.String in0, java.lang.String in1) throws java.rmi.RemoteException 
 	{
 		try 
 		{
@@ -35,6 +35,11 @@ public class UserServicesBindingImpl implements sai_cas.gen_services.UserService
 			throw new RemoteException(e.toString());
 		}
 		
+	}
+
+	public boolean validateLoginPassword(String login, String password)
+	{
+		return UserServices.validateLoginPassword(login, password);
 	}
 
 }

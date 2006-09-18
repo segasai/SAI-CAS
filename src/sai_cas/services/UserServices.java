@@ -32,5 +32,17 @@ public class UserServices
 		dbi.close();
 		return result;
 	}
-
+	public static boolean validateLoginPassword(String login, String password)
+	{
+		try
+		{
+			Connection conn = DBConnection.getPooledPerUserConnection(login, password);
+			conn.close();
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+		return true;
+	}
 }
