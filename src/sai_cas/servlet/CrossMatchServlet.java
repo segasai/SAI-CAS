@@ -51,7 +51,7 @@ public class CrossMatchServlet extends HttpServlet {
 
 		response.setContentType("text/xml");
 		
-		String cat = null, tab = null, rad = null;
+		String cat = null, tab = null, radString = null;
 
 		List<FileItem> fileItemList = null;
 
@@ -89,7 +89,7 @@ public class CrossMatchServlet extends HttpServlet {
 			}
 			if (fi0.getFieldName().equals("rad"))//(!fi0.isFormField())
 			{
-				rad = fi0.getString();
+				radString = fi0.getString();
 			}
 		}
 		
@@ -101,6 +101,10 @@ public class CrossMatchServlet extends HttpServlet {
 
 		try
 		{
+			double rad = 0;
+			
+			rad = Double.parseDouble(radString);
+			
 			if (fi == null)
 			{
 				throw new ServletException("File should be specified" + fileItemList.size() );			
@@ -165,6 +169,10 @@ public class CrossMatchServlet extends HttpServlet {
 		catch (VotableException e)
 		{
 			voqro.printError(out, "Error occured: " + "Cannot read the VOTable, probably it is not well formed (remember that you must have 'xmlns=\"http://www.ivoa.net/xml/VOTable/v1.1\"' in the VOTABLE tag)");
+		}
+		catch (NumberFormatException e)
+		{
+			voqro.printError(out, "Error occured: " + e.getMessage());
 		}
 		catch (CrossMatchServletException e)
 		{
