@@ -106,6 +106,11 @@ public class CrossMatchServlet extends HttpServlet {
 		{
 			throw new ServletException("File is too big");
 		}
+		if (size = 0) 
+		{
+			throw new ServletException("File must not be empty");
+		}
+
 		File uploadedFile = null;
 		Connection conn = null;
 		DBInterface dbi = null;
