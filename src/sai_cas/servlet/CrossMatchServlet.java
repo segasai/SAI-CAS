@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.logging.Logger;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -47,16 +48,14 @@ public class CrossMatchServlet extends HttpServlet {
 	{
 
 		PrintWriter out = response.getWriter();
-/*		String cat = request.getParameter("cat");
-		String tab = request.getParameter("tab");
-		String rad = request.getParameter("rad");
-		*/
-		response.setContentType("text/xml");
 
+		response.setContentType("text/xml");
 		
 		String cat = null, tab = null, rad = null;
 
 		List<FileItem> fileItemList = null;
+
+
 		FileItemFactory factory = new DiskFileItemFactory();
 		try 
 		{		
@@ -92,34 +91,42 @@ public class CrossMatchServlet extends HttpServlet {
 			{
 				rad = fi0.getString();
 			}
-
 		}
-		//logger.debug("CAT: " + cat + " TAB: " + tab + " RAD: " + rad);
-
 		
-		if (fi == null)
-		{
-			throw new ServletException("File should be specified" + fileItemList.size() );			
-		}
-		long size = fi.getSize();
-		if (size > 10000000) 
-		{
-			throw new ServletException("File is too big");
-		}
-		if (size == 0) 
-		{
-			throw new ServletException("File must not be empty");
-		}
-
 		File uploadedFile = null;
 		Connection conn = null;
 		DBInterface dbi = null;
+
 		VOTableQueryResultsOutputter voqro = new VOTableQueryResultsOutputter();
 
 		try
 		{
+			if (fi == null)
+			{
+				throw new ServletException("File should be specified" + fileItemList.size() );			
+			}
+			long size = fi.getSize();
+
+			if (size > 10000000) 
+			{
+				throw new CrossMatchServletException("File is too big");
+			}
+			if (size == 0) 
+			{
+				throw new CrossMatchServletException("File must not be empty");
+			}
+
+
 			uploadedFile = File.createTempFile("crossmatch",".dat",new File("/tmp/"));
-			fi.write(uploadedFile);
+			try
+			{
+				fi.write(uploadedFile);
+			}
+			catch (Exception e)
+			{
+				throw new CrossMatchServletException("Error in writing your data in the temporary file");
+			}
+			
 			logger.debug("File written");
 			String tempUser = "cas_user_tmp";
 			String tempPasswd = "aspen";
@@ -159,9 +166,21 @@ public class CrossMatchServlet extends HttpServlet {
 		{
 			voqro.printError(out, "Error occured: " + "Cannot read the VOTable, probably it is not well formed (remember that you must have 'xmlns=\"http://www.ivoa.net/xml/VOTable/v1.1\"' in the VOTABLE tag)");
 		}
-		catch (Exception e)
+		catch (CrossMatchServletException e)
 		{
-			logger.error("Something is wrong "+e);
+			voqro.printError(out, "Error occured: " + e.getMessage());
+		}
+		catch (DBException e)
+		{
+			logger.error("DBException "+e);
+			StringWriter sw =new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			voqro.printError(out, "Error occured: " + e +"\nCause: " +e.getCause()+"\nTrace: "+sw);
+		}
+		catch (SQLException e)
+		{
+			logger.error("SQLException "+e);
 			StringWriter sw =new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
