@@ -3,7 +3,6 @@ import sai_cas.db.*;
 import sai_cas.XMLCatalogFile.*;
 
 import javax.xml.transform.stream.StreamSource;
-//import javax.xml.stream.XMLEventReader;
 import javax.xml.bind.*;
 
 import org.apache.log4j.Logger;

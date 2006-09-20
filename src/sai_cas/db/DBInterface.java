@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.postgresql.*;
 
 
-public class DBInterface  extends Object
+public class DBInterface
 {
 	static Logger logger = Logger.getLogger("sai_cas.DBInterface");
 	private PreparedStatement pstmtBuffered;
@@ -52,6 +52,10 @@ public class DBInterface  extends Object
 		close(true);
 	}
 
+	/**
+	 * Close the {@link DBInterface}
+	 * @param commit_flag
+	 */
 	public void close(boolean commit_flag)
 	{
 		try
@@ -111,6 +115,11 @@ public class DBInterface  extends Object
 		}
 	}
 
+	/**
+	 * Flush the SQL commands staying the buffer of the batch execution
+	 * (used during the batch inserts)
+	 * @throws SQLException
+	 */
 	public void flushData() throws SQLException
 	{
 		if (pstmtBuffered != null)
@@ -1110,7 +1119,13 @@ public class DBInterface  extends Object
 		rs.close();
 		return result;
 	}
-
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return the name of columns having the UCD of ra & dec
+	 * @throws SQLException
+	 */
 	public String[] getRaDecColumnsFromUCD(String catalogName, String tableName) throws SQLException
 	{
 		String query="SELECT * FROM cas_get_table_ra_dec_from_ucd('" + catalogName + "'," +
@@ -1146,7 +1161,7 @@ public class DBInterface  extends Object
 	public String getSingleTableFromCatalog(String catalogName) throws SQLException
 	{
 		String tableArray[] = getTableNames(catalogName);
-		if (tableArray.length>1)
+		if (tableArray.length > 1)
 		{
 			return null;
 		}
