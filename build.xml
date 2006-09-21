@@ -197,8 +197,15 @@
 			tofile="${gen.src.axis}/sai_cas/gen_services/undeploy3.wsdd"/>
 	</target>
 
+	<target name="wsdl2javaSkyNode">
+		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
+			url="wsdls/SkyNode.wsdl" serverside="true"
+			skeletondeploy="true"/>
+	</target>
+
 				
-	<target name="axiscompile" depends="wsdl2java1,wsdl2java2,wsdl2java3">
+	<target name="axiscompile" 
+		depends="wsdl2java1,wsdl2java2,wsdl2java3,wsdl2javaSkyNode">
 		<copy
 			file="${impl}/sai_cas/gen_services/MainAxisServicesBindingImpl.java"
 			todir="${gen.src.axis}/sai_cas/gen_services/"
@@ -211,7 +218,10 @@
 			file="${impl}/sai_cas/gen_services/UserServicesBindingImpl.java"
 			todir="${gen.src.axis}/sai_cas/gen_services/"
 			overwrite="true"/>
-
+		<copy
+			file="${impl}/net/ivoa/SkyNode/SkyNodeSoapImpl.java"
+			todir="${gen.src.axis}/net/ivoa/SkyNode/"
+			overwrite="true"/>
 		<javac debug="${debug}" srcdir="${gen.src.axis}"
 			destdir="${build.classes}">
 			<compilerarg line="-Xlint:-unchecked"/>
@@ -243,6 +253,9 @@
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
 		<axis-admin
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/deploy3.wsdd"
+			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
+		<axis-admin
+			xmlfile="${gen.src.axis}/net/ivoa/SkyNode/deploy.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
 	</target>
 

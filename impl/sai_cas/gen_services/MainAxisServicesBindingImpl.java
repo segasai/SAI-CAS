@@ -47,6 +47,7 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		return MainAxisServices.getCatalogNames();
 	}
 
+
 	public java.lang.String getCatalogInfo(String cat) throws java.rmi.RemoteException
 	{
 		try 
