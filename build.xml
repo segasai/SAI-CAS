@@ -271,6 +271,9 @@
 		<axis-admin
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/undeploy3.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
+		<axis-admin
+			xmlfile="${gen.src.axis}/net/ivoa/SkyNode/undeploy.wsdd"
+			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
 	</target>
 				
 	
