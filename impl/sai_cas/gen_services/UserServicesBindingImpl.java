@@ -7,8 +7,11 @@
 
 package sai_cas.gen_services;
 import java.rmi.RemoteException;
+import java.sql.Connection;
 import java.sql.SQLException;
 
+import sai_cas.db.DBConnection;
+import sai_cas.db.DBInterface;
 import sai_cas.services.UserServices;
 public class UserServicesBindingImpl implements sai_cas.gen_services.UserServices {
 
@@ -24,6 +27,19 @@ public class UserServicesBindingImpl implements sai_cas.gen_services.UserService
 		}
 		
 	}
+	public void deleteUser(String adminLogin,
+			String adminPassword, String login) throws java.rmi.RemoteException
+	{
+		try
+		{
+			UserServices.deleteUser(adminLogin, adminPassword, login);
+		}
+		catch (SQLException e)
+		{
+			throw new RemoteException(e.toString());			
+		}
+	}
+
 	public java.lang.String[][] listAllUsers(java.lang.String in0, java.lang.String in1) throws java.rmi.RemoteException 
 	{
 		try 

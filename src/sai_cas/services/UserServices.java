@@ -32,6 +32,18 @@ public class UserServices
 		dbi.close();
 		return result;
 	}
+
+	
+	public static void deleteUser(String adminLogin,
+			String adminPassword, String login) throws SQLException
+	{
+		Connection conn = DBConnection.getPooledPerUserConnection(adminLogin, adminPassword);
+		DBInterface dbi = new DBInterface(conn);
+		dbi.executeSimpleQuery("select cas_delete_user('"+login+"');");
+		dbi.close();
+	}
+
+	
 	public static boolean validateLoginPassword(String login, String password)
 	{
 		try
