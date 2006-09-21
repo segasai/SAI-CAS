@@ -87,6 +87,10 @@ public class SkyNodeSoapImpl implements net.ivoa.SkyNode.SkyNodeSoap{
 				{
 					catalogTableNamesList.add(cat+"."+tab);
                                   String tableDescription = dbi.getTableDescription(cat,tab);
+                                  if (tableDescription == null) 
+                                  {
+                                    tableDescription = "";
+                                  }
 					catalogTableDescriptionsList.add(catalogDescription+"\n"+tableDescription);
 				}	
 			}
