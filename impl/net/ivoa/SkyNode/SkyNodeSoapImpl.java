@@ -97,13 +97,13 @@ public class SkyNodeSoapImpl implements net.ivoa.SkyNode.SkyNodeSoap{
 			throw new java.rmi.RemoteException(e.getMessage());
 		}
 		DBInterface.close(dbi, conn);
-		net.ivoa.SkyNode.MetaTable mt = new net.ivoa.SkyNode.MetaTable();
 		net.ivoa.SkyNode.MetaTable[] metaTableArray =
 		  new net.ivoa.SkyNode.MetaTable[catalogTableNamesList.size()];
                 int i=0;
                 Iterator<String> it = catalogTableDescriptionsList.iterator();
                 for (String s: catalogTableNamesList)
                 {
+        		net.ivoa.SkyNode.MetaTable mt = new net.ivoa.SkyNode.MetaTable();
                   mt.setName(s);
                   mt.setDescription(it.next());
                   metaTableArray[i++]=mt;
