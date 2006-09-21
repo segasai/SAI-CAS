@@ -157,9 +157,9 @@ public class CrossMatchServlet extends HttpServlet {
 						"ON q3c_join(a."+raDecArray1[0]+",a."+raDecArray1[1]+",b."+
 						raDecArray[0]+",b."+raDecArray[1]+","+rad+")");
 				voqro.setResource(cat + "_" + fi.getName() );
-				voqro.setResourceDescription("This is the table obtained by"+
-						"crossmatching the table "+cat+"."+tab + "with the " +
-						"user supplied table from the file" + fi.getName()+"\n"+
+				voqro.setResourceDescription("This is the table obtained by "+
+						"crossmatching the table "+cat+"."+tab + " with the " +
+						"user supplied table from the file " + fi.getName()+"\n"+
 						"Radius of the crossmatch: "+rad+"deg");
 				voqro.setTable("main" );
 				voqro.print(out,dbi);
