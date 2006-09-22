@@ -34,7 +34,8 @@ public class MainAxisServices {
 	 * @return void
 	 */
 	
-	public static void insertCatalogFromURI(String uriCatalog) throws RemoteException
+	public static void insertCatalogFromURI(String uriCatalog,
+		String adminUser, String adminPassword) throws RemoteException
 	{
 		
 		Connection conn = null;
@@ -52,7 +53,7 @@ public class MainAxisServices {
 		
 		try
 		{
-			conn = DBConnection.getPooledPerUserAdminConnection();
+			conn = DBConnection.getPooledPerUserConnection(adminUser, adminPassword);
 			dbi = new DBInterface(conn);
 			xmlc = new XMLCatalog(uri);
 			xmlc.insertDataToDB(dbi);
@@ -79,12 +80,14 @@ public class MainAxisServices {
 	}
 	
 	/**
-	 *
+	 * The method is meant to be run as an admin ! user !! 
 	 * @param catalogString -- The whole catalogue as a string
 	 * @throws Exception
 	 * @return void
 	 */
-	public static void insertCatalog(String catalogString) throws RemoteException
+	public static void insertCatalog(String catalogString,
+		String adminUser,
+		String adminPassword) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -92,7 +95,8 @@ public class MainAxisServices {
 		
 		try
 		{
-			conn = DBConnection.getPooledPerUserAdminConnection();
+			conn = DBConnection.getPooledPerUserConnection(adminUser,
+				adminPassword);
 			dbi = new DBInterface(conn);
 			xmlc = new XMLCatalog(catalogString);
 			xmlc.insertDataToDB(dbi);
