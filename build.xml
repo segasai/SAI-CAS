@@ -17,7 +17,6 @@
 	<property name="gen.src" value="${basedir}/gen_src/"/>
 	<property name="gen.src.axis" value="${basedir}/gen_src_axis/"/>
 	<property name="impl" value="${basedir}/impl/"/>
-	<property name="debug" value="off"/>
 	
 	<!-- Definition of various Ant tasks -->
 	
@@ -248,12 +247,15 @@
 		<axis-admin
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/deploy1.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
+		<sleep seconds="1"/>
 		<axis-admin
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/deploy2.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
+		<sleep seconds="1"/>
 		<axis-admin
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/deploy3.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
+		<sleep seconds="1"/>
 		<axis-admin
 			xmlfile="${gen.src.axis}/net/ivoa/SkyNode/deploy.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>

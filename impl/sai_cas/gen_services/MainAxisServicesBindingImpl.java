@@ -36,8 +36,20 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		logger.info("Running insertCatalog...");
 		logger.debug("The following catalogue is being inserted" + catalogString);
 		
-		sai_cas.services.MainAxisServices.insertCatalog(catalogString,
-			adminUser, adminPassword);
+		try
+		{
+			sai_cas.services.MainAxisServices.insertCatalog(catalogString,
+				adminUser, adminPassword);
+		}
+		catch (java.rmi.RemoteException e)
+		{
+			throw new java.rmi.RemoteException(e.getMessage());
+		}
+		catch (java.lang.NullPointerException e)
+		{
+			throw new java.rmi.RemoteException(e.getMessage());
+		}
+
 	}
 
 	public void insertCatalogFromVotable(java.lang.String catalogString, String user, String password) throws java.rmi.RemoteException
