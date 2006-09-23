@@ -45,7 +45,6 @@
 	
 	<!-- End of task definition section -->
 	
-	
 	<!-- Now the real tasks -->	
 	<target name="init">
 		<mkdir dir="${build.classes}"/>
@@ -106,10 +105,6 @@
 		<war destfile="${build}/sai_cas.war" webxml="web/WEB-INF/web.xml">
 			<fileset dir="web" includes="conesearch.jsp" />
 			<metainf dir="web/META-INF" includes="context.xml" />		
-			<!-- <lib dir="${build}" includes="*.jar"/> -->
-<!--			<lib dir="${tomcat.common.lib}/">
-				<include name="*jar"/>
-			</lib>-->
 			<classes dir="${build.classes}"/>         
 		</war>
 	</target>
