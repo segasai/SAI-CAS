@@ -43,7 +43,49 @@ public class SkyNodeSoapImpl implements net.ivoa.SkyNode.SkyNodeSoap {
 	public net.ivoa.SkyNode.MetaColumn[] columns(java.lang.String table)
 			throws java.rmi.RemoteException
 	{
-		return null;
+		String catalogName, tableName; 
+		String tmp[] = table.split(".");
+		Connection conn = null;
+		DBInterface dbi = null;
+		MetaColumn[] mca;
+
+		if (tmp.length != 2)
+		{
+			return null;
+		}
+		catalogName = tmp[0];
+		tableName = tmp[1];
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			String[] columnNames = dbi.getColumnNames(catalogName, tableName);
+			String[] columnDescriptions = dbi.getColumnDescriptions(catalogName, tableName);
+			String[] columnUCDs = dbi.getColumnUCDs(catalogName, tableName);
+			String[] columnUnits = dbi.getColumnUnits(catalogName, tableName);
+
+			mca = new MetaColumn[columnNames.length];
+			
+			for(int i = 0; i < columnNames.length; i++)
+			{
+				MetaColumn mc = new MetaColumn();
+				mc.setDescription(columnDescriptions[i]);
+				mc.setName(columnNames[i]);
+				mc.setUCD(columnUCDs[i]);
+				mc.setUnit(columnUnits[i]);
+				mca[i] = mc;
+			}
+		}
+		catch (SQLException e)
+		{
+			logger.error("Caught an exception... ", e);
+			DBInterface.close(dbi, conn);
+			throw new java.rmi.RemoteException(e.getMessage());			
+		}
+		
+		DBInterface.close(dbi, conn);
+		
+		return mca;
 	}
 
 	public nvo_region.RegionType footprint(nvo_region.RegionType region)
@@ -91,9 +133,6 @@ public class SkyNodeSoapImpl implements net.ivoa.SkyNode.SkyNodeSoap {
 		String[] tableNamesArray = null;
 		List<String> catalogTableNamesList = null;
 		List<String> catalogTableDescriptionsList = null;
-		/** TODO 
-		 * I should append the table description to the catalog description
-		 */
 		try 
 		{
 			conn = DBConnection.getPooledPerUserConnection();
@@ -133,9 +172,6 @@ public class SkyNodeSoapImpl implements net.ivoa.SkyNode.SkyNodeSoap {
 			mt.setDescription(it.next());
 			metaTableArray[i++] = mt;
 		}
-		/* TODO 
-		 * Insert the logic here 
-		 */
 		return metaTableArray;
 	}
 
