@@ -1,40 +1,25 @@
 package sai_cas.services;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.IOException;
-import java.sql.Date;
-import java.util.Calendar;
 import java.util.ArrayList;
 
-import javax.naming.NamingException;
-import javax.xml.bind.JAXBException;
 
 import java.rmi.RemoteException;
 
 import org.apache.log4j.Logger;
 
-import sai_cas.XMLCatalog;
-import sai_cas.XMLCatalogException;
 import sai_cas.db.*;
-import sai_cas.vo.ConeSearch;
-import sai_cas.Votable;
-import sai_cas.VotableException;
 
 public class EditingServices {
-	static Logger logger = Logger.getLogger("sai_cas.MainAxisServices");
+	static Logger logger = Logger.getLogger("sai_cas.EditingServices");
 	
 	public static void setUCD(String catalog, String table, String column, 
 		String ucd, String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
-		String []result = null;
 		try
 		{
 			conn = DBConnection.getPooledPerUserConnection(user, password);
@@ -59,7 +44,6 @@ public class EditingServices {
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
-		String []result = null;
 		try
 		{
 			conn = DBConnection.getPooledPerUserConnection(user, password);
@@ -80,7 +64,6 @@ public class EditingServices {
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
-		String []result = null;
 		try
 		{
 			conn = DBConnection.getPooledPerUserConnection(user, password);
@@ -102,7 +85,6 @@ public class EditingServices {
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
-		String []result = null;
 		try
 		{
 			conn = DBConnection.getPooledPerUserConnection(user, password);
@@ -123,7 +105,6 @@ public class EditingServices {
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
-		String []result = null;
 		try
 		{
 			conn = DBConnection.getPooledPerUserConnection(user, password);
@@ -145,7 +126,6 @@ public class EditingServices {
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
-		String []result = null;
 		try
 		{
 			conn = DBConnection.getPooledPerUserConnection(user, password);
@@ -166,7 +146,6 @@ public class EditingServices {
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
-		String []result = null;
 		try
 		{
 			conn = DBConnection.getPooledPerUserConnection(user, password);
@@ -188,7 +167,6 @@ public class EditingServices {
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
-		String []result = null;
 		try
 		{
 			conn = DBConnection.getPooledPerUserConnection(user, password);
@@ -209,7 +187,6 @@ public class EditingServices {
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
-		String []result = null;
 		try
 		{
 			conn = DBConnection.getPooledPerUserConnection(user, password);

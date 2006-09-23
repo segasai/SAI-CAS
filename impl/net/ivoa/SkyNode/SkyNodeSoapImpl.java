@@ -8,7 +8,6 @@
 package net.ivoa.SkyNode;
 
 import sai_cas.db.*;
-import sai_cas.*;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Arrays;
@@ -19,7 +18,7 @@ import org.apache.log4j.Logger;
 import net.ivoa.SkyNode.MetaTable;
 
 public class SkyNodeSoapImpl implements net.ivoa.SkyNode.SkyNodeSoap {
-	static Logger logger = Logger.getLogger("net.ivoa.SkyNode.SkyNodeSoap");
+	static Logger logger = Logger.getLogger("sai_cas.net.ivoa.SkyNode.SkyNodeSoapImpl");
 
 	public net.ivoa.SkyNode.VOData performQuery(
 			net.ivoa.www.xml.ADQL.v0_7_4.SelectType select,
@@ -44,17 +43,22 @@ public class SkyNodeSoapImpl implements net.ivoa.SkyNode.SkyNodeSoap {
 			throws java.rmi.RemoteException
 	{
 		String catalogName, tableName; 
-		String tmp[] = table.split(".");
+		String tmp[];
 		Connection conn = null;
 		DBInterface dbi = null;
 		MetaColumn[] mca;
 
+		tmp = table.split("\\.");
+
 		if (tmp.length != 2)
 		{
+			logger.debug("The name is wrong: " + table);
 			return null;
 		}
 		catalogName = tmp[0];
 		tableName = tmp[1];
+		logger.debug("Getting the infos about catalog: " + catalogName + 
+				" table: " + tableName);
 		try
 		{
 			conn = DBConnection.getPooledPerUserConnection();
@@ -133,6 +137,7 @@ public class SkyNodeSoapImpl implements net.ivoa.SkyNode.SkyNodeSoap {
 		String[] tableNamesArray = null;
 		List<String> catalogTableNamesList = null;
 		List<String> catalogTableDescriptionsList = null;
+
 		try 
 		{
 			conn = DBConnection.getPooledPerUserConnection();
