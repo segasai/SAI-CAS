@@ -37,10 +37,20 @@ public class DBInterface
 	public DBInterface(Connection conn, String user) throws java.sql.SQLException
 	{
 		this.conn = conn;
-		userLogged = user;
-		stmt = conn.createStatement();
-		String userSchema = this.getUserMetaDataSchemaName() ; 
-		String query = "SET search_path TO " + userSchema + ", cas_metadata, public;";
+		String userSchema;
+		String query;
+		if (!user.equals("cas_admin"))
+		{
+			userLogged = user;
+			stmt = conn.createStatement();
+			userSchema = this.getUserMetaDataSchemaName() ; 
+			query = "SET search_path TO " + userSchema + ", cas_metadata, public;";
+		}
+		else
+		{
+			stmt = conn.createStatement();
+			query = "SET search_path TO  cas_metadata, public;";		
+		}
 		stmt.execute(query);
 		logger.info("The DB interface is successfully created...");
 		curNBatchStatements = 0;

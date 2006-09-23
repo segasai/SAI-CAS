@@ -30,15 +30,15 @@ public class EditingServices {
 	static Logger logger = Logger.getLogger("sai_cas.MainAxisServices");
 	
 	public static void setUCD(String catalog, String table, String column, 
-		String ucd) throws java.rmi.RemoteException
+		String ucd, String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserAdminConnection();
-			dbi = new DBInterface(conn);
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
 			ArrayList<String> alColumn  = new ArrayList<String>();
 			alColumn.add(column);
 			ArrayList<String> alUcd  = new ArrayList<String>();
@@ -55,15 +55,15 @@ public class EditingServices {
 		DBInterface.close(dbi, conn);
 	} 
 	public static void setUnit(String catalog, String table, String column, 
-		String unit) throws java.rmi.RemoteException
+		String unit, String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserAdminConnection();
-			dbi = new DBInterface(conn);
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
 			dbi.setUnit (catalog, table, column, unit);
 		}
 		catch(SQLException e)
@@ -76,15 +76,15 @@ public class EditingServices {
 	}
 
 	public static void setColumnName(String catalog, String table, String columnName, 
-		String newColumnName) throws java.rmi.RemoteException
+		String newColumnName, String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserAdminConnection();
-			dbi = new DBInterface(conn);
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
 			dbi.setUnit (catalog, table, columnName, newColumnName);
 		}
 		catch(SQLException e)
@@ -98,15 +98,15 @@ public class EditingServices {
 
 
 	public static void setColumnDescription(String catalog, String table, String column,
-		String description) throws java.rmi.RemoteException
+		String description, String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserAdminConnection();
-			dbi = new DBInterface(conn);
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
 			dbi.setAttributeDescription(catalog, table, column, description);
 		}
 		catch(SQLException e)
@@ -119,15 +119,15 @@ public class EditingServices {
 	}
 
 	public static void setColumnInfo(String catalog, String table, String column,
-		String description) throws java.rmi.RemoteException
+		String description, String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserAdminConnection();
-			dbi = new DBInterface(conn);
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
 			dbi.setAttributeDescription(catalog, table, column, description);
 		}
 		catch(SQLException e)
@@ -141,15 +141,15 @@ public class EditingServices {
 
 
 	public static void setTableDescription(String catalog, String table,
-		String description) throws java.rmi.RemoteException
+		String description, String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserAdminConnection();
-			dbi = new DBInterface(conn);
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
 			dbi.setTableDescription(catalog, table, description);
 		}
 		catch(SQLException e)
@@ -162,15 +162,15 @@ public class EditingServices {
 	}
 
 	public static void setTableInfo(String catalog, String table,
-		String info) throws java.rmi.RemoteException
+		String info, String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserAdminConnection();
-			dbi = new DBInterface(conn);
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
 			dbi.setTableDescription(catalog, table, info);
 		}
 		catch(SQLException e)
@@ -184,15 +184,15 @@ public class EditingServices {
 
 
 	public static void setCatalogDescription(String catalog,
-		String description) throws java.rmi.RemoteException
+		String description, String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserAdminConnection();
-			dbi = new DBInterface(conn);
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
 			dbi.setCatalogDescription(catalog, description);
 		}
 		catch(SQLException e)
@@ -205,15 +205,15 @@ public class EditingServices {
 	}
 
 	public static void setCatalogInfo(String catalog, String table,
-		String info) throws java.rmi.RemoteException
+		String info, String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
 		String []result = null;
 		try
 		{
-			conn = DBConnection.getPooledPerUserAdminConnection();
-			dbi = new DBInterface(conn);
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
 			dbi.setCatalogInfo(catalog, info);
 		}
 		catch(SQLException e)
