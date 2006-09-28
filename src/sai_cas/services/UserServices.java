@@ -28,7 +28,7 @@ public class UserServices
 		Connection conn = DBConnection.getPooledPerUserConnection(adminLogin, adminPassword);
 		String [][] result;
 		DBInterface dbi = new DBInterface(conn);
-		result = dbi.getUserNames();
+		result = dbi.getUserNamesAndEmails();
 		dbi.close();
 		return result;
 	}

@@ -1098,6 +1098,28 @@ public class DBInterface
 		return als.toArray(result);
 	}
 	
+	public String[][] getUserNamesAndEmails() throws SQLException
+	{
+		String query="SELECT name, fullname, email from user_list;";
+		logger.debug("Running query: "+query);
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ArrayList<String[]> als = new ArrayList<String[]>();
+		while(rs.next())
+		{
+			String[] row = new String[3];
+			row[0]=rs.getString(1);
+			row[1]=rs.getString(2);			
+			row[2]=rs.getString(3);			
+			als.add(row);
+		}
+		String[][] result = new String[1][1];
+		rs.close();
+		return als.toArray(result);
+	}
+
+
+	
 	public String[] getRaDecColumns(String catalogName, String tableName) throws SQLException
 	{
 //		String query="?=CALL cas_get_table_ra_dec(?,?)";
