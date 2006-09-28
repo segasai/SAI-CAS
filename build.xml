@@ -17,6 +17,7 @@
 	<property name="gen.src" value="${basedir}/gen_src/"/>
 	<property name="gen.src.axis" value="${basedir}/gen_src_axis/"/>
 	<property name="impl" value="${basedir}/impl/"/>
+	<property name="docs" value="${basedir}/docs/"/>
 	
 	<!-- Definition of various Ant tasks -->
 	
@@ -276,12 +277,22 @@
 	
 	<target name="all" depends="deploy_cas,deploy_cas_ws"/>
 	
+	<target name="docs">
+		<mkdir dir="${docs}"/>		
+		<javadoc destdir="${docs}" author="true" version="true"
+			use="true" windowtitle="SAI CAS API">
+			<packageset dir="src" defaultexcludes="yes">
+				<include name="sai_cas/**"/>
+			</packageset>
+		</javadoc>
+	</target>
 	
 	<target name="clean">
 		<delete includeemptydirs="true">
 			<fileset dir="${gen.src}" includes="**/*"/>
 			<fileset dir="${gen.src.axis}" includes="**/*"/>
 			<fileset dir="${build}/" includes="**/*"/>
+			<fileset dir="${docs}/" includes="**/*"/>
 		</delete>
 	</target>
 

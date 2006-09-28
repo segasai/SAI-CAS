@@ -1086,9 +1086,9 @@ public class DBInterface
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
 		ArrayList<String[]> als = new ArrayList<String[]>();
-		String[] row = new String[2];
 		while(rs.next())
 		{
+			String[] row = new String[2];
 			row[0]=rs.getString(1);
 			row[1]=rs.getString(2);			
 			als.add(row);
