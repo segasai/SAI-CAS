@@ -109,13 +109,17 @@ public class CrossMatchServlet extends HttpServlet {
 				formatString = fi0.getString();
 			}
 		}
-		if ((formatString==null)||(formatString.equalsIgnoreCase("votable"))
+		if ((formatString==null)||(formatString.equalsIgnoreCase("votable")))
 		{
 			format = formats.VOTABLE;
 		}
 		else if (formatString.equalsIgnoreCase("CSV"))
 		{
 			format = formats.CSV;
+		}
+		else
+		{
+			format = formats.VOTABLE;
 		}
 
 		QueryResultsOutputter qro = null;
