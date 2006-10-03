@@ -104,7 +104,7 @@ public class Votable
 			tab.data.tabledata = new TABLEDATA();
 			ArrayList<TR> trList = new ArrayList<TR>();
 			tab.data.tabledata.tr = trList;
-			while((data=br.readLine())!=null)
+			while((data = br.readLine()) != null)
 			{
 				stoken = new StringTokenizer(data,",");
 				TR tr = new TR();
@@ -115,7 +115,7 @@ public class Votable
 					td.value=stoken.nextToken();
 					tr.td.add(td);
 				}
-				if (tr.td.size()!=ncols)
+				if (tr.td.size() != ncols)
 				{
 					throw new VotableException("Number of records in the data is not equal to the number of columns");
 				}
