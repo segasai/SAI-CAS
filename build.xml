@@ -3,21 +3,21 @@
 
 	<property file="build.properties"/>		
 
-	<property name="tomcat.common.lib" value="${tomcat.home}/common/lib/"/>
-	<property name="tomcat.server.lib" value="${tomcat.home}/server/lib/"/>
+	<property name="tomcat.common.lib" value="${tomcat.home}/common/lib"/>
+	<property name="tomcat.server.lib" value="${tomcat.home}/server/lib"/>
 	
 	<property name="axis.web-inf.lib"
 		value="${tomcat.home}/webapps/axis/WEB-INF/lib"/>	
-	<property name="axis.lib" value="${axis.home}/lib/"/>
+	<property name="axis.lib" value="${axis.home}/lib"/>
 	
-	<property name="build" value="${basedir}/build/"/>
+	<property name="build" value="${basedir}/build"/>
 	<property name="build.classes" value="${build}/classes"/>
 	<property name="build.wsdl" value="${build}/wsdl"/>
 	
-	<property name="gen.src" value="${basedir}/gen_src/"/>
-	<property name="gen.src.axis" value="${basedir}/gen_src_axis/"/>
-	<property name="impl" value="${basedir}/impl/"/>
-	<property name="docs" value="${basedir}/docs/"/>
+	<property name="gen.src" value="${basedir}/gen_src"/>
+	<property name="gen.src.axis" value="${basedir}/gen_src_axis"/>
+	<property name="impl" value="${basedir}/impl"/>
+	<property name="docs" value="${basedir}/docs"/>
 	
 	<!-- Definition of various Ant tasks -->
 	
@@ -288,11 +288,11 @@
 	</target>
 	
 	<target name="clean">
-		<delete includeemptydirs="true">
-			<fileset dir="${gen.src}" includes="**/*"/>
-			<fileset dir="${gen.src.axis}" includes="**/*"/>
-			<fileset dir="${build}/" includes="**/*"/>
-			<fileset dir="${docs}/" includes="**/*"/>
+		<delete includeemptydirs="true" quiet="true">
+			<fileset dir="${gen.src}"/>
+			<fileset dir="${gen.src.axis}"/>
+			<fileset dir="${build}"/>
+			<fileset dir="${docs}"/>
 		</delete>
 	</target>
 
