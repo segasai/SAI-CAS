@@ -70,7 +70,7 @@ public class Votable
 			VOTABLE vot0 = new VOTABLE();
 
 			BufferedReader br; // to fetch file data
-			StringTokenizer stoken; //
+			StringTokenizer stoken; 
 			br = new BufferedReader(new FileReader(file));
 			
 			String data;
@@ -87,6 +87,7 @@ public class Votable
 			}
 			vot0.resource= new ArrayList<sai_cas.VOTABLEFile.RESOURCE>();
 			RESOURCE res = new RESOURCE();
+			res.setName("crossmatch");
 			vot0.resource.add(res);
 			res.table = new ArrayList<TABLE>();
 			TABLE tab = new TABLE();
@@ -101,7 +102,8 @@ public class Votable
 			}
 			tab.data = new DATA();
 			tab.data.tabledata = new TABLEDATA();
-			tab.data.tabledata.tr = new ArrayList<TR>();
+			ArrayList<TR> trList = new ArrayList<TR>();
+			tab.data.tabledata.tr = trList;
 			while((data=br.readLine())!=null)
 			{
 				stoken = new StringTokenizer(data,",");
@@ -113,6 +115,11 @@ public class Votable
 					td.value=stoken.nextToken();
 					tr.td.add(td);
 				}
+				if (tr.td.size()!=ncols)
+				{
+					throw new VotableException("Number of records in the data is not equal to the number of columns");
+				}
+				trList.add(tr);
 			}
 			return vot;
 		}
