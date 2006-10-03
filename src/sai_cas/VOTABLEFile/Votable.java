@@ -1,4 +1,4 @@
-package sai_cas;
+package sai_cas.VOTABLEFile;
 import sai_cas.db.*;
 import sai_cas.VOTABLEFile.*;
 
@@ -7,20 +7,29 @@ import javax.xml.bind.*;
 
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URI;
 import java.util.List;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 import java.sql.*;
 
 public class Votable
 {
 	static Logger logger = Logger.getLogger("sai_cas.Votable");
 	private VOTABLE vot;
-
+	
+	public Votable()
+	{}
+	
 	public Votable(String catalogString) throws  VotableException
 	{
 		logger.info("The Votable constructor is running");
@@ -51,6 +60,66 @@ public class Votable
 			throw new VotableException("Error during unmarshalling:\n Message: " + e.getMessage() + e.getCause());
 		}
 		logger.info("The catalog successfully unmarshalled");
+	}
+	
+	public static Votable getVOTableFromCSV(File file) throws VotableException
+	{
+		try
+		{
+			Votable vot = new Votable();
+			VOTABLE vot0 = new VOTABLE();
+
+			BufferedReader br; // to fetch file data
+			StringTokenizer stoken; //
+			br = new BufferedReader(new FileReader(file));
+			
+			String data;
+			/* Getting the columnNames */
+
+			data=br.readLine();
+			stoken = new StringTokenizer(data,",");
+			List<String> columns = new ArrayList<String>();
+			int ncols = 0;
+			while (stoken.hasMoreTokens())
+			{
+				columns.add(stoken.nextToken());
+				ncols++;
+			}
+			vot0.resource= new ArrayList<sai_cas.VOTABLEFile.RESOURCE>();
+			RESOURCE res = new RESOURCE();
+			vot0.resource.add(res);
+			res.table = new ArrayList<TABLE>();
+			TABLE tab = new TABLE();
+			res.table.add(tab);
+			tab.fieldOrPARAMOrGROUP = new ArrayList();
+			List<Object> fieldList = tab.fieldOrPARAMOrGROUP;
+			for (String column: columns)
+			{
+				FIELD f= new FIELD();
+				f.setName(column);
+				fieldList.add(f);
+			}
+			tab.data = new DATA();
+			tab.data.tabledata = new TABLEDATA();
+			tab.data.tabledata.tr = new ArrayList<TR>();
+			while((data=br.readLine())!=null)
+			{
+				stoken = new StringTokenizer(data,",");
+				TR tr = new TR();
+				tr.td = new ArrayList<TD>();
+				while (stoken.hasMoreTokens())
+				{
+					TD td = new TD();
+					td.value=stoken.nextToken();
+					tr.td.add(td);
+				}
+			}
+			return vot;
+		}
+		catch(Exception e)
+		{
+			throw new VotableException();
+		}
 	}
 	
 	public Votable(URI uri) throws  VotableException

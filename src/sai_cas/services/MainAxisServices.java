@@ -19,10 +19,10 @@ import org.apache.log4j.Logger;
 
 import sai_cas.XMLCatalog;
 import sai_cas.XMLCatalogException;
+import sai_cas.VOTABLEFile.Votable;
+import sai_cas.VOTABLEFile.VotableException;
 import sai_cas.db.*;
 import sai_cas.vo.ConeSearch;
-import sai_cas.Votable;
-import sai_cas.VotableException;
 
 public class MainAxisServices {
 	static Logger logger = Logger.getLogger("sai_cas.MainAxisServices");

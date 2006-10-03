@@ -1,4 +1,4 @@
-package sai_cas;
+package sai_cas.VOTABLEFile;
 
 public class VotableException extends Exception
 {

@@ -21,11 +21,11 @@ import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.servlet.*;
 import org.apache.commons.fileupload.disk.*;
 
+import sai_cas.VOTABLEFile.Votable;
+import sai_cas.VOTABLEFile.VotableException;
 import sai_cas.db.*;
 import sai_cas.output.VOTableQueryResultsOutputter;
 import sai_cas.vo.*;
-import sai_cas.Votable;
-import sai_cas.VotableException;
 
 public class CrossMatchServlet extends HttpServlet {
 	
