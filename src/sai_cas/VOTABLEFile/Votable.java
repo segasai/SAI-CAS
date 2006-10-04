@@ -68,7 +68,7 @@ public class Votable
 		{
 			Votable vot = new Votable();
 			VOTABLE vot0 = new VOTABLE();
-
+			vot.vot = vot0;
 			BufferedReader br; // to fetch file data
 			StringTokenizer stoken; 
 			br = new BufferedReader(new FileReader(file));
