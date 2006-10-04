@@ -19,6 +19,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 import java.sql.*;
 
@@ -77,14 +78,9 @@ public class Votable
 			/* Getting the columnNames */
 
 			data=br.readLine();
-			stoken = new StringTokenizer(data,",");
-			List<String> columns = new ArrayList<String>();
-			int ncols = 0;
-			while (stoken.hasMoreTokens())
-			{
-				columns.add(stoken.nextToken());
-				ncols++;
-			}
+			List<String> columns =  Arrays.asList(data.split(","));
+			int ncols = columns.size();
+
 			vot0.resource= new ArrayList<sai_cas.VOTABLEFile.RESOURCE>();
 			RESOURCE res = new RESOURCE();
 			res.setName("crossmatch");
@@ -108,21 +104,20 @@ public class Votable
 			tab.data.tabledata = new TABLEDATA();
 			ArrayList<TR> trList = new ArrayList<TR>();
 			tab.data.tabledata.tr = trList;
+
 			while((data = br.readLine()) != null)
 			{
-				stoken = new StringTokenizer(data,",");
+				String[] dataArray = data.split(",");
+				int nrecs = dataArray.length;
 				TR tr = new TR();
 				tr.td = new ArrayList<TD>();
-				while (stoken.hasMoreTokens())
+				for (int i = 0; i <= nrecs; i++)
 				{
 					TD td = new TD();
-					String tok = stoken.nextToken();
-					td.value = (tok == null) ? "" : tok;
+					//String tok = stoken.nextToken();
+					//td.value = (tok == null) ? "" : tok;
+					td.value = dataArray[i];
 					tr.td.add(td);
-				}
-				if (tr.td.size() != ncols)
-				{
-					throw new VotableException("Number of records in the data is not equal to the number of columns");
 				}
 				trList.add(tr);
 			}
