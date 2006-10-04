@@ -192,6 +192,11 @@ public class CrossMatchServlet extends HttpServlet {
 			{
 			case CSV:
 				vot = Votable.getVOTableFromCSV(uploadedFile);
+				if ((!vot.checkColumnExistance(raColumn)) || 
+					(!vot.checkColumnExistance(decColumn)))
+				{
+					throw new CrossMatchServletException("The column names specified as RA and DEC should be present in the CSV file");
+				}
 				break;
 			case VOTABLE:
 				vot = new Votable (uploadedFile);
@@ -215,7 +220,7 @@ public class CrossMatchServlet extends HttpServlet {
 			case CSV:
 				raDecArray1 = new String[2];
 				raDecArray1[0] = raColumn;
-				raDecArray1[1] = decColumn;				
+				raDecArray1[1] = decColumn;	
 			}
 
 			response.setHeader("Content-Disposition",
