@@ -396,6 +396,21 @@ public class Votable
 		}  
 		return tableNameList.get(0);
 	}
+	public boolean checkColumnExistance(String column)
+	{
+		for(Object o: vot.resource.get(0).table.get(0).fieldOrPARAMOrGROUP)
+		{
+			if (o instanceof FIELD)
+			{
+				FIELD f = (FIELD) o;
+				if (f.name.equals(column))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	
 	public static void main(String args[]) throws Exception
 	{
