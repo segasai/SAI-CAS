@@ -192,8 +192,10 @@ public class CrossMatchServlet extends HttpServlet {
 			{
 			case CSV:
 				vot = Votable.getVOTableFromCSV(uploadedFile);
+				break;
 			case VOTABLE:
 				vot = new Votable (uploadedFile);
+				break;
 			}
 			String userDataSchema = dbi.getUserDataSchemaName();
 			String tableName = vot.insertDataToDB(dbi,userDataSchema);
@@ -238,7 +240,7 @@ public class CrossMatchServlet extends HttpServlet {
 		}
 		catch (VotableException e)
 		{
-			qro.printError(out, "Error occured: " + "Cannot read the VOTable, probably it is not well formed (remember that you must have 'xmlns=\"http://www.ivoa.net/xml/VOTable/v1.1\"' in the VOTABLE tag)");
+			qro.printError(out, "Error occured: "+ e.getMessage() + "Cannot read the VOTable, probably it is not well formed (remember that you must have 'xmlns=\"http://www.ivoa.net/xml/VOTable/v1.1\"' in the VOTABLE tag)");
 		}
 		catch (NumberFormatException e)
 		{
