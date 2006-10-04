@@ -129,7 +129,7 @@ public class Votable
 		}
 		catch(Exception e)
 		{
-			throw new VotableException();
+			throw new VotableException(e.getMessage());
 		}
 	}
 	
