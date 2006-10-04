@@ -100,6 +100,9 @@ public class Votable
 				FIELD f= new FIELD();
 				f.setName(column);
 				fieldList.add(f);
+				f.setDatatype(sai_cas.VOTABLEFile.DataType.DOUBLE);
+				f.setUnit("");
+				f.setUcd("");
 			}
 			tab.data = new DATA();
 			tab.data.tabledata = new TABLEDATA();
