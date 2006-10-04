@@ -201,7 +201,7 @@ public class CrossMatchServlet extends HttpServlet {
 			String tableName = vot.insertDataToDB(dbi,userDataSchema);
 			dbi.analyze(userDataSchema, tableName);
 			String[] raDecArray = dbi.getRaDecColumns(cat, tab);
-			String[] raDecArray1=null;
+			String[] raDecArray1 = null;
 			switch(format)
 			{
 			case VOTABLE:
@@ -214,8 +214,8 @@ public class CrossMatchServlet extends HttpServlet {
 				break;
 			case CSV:
 				raDecArray1 = new String[2];
-				raDecArray1[0]=raColumn;
-				raDecArray1[1]=decColumn;				
+				raDecArray1[0] = raColumn;
+				raDecArray1[1] = decColumn;				
 			}
 
 			response.setHeader("Content-Disposition",
@@ -235,8 +235,6 @@ public class CrossMatchServlet extends HttpServlet {
 				voqro.setTable("main" );
 			}
 			qro.print(out,dbi);
-
-			
 		}
 		catch (VotableException e)
 		{
@@ -252,11 +250,11 @@ public class CrossMatchServlet extends HttpServlet {
 		}
 		catch (DBException e)
 		{
-			logger.error("DBException "+e);
-			StringWriter sw =new StringWriter();
+			logger.error("DBException " + e);
+			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			qro.printError(out, "Error occured: " + e +"\nCause: " +e.getCause()+"\nTrace: "+sw);
+			qro.printError(out, "Error occured: " + e + "\nCause: " + e.getCause() + "\nTrace: " + sw);
 		}
 		catch (SQLException e)
 		{
