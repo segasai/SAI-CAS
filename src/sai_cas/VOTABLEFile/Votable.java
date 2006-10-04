@@ -91,6 +91,7 @@ public class Votable
 			vot0.resource.add(res);
 			res.table = new ArrayList<TABLE>();
 			TABLE tab = new TABLE();
+			tab.setName("table");
 			res.table.add(tab);
 			tab.fieldOrPARAMOrGROUP = new ArrayList();
 			List<Object> fieldList = tab.fieldOrPARAMOrGROUP;
