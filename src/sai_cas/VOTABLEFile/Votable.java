@@ -116,7 +116,8 @@ public class Votable
 				while (stoken.hasMoreTokens())
 				{
 					TD td = new TD();
-					td.value=stoken.nextToken();
+					String tok = stoken.nextToken();
+					td.value = (tok == null) ? "" : tok;
 					tr.td.add(td);
 				}
 				if (tr.td.size() != ncols)
