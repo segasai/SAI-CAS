@@ -107,11 +107,17 @@ public class Votable
 
 			while((data = br.readLine()) != null)
 			{
-				String[] dataArray = data.split(",");
+				String[] dataArray = data.split(",",ncols+1);
 				int nrecs = dataArray.length;
+
+				if (nrecs != ncols)
+				{
+					throw new VotableException("Number of records in the data is not equal to the number of columns");
+				}
+				
 				TR tr = new TR();
 				tr.td = new ArrayList<TD>();
-				for (int i = 0; i <= nrecs; i++)
+				for (int i = 0; i < nrecs; i++)
 				{
 					TD td = new TD();
 					//String tok = stoken.nextToken();
