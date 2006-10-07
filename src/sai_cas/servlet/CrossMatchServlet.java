@@ -183,7 +183,7 @@ public class CrossMatchServlet extends HttpServlet {
 			}
 			
 			logger.debug("File written");
-			String[] userPasswd = dbi.getDefaultTempDBUserPasswd();
+			String[] userPasswd = sai_cas.Parameters.getDefaultTempDBUserPasswd();
 			String tempUser = userPasswd[0];
 			String tempPasswd = userPasswd[1];
 			conn = DBConnection.getPooledPerUserConnection(tempUser, tempPasswd);
