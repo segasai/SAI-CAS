@@ -12,12 +12,12 @@ public class Parameters
 	}
 	public static String[] getDefaultDBUserPasswd()
 	{
-		String[] res={"cas_user","aspen"};
+		String[] res={"user","aspen"};
 		return res;
 	}
 	public static String[] getAdminDBUserPasswd()
 	{
-		String[] res={"cas_admin","aspen"};
+		String[] res={"admin","aspen"};
 		return res;
 	}
 

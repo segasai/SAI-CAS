@@ -105,7 +105,8 @@ public class DBConnection
 		try
 		{
 			//ds2.setDataSourceName("java://comp/env/jdbc/DriverAdapterCPDS");
-			conn = pupds.getConnection(user, password);
+			conn = pupds.getConnection(DBInterface.getInternalLoginName(user),
+				password);
 		}
 		catch (SQLException e)
 		{
@@ -130,14 +131,16 @@ public class DBConnection
   
 	public static Connection getSimpleConnection() throws SQLException
 	{
-		Connection conn =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas","math","");
+		Connection conn =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas",
+			"math", "");
 		//this.conn = conn;
 		return conn;
 	}
 	
 	public static Connection getSimpleConnection(String user, String password) throws SQLException
 	{
-		Connection conn =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas",user,password);
+		Connection conn =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas",
+			DBInterface.getInternalLoginName(user), password);
 		//this.conn = conn;
 		return conn;
 	}

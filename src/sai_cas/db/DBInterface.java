@@ -39,9 +39,9 @@ public class DBInterface
 		this.conn = conn;
 		String userSchema;
 		String query;
-		if (!user.equals("cas_admin"))
+		if (!user.equals("admin"))
 		{
-			userLogged = user;
+			userLogged = getInternalLoginName(user);
 			stmt = conn.createStatement();
 			userSchema = this.getUserMetaDataSchemaName() ; 
 			query = "SET search_path TO " + userSchema + ", cas_metadata, public;";
@@ -1223,6 +1223,11 @@ public class DBInterface
 		stmt.execute(query);
 	}	
 
+	public static String getInternalLoginName(String user)
+	{
+		return "cas_"+user;
+	}
+	
 	public class QueryResults
 	{
 		public QueryResults(ResultSet rs) throws SQLException
