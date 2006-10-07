@@ -349,7 +349,14 @@ public class Votable
 				 * create the list of lists of properties ... 
 				 */
 //				List<Property> columnProperties = table.getPropertyList().getProperty();
-				datatypeList.add(datatype.value());
+				try
+				{
+					datatypeList.add(datatype.value());
+				}
+				catch (NullPointerException e)
+				{
+					throw new VotableException ("The datatype attribute must be specified for each field in the table");
+				}
 				columnNameList.add(columnName);
 				unitList.add(unit);
 				ucdList.add(ucd);
