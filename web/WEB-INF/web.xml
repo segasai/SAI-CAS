@@ -19,6 +19,11 @@
 	</servlet>
 
 	<servlet>
+		<servlet-name>UploadServlet</servlet-name>
+		<servlet-class>sai_cas.servlet.UploadServlet</servlet-class>
+	</servlet>
+
+	<servlet>
 		<servlet-name>SQLQueryExecutorServlet</servlet-name>
 		<servlet-class>
 			sai_cas.servlet.SQLQueryExecutorServlet
