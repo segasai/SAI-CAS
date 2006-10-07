@@ -243,15 +243,15 @@
 		<axis-admin
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/deploy1.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
-		<sleep seconds="1"/>
+		<sleep seconds="5"/>
 		<axis-admin
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/deploy2.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
-		<sleep seconds="1"/>
+		<sleep seconds="5"/>
 		<axis-admin
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/deploy3.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
-		<sleep seconds="1"/>
+		<sleep seconds="5"/>
 		<axis-admin
 			xmlfile="${gen.src.axis}/net/ivoa/SkyNode/deploy.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
