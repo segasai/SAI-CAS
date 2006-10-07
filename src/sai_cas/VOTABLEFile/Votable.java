@@ -47,8 +47,7 @@ public class Votable
 		}
 		try
 		{
-			JAXBElement<?> votElement = (JAXBElement<?>)um.unmarshal(new StreamSource ( new StringReader( catalogString )));
-			vot = (VOTABLE) votElement.getValue();
+			vot = (VOTABLE) um.unmarshal(new StreamSource ( new StringReader(file)));
 		}
 		catch (UnmarshalException e) 
 		{
