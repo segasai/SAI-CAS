@@ -192,6 +192,32 @@ public class MainAxisServices {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @return String[] -- the array of catalogues in the system
+	 * @throws Exception
+	 */
+	public static String[] getCatalogNames(String user, String password) throws RemoteException
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String []result = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			result = dbi.getCatalogNames();
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);
+			DBInterface.close(dbi, conn);
+			throw new RemoteException(e.getMessage());
+		}
+		DBInterface.close(dbi, conn);
+		return result;
+	}
+
 
 	/**
 	 * 
@@ -220,6 +246,35 @@ public class MainAxisServices {
 		return result;
 	}
 
+
+	/**
+	 * 
+	 * @return String -- the info about the catalogue
+	 * @throws Exception
+	 */
+	public static String getCatalogInfo(String catalog, String user, String password) 
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			result = dbi.getCatalogInfo(catalog);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+
 	/**
 	 * 
 	 * @return String -- the Description of the catalogue
@@ -234,6 +289,33 @@ public class MainAxisServices {
 		{
 			conn = DBConnection.getPooledPerUserConnection();
 			dbi = new DBInterface(conn);
+			result = dbi.getCatalogDescription(catalog);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @return String -- the Description of the catalogue
+	 * @throws Exception
+	 */
+	public static String getCatalogDescription(String catalog, String user, String password) 
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
 			result = dbi.getCatalogDescription(catalog);
 		}
 		catch(SQLException e)
@@ -279,6 +361,35 @@ public class MainAxisServices {
 	/**
 	 * 
 	 * @param catalogName
+	 * @return String[] the array of table names in the catalogue
+	 * @throws Exception
+	 */
+	public static String[] getTableNames(String catalogName, String user, String password) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			result = dbi.getTableNames(catalogName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+
+	/**
+	 * 
+	 * @param catalogName
 	 * @param tableName
 	 * @return String[] the array of column names in the table of the catalogue
 	 * @throws Exception
@@ -304,6 +415,36 @@ public class MainAxisServices {
 		}
 		return result;
 	}
+
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return String[] the array of column names in the table of the catalogue
+	 * @throws Exception
+	 */
+	public static String[] getColumnNames(String catalogName, String tableName, String user, String password) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			result = dbi.getColumnNames(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
 
 	/**
 	 * 
@@ -338,6 +479,36 @@ public class MainAxisServices {
 	 * 
 	 * @param catalogName
 	 * @param tableName
+	 * @return String[] the array of infos about the columns in the table of the catalogue
+	 * @throws Exception
+	 */
+	public static String[] getColumnInfos(String catalogName, String tableName, String user, String password) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			result = dbi.getColumnInfos(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
 	 * @return String[] the array of descriptions of the columns in the table of the catalogue
 	 * @throws Exception
 	 */
@@ -362,6 +533,36 @@ public class MainAxisServices {
 		}
 		return result;
 	}
+
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return String[] the array of descriptions of the columns in the table of the catalogue
+	 * @throws Exception
+	 */
+	public static String[] getColumnDescriptions(String catalogName, String tableName, String user, String password) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			result = dbi.getColumnDescriptions(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
 
 	/**
 	 * 
@@ -393,6 +594,34 @@ public class MainAxisServices {
 	}
 
 
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return String[] -- the array of units of columns in the table of the catalogue
+	 * @throws Exception
+	 */
+	public static String[] getColumnUnits(String catalogName, String tableName, String user, String password) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			result = dbi.getColumnUnits(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
 
 
 	/**
@@ -424,6 +653,36 @@ public class MainAxisServices {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return String[] -- the array of UCD's of columns in the table of the catalogue
+	 * @throws Exception
+	 */
+	public static String[] getColumnUCDs(String catalogName, String tableName, String user, String password) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			result = dbi.getColumnUCDs(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+
 	public static String[] getColumnDatatypes(String catalogName, String tableName) throws Exception
 	{
 		Connection conn = null;
@@ -445,6 +704,30 @@ public class MainAxisServices {
 		}
 		return result;
 	}
+
+
+	public static String[] getColumnDatatypes(String catalogName, String tableName, String user, String password) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result[] = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			result = dbi.getColumnDatatypes(catalogName,tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
 
 	/**
 	 * 
