@@ -132,7 +132,7 @@ public class ConeSearch
 		}
 		catch (java.sql.SQLException e)
 		{
-			DBInterface.close(dbi,conn);
+			DBInterface.close(dbi,conn,false);
 			logger.error("Got the SQL exception...",e);
 			qro.printError(out, "ERROR:\nSQL Exception: " + e.getMessage() +
 						"\nContact saicas@sai.msu.ru in case of problems\n");
@@ -140,7 +140,7 @@ public class ConeSearch
 		}
 		catch (ConeSearchException e)
 		{
-			DBInterface.close(dbi,conn);
+			DBInterface.close(dbi,conn,false);
 			qro.printError(out, "ERROR: " + e.getMessage() +
 						"\nContact saicas@sai.msu.ru in case of problems\n");    
 			return false;
