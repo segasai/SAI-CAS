@@ -102,7 +102,6 @@ public class DBInterface
 	
 	public static void close(DBInterface dbi, Connection conn, boolean commit_flag)
 	{
-		logger.debug("The DB interface is being closed...");
 		try 
 		{
 			if (dbi != null)
@@ -111,6 +110,8 @@ public class DBInterface
 			}
 			else if (conn != null)
 			{
+				logger.debug("The DB interface is being closed...");
+
 				if (commit_flag)
 				{
 					conn.commit();
