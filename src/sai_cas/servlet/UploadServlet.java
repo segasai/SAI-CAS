@@ -112,8 +112,17 @@ public class UploadServlet extends HttpServlet {
 
 			if (fi == null)
 			{
-				throw new ServletException("File should be specified" + fileItemList.size() );			
+				throw new ServletException("File must be specified" + fileItemList.size() );			
 			}
+			if (user == null)
+			{
+				throw new ServletException("User name must be specified" + fileItemList.size() );			
+			}
+			if (password == null)
+			{
+				throw new ServletException("Password must be specified" + fileItemList.size() );			
+			}
+
 			long size = fi.getSize();
 
 			if (size > 10000000) 
@@ -140,8 +149,9 @@ public class UploadServlet extends HttpServlet {
 			{
 				conn = DBConnection.getPooledPerUserConnection(user, password);
 				dbi = new DBInterface(conn, user);
+				String userDataSchema = dbi.getUserDataSchemaName();
 				vot = new Votable(uploadedFile);
-				vot.insertDataToDB(dbi);
+				vot.insertDataToDB(dbi,userDataSchema);
 			}
 			catch (SQLException e)
 			{
@@ -158,16 +168,16 @@ public class UploadServlet extends HttpServlet {
 				logger.error("Got an DB exception... ", e);
 				throw new UploadServletException(e.getMessage());
 			}
+			DBInterface.close(dbi, conn);
 			out.println("Success");
 		}
 		catch (UploadServletException e)
 		{
 			out.println("Upload failed: " + e.getMessage());
+			DBInterface.close(dbi,conn,false);
 		}
 		finally 
 		{
-			DBInterface.close(dbi,conn,false);
-			/* Always rollback */
 			try 
 			{
 				uploadedFile.delete();
