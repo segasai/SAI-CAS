@@ -183,8 +183,9 @@ public class CrossMatchServlet extends HttpServlet {
 			}
 			
 			logger.debug("File written");
-			String tempUser = "cas_user_tmp";
-			String tempPasswd = "aspen";
+			String userPasswd = dbi.getDefaultTempDBUserPasswd();
+			String tempUser = userPasswd[0];
+			String tempPasswd = userPasswd[1];
 			conn = DBConnection.getPooledPerUserConnection(tempUser, tempPasswd);
 			dbi = new DBInterface(conn,tempUser);
 			Votable vot = null;

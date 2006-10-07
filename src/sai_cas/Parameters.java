@@ -15,6 +15,11 @@ public class Parameters
 		String[] res={"user","aspen"};
 		return res;
 	}
+	public static String[] getDefaultTempDBUserPasswd()
+	{
+		String[] res={"user_tmp","aspen"};
+		return res;
+	}
 	public static String[] getAdminDBUserPasswd()
 	{
 		String[] res={"admin","aspen"};
