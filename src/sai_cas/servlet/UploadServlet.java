@@ -1,4 +1,4 @@
-package sai_cas.services;
+package sai_cas.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
