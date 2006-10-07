@@ -47,7 +47,7 @@ public class Votable
 		}
 		try
 		{
-			vot = (VOTABLE) um.unmarshal(new StreamSource ( new StringReader(file)));
+			vot = (VOTABLE) um.unmarshal(new StreamSource ( new StringReader(catalogString)));
 		}
 		catch (UnmarshalException e) 
 		{
