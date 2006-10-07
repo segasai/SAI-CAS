@@ -111,7 +111,7 @@ public class DBConnection
 		{
 			logger.error("Failed to get the Pooled Connection");
 			logger.error("The cause of that" + e.getMessage()+" "+e.getCause());
-			return null;
+			throw e;
 		}
 		try
 		{
