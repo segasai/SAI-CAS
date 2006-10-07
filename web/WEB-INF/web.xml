@@ -45,7 +45,17 @@
 		<url-pattern>/crossmatch</url-pattern>
 	</servlet-mapping>
 
-	
+	<servlet-mapping>
+		<servlet-name>UploadServlet</servlet-name>
+		<url-pattern>/upload</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>UploadServlet</servlet-name>
+		<url-pattern>/Upload</url-pattern>
+	</servlet-mapping>
+
+[A	
 	<servlet-mapping>
 		<servlet-name>SQLQueryExecutorServlet</servlet-name>
 		<url-pattern>/SQLQueryExecutor</url-pattern>
