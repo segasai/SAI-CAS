@@ -140,7 +140,8 @@ public class MainAxisServices {
 			conn = DBConnection.getPooledPerUserConnection(user, password);
 			dbi = new DBInterface(conn, user);
 			vot = new Votable(catalogString);
-			vot.insertDataToDB(dbi);
+			String userDataSchema = dbi.getUserDataSchemaName();
+			vot.insertDataToDB(dbi, userDataSchema);
 		}
 		catch (SQLException e)
 		{
