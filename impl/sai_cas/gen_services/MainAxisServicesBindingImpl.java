@@ -60,6 +60,16 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		sai_cas.services.MainAxisServices.insertCatalogFromVotable(catalogString,user,password);
 	}
 
+	public void deleteCatalog(String catalog, String user, String password) throws java.rmi.RemoteException
+	{
+		MainAxisServices.deleteCatalog(catalog, user, password);
+	}
+
+	public void deleteTable(String catalog, String table, String user, String password) throws java.rmi.RemoteException
+	{
+		MainAxisServices.deleteTable(catalog, table, user, password);
+	}
+
 	public java.lang.String[] getCatalogNames() throws java.rmi.RemoteException
 	{
 		return MainAxisServices.getCatalogNames();

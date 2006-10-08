@@ -165,6 +165,63 @@ public class MainAxisServices {
 	}
 
 
+	/**
+	 * 
+	 * @return String -- the info about the catalogue
+	 * @throws Exception
+	 */
+	public static void deleteCatalog(String catalog, String adminUser, String adminPassword)  throws java.rmi.RemoteException
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(adminUser, adminPassword);
+			dbi = new DBInterface(conn);// I do not put the user name here in 
+										// the constructor, since that WS is not
+										// supposed to be called by usual user
+										// only by admin
+			dbi.deleteCatalog(catalog);
+		}
+		catch(SQLException e)
+		{
+			logger.debug("Caught an exception... ", e);			
+			throw new RemoteException(e.getMessage());		
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+	}
+
+
+	/**
+	 * 
+	 * @return String -- the info about the catalogue
+	 * @throws Exception
+	 */
+	public static void deleteTable(String catalog, String table, String user, String password)  throws java.rmi.RemoteException
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			dbi.deleteTable(catalog, table);
+		}
+		catch(SQLException e)
+		{
+			logger.debug("Caught an exception... ", e);			
+			throw new RemoteException(e.getMessage());		
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+	}
+
+
 	
 	/**
 	 * 
@@ -245,6 +302,8 @@ public class MainAxisServices {
 		}
 		return result;
 	}
+
+
 
 
 	/**
