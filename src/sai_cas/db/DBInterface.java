@@ -1208,12 +1208,12 @@ public class DBInterface
 	
 	public void deleteTable(String catalogName, String tableName) throws SQLException
 	{
-		stmt.executeUpdate("select cas_delete_table('" + catalogName + "','" + tableName + "')");
+		stmt.execute("select cas_delete_table('" + catalogName + "','" + tableName + "')");
 	}
 
 	public void deleteCatalog(String catalogName) throws SQLException
 	{
-		stmt.executeUpdate("select cas_delete_catalog('" + catalogName + "')");
+		stmt.execute("select cas_delete_catalog('" + catalogName + "')");
 	}
 	
 	public void executeQuery(String query) throws java.sql.SQLException
