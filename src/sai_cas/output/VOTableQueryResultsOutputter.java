@@ -91,11 +91,13 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 				 */
 				
 				out.print("<DESCRIPTION>");
-				out.print(dbi.qr.getColumnDescription(i));
-				out.println("</DESCRIPTION>");
-				out.print("<INFO>");
+				out.println(dbi.qr.getColumnDescription(i));
 				out.print(dbi.qr.getColumnInfo(i));
+				out.println("</DESCRIPTION>");
+				/*
+				out.print("<INFO>");
 				out.println("</INFO>");
+				*/
 
 				out.println("</FIELD>");
 			}
