@@ -1,13 +1,9 @@
 package sai_cas.servlet;
 import java.io.*;
-//import java.util.*;
-//import java.sql.*;
-//import javax.sql.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import sai_cas.db.*;
 import sai_cas.vo.*;
 
 import org.apache.log4j.Logger;

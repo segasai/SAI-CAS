@@ -2,7 +2,6 @@ package sai_cas.db;
 import java.sql.*;
 import java.util.Arrays;
 
-import javax.servlet.ServletContext;
 import javax.sql.*;
 import javax.naming.*;
 import org.apache.log4j.Logger;
@@ -49,8 +48,6 @@ public class DBConnection
 		}
 
 		logger.info("The pooled DB connection successfully retrieved");
-
-		//this.conn = conn;
 
 		/* By default we always return the notAutoCommited connection */ 
 		try
@@ -124,7 +121,6 @@ public class DBConnection
 		}
 
 		logger.info("The pooled DB connection successfully retrieved");
-		//this.conn = conn;
 		return conn;
 	}
 	
@@ -133,7 +129,6 @@ public class DBConnection
 	{
 		Connection conn =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas",
 			"math", "");
-		//this.conn = conn;
 		return conn;
 	}
 	
@@ -141,15 +136,8 @@ public class DBConnection
 	{
 		Connection conn =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas",
 			DBInterface.getInternalLoginName(user), password);
-		//this.conn = conn;
 		return conn;
 	}
 
-/*  public void close() throws SQLException
-  {
-    if (conn!=null) conn.close();
-  }
-*/
-//  Connection conn;
 
 }

@@ -532,14 +532,12 @@ public class XMLCatalog
 		}
 		
 		abstract String[] getData() throws IOException, XMLCatalogException;
-//		private ArrayList<String> uriList;
 		protected ListIterator<URL> urlIterator;
 		protected BufferedReader br;		
 		protected Properties properties;
 		protected URL currentURL;
 		protected int ncols;
 		private String encoding;
-		private String format;
 	}
 
 	private class FixedWidthDataReader extends DataReader
