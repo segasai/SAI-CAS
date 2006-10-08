@@ -70,7 +70,6 @@ public class Votable
 			VOTABLE vot0 = new VOTABLE();
 			vot.vot = vot0;
 			BufferedReader br; // to fetch file data
-			StringTokenizer stoken; 
 			br = new BufferedReader(new FileReader(file));
 			
 			String data;
@@ -88,7 +87,7 @@ public class Votable
 			TABLE tab = new TABLE();
 			tab.setName("table");
 			res.table.add(tab);
-			tab.fieldOrPARAMOrGROUP = new ArrayList();
+			tab.fieldOrPARAMOrGROUP = new ArrayList<Object>();
 			List<Object> fieldList = tab.fieldOrPARAMOrGROUP;
 			for (String column: columns)
 			{
