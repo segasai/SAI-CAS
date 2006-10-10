@@ -70,6 +70,11 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		MainAxisServices.deleteTable(catalog, table, user, password);
 	}
 
+	public void renameTable(String catalog, String table, String newTable, String user, String password) throws java.rmi.RemoteException
+	{
+		MainAxisServices.renameTable(catalog, table, newTable, user, password);
+	}
+
 	public java.lang.String[] getCatalogNames() throws java.rmi.RemoteException
 	{
 		return MainAxisServices.getCatalogNames();
