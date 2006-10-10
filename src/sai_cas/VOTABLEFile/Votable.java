@@ -291,9 +291,11 @@ public class Votable
 				{
 					tableName="tab"+(tableCounter++);
 				}
+				int counter=1;
+				String tableName0 = tableName;
 				while (dbi.checkTableExists(catalogName, tableName))
 				{
-					tableName = tableName + "_";
+					tableName = tableName0 + "_"+(counter++);
 				}
 			}
 			
