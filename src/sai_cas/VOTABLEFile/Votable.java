@@ -267,14 +267,36 @@ public class Votable
 		List<String> tableNameList = new ArrayList<String>();
 
 		logger.debug("Looping through tables in the catalogue... ");				
+		int tableCounter = 1;
 		for(TABLE table : tableList)
 		{
 			/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
 			 * I do the convertion to lower case. And I also convert slashes to 
 			 * subscript
 			 */
+
 			
-			String tableName = table.getName().toLowerCase().replace('/','_').replace('.','_');
+			String tableName = null;
+			try
+			{
+				tableName = table.getName().toLowerCase().replace('/','_').replace('.','_');
+			}
+			catch (NullPointerException e)
+			{
+				tableName="";
+			}
+			finally 
+			{
+				if (tableName.length()==0)
+				{
+					tableName="tab"+(tableCounter++);
+				}
+				while (dbi.checkTableExists(catalogName, tableName))
+				{
+					tableName = tableName + "_";
+				}
+			}
+			
 			tableNameList.add(tableName);
 			logger.debug("Inserting the table: "+tableName);				
 			String tableDescription;
