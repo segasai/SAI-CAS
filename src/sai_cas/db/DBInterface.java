@@ -1213,7 +1213,7 @@ public class DBInterface
 
 	public void renameTable(String catalogName, String tableName, String newTableName) throws SQLException
 	{
-		stmt.execute("select cas_renaem_table('" + catalogName + "','" + tableName + "', '" + newTableName + "')");
+		stmt.execute("select cas_rename_table('" + catalogName + "','" + tableName + "', '" + newTableName + "')");
 	}
 
 	public void deleteCatalog(String catalogName) throws SQLException
