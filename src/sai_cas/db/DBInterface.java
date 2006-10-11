@@ -1216,6 +1216,11 @@ public class DBInterface
 		stmt.execute("select cas_rename_table('" + catalogName + "','" + tableName + "', '" + newTableName + "')");
 	}
 
+	public void renameColumn(String catalogName, String tableName, String columnName, String newColumnName) throws SQLException
+	{
+		stmt.execute("select cas_rename_column('" + catalogName + "','" + tableName + "', '" + columnName + "','" + newColumnName +  "')");
+	}
+
 	public void deleteCatalog(String catalogName) throws SQLException
 	{
 		stmt.execute("select cas_delete_catalog('" + catalogName + "')");

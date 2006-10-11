@@ -15,6 +15,33 @@ import sai_cas.db.*;
 public class EditingServices {
 	static Logger logger = Logger.getLogger("sai_cas.EditingServices");
 	
+	/**
+	 * 
+	 * @return String -- the info about the catalogue
+	 * @throws Exception
+	 */
+	public static void renameTable(String catalog, String table, String newTable, String user, String password)  throws java.rmi.RemoteException
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			dbi.renameTable(catalog, table, newTable);
+		}
+		catch(SQLException e)
+		{
+			logger.debug("Caught an exception... ", e);			
+			throw new RemoteException(e.getMessage());		
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+	}
+
+
 	public static void setUCD(String catalog, String table, String column, 
 		String ucd, String user, String password) throws java.rmi.RemoteException
 	{
@@ -59,7 +86,7 @@ public class EditingServices {
 		DBInterface.close(dbi, conn);	
 	}
 
-	public static void setColumnName(String catalog, String table, String columnName, 
+	public static void renameColumn(String catalog, String table, String columnName, 
 		String newColumnName, String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
@@ -68,7 +95,7 @@ public class EditingServices {
 		{
 			conn = DBConnection.getPooledPerUserConnection(user, password);
 			dbi = new DBInterface(conn, user);
-			dbi.setUnit (catalog, table, columnName, newColumnName);
+			dbi.renameColumn(catalog, table, columnName, newColumnName);
 		}
 		catch(SQLException e)
 		{

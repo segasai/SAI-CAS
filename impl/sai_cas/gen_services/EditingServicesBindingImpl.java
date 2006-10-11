@@ -10,6 +10,18 @@ import sai_cas.services.EditingServices;
 
 public class EditingServicesBindingImpl implements sai_cas.gen_services.EditingServices
 {
+
+	public void renameTable(String catalog, String table, String newTable, String user, String password) throws java.rmi.RemoteException
+	{
+		sai_cas.services.EditingServices.renameTable(catalog, table, newTable, user, password);
+	}
+
+	public void renameColumn(String catalog, String table, String column, String newColumn, String user, String password) throws java.rmi.RemoteException
+	{
+		sai_cas.services.EditingServices.renameColumn(catalog, table, column, newColumn, user, password);
+	}
+
+
 	public void setUCD(java.lang.String in0, java.lang.String in1,
 			java.lang.String in2, java.lang.String in3, java.lang.String in4,
 			java.lang.String in5) throws java.rmi.RemoteException
@@ -21,13 +33,6 @@ public class EditingServicesBindingImpl implements sai_cas.gen_services.EditingS
 			java.lang.String in2, java.lang.String in3, java.lang.String in4,
 			java.lang.String in5) throws java.rmi.RemoteException {
 		sai_cas.services.EditingServices.setUnit(in0, in1, in2, in3, in4, in5);
-	}
-
-	public void setColumnName(java.lang.String in0, java.lang.String in1,
-			java.lang.String in2, java.lang.String in3, java.lang.String in4,
-			java.lang.String in5) throws java.rmi.RemoteException
-	{
-		sai_cas.services.EditingServices.setColumnName(in0, in1, in2, in3, in4, in5);
 	}
 
 	public void setColumnDescription(java.lang.String in0,

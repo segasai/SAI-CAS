@@ -221,32 +221,6 @@ public class MainAxisServices {
 		}
 	}
 
-	/**
-	 * 
-	 * @return String -- the info about the catalogue
-	 * @throws Exception
-	 */
-	public static void renameTable(String catalog, String table, String newTable, String user, String password)  throws java.rmi.RemoteException
-	{
-		Connection conn = null;
-		DBInterface dbi = null;
-		try
-		{
-			conn = DBConnection.getPooledPerUserConnection(user, password);
-			dbi = new DBInterface(conn, user);
-			dbi.renameTable(catalog, table, newTable);
-		}
-		catch(SQLException e)
-		{
-			logger.debug("Caught an exception... ", e);			
-			throw new RemoteException(e.getMessage());		
-		}
-		finally
-		{
-			DBInterface.close(dbi, conn);
-		}
-	}
-
 	
 	/**
 	 * 
