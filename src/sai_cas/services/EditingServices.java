@@ -33,12 +33,10 @@ public class EditingServices {
 		catch(SQLException e)
 		{
 			logger.debug("Caught an exception... ", e);			
+			DBInterface.close(dbi, conn, false);
 			throw new RemoteException(e.getMessage());		
 		}
-		finally
-		{
-			DBInterface.close(dbi, conn);
-		}
+		DBInterface.close(dbi, conn);
 	}
 
 
@@ -54,14 +52,13 @@ public class EditingServices {
 			ArrayList<String> alColumn  = new ArrayList<String>();
 			alColumn.add(column);
 			ArrayList<String> alUcd  = new ArrayList<String>();
-			alUcd.add(column);
-			
+			alUcd.add(ucd);
 			dbi.setUcds (catalog, table, alColumn, alUcd);
 		}
 		catch(SQLException e)
 		{
 			logger.error("Caught an exception... ", e);
-			DBInterface.close(dbi, conn);
+			DBInterface.close(dbi, conn, false);
 			throw new RemoteException(e.getMessage());
 		}
 		DBInterface.close(dbi, conn);
@@ -80,7 +77,7 @@ public class EditingServices {
 		catch(SQLException e)
 		{
 			logger.error("Caught an exception... ", e);
-			DBInterface.close(dbi, conn);
+			DBInterface.close(dbi, conn, false);
 			throw new RemoteException(e.getMessage());
 		}
 		DBInterface.close(dbi, conn);	
