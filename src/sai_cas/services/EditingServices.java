@@ -125,7 +125,7 @@ public class EditingServices {
 	}
 
 	public static void setColumnInfo(String catalog, String table, String column,
-		String description, String user, String password) throws java.rmi.RemoteException
+		String info, String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -133,7 +133,7 @@ public class EditingServices {
 		{
 			conn = DBConnection.getPooledPerUserConnection(user, password);
 			dbi = new DBInterface(conn, user);
-			dbi.setAttributeDescription(catalog, table, column, description);
+			dbi.setAttributeInfo(catalog, table, column, info);
 		}
 		catch(SQLException e)
 		{
