@@ -416,6 +416,7 @@ public class MainAxisServices {
 		return result;
 	}
 
+
 	/**
 	 * 
 	 * @param catalogName
@@ -443,6 +444,35 @@ public class MainAxisServices {
 		}
 		return result;
 	}
+
+	/**
+	 * 
+	 * @param catalogName
+	 * @return String the table description in the catalogue
+	 * @throws Exception
+	 */
+	public static String getTableDescription(String catalogName, String tableName) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getTableDescription(catalogName, tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
 
 
 	/**
