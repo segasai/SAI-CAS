@@ -173,6 +173,19 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		}
 	}
 
+	public java.lang.String getTableDescription(java.lang.String catalogName, String tableName, String user, String password) throws java.rmi.RemoteException
+	{
+		try
+		{
+			return MainAxisServices.getTableDescription(catalogName, tableName, user, password);
+		}
+		catch(Exception e)
+		{
+			logger.error("Catched exception ",e);
+			return null;			
+		}
+	}
+
 
 	public java.lang.String[] getColumnNames(java.lang.String catalogName, java.lang.String tableName) throws java.rmi.RemoteException
 	{

@@ -474,6 +474,35 @@ public class MainAxisServices {
 	}
 
 
+	/**
+	 * 
+	 * @param catalogName
+	 * @return String the table description in the catalogue
+	 * @throws Exception
+	 */
+	public static String getTableDescription(String catalogName, String tableName, String user, String password) throws Exception
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		String result = null;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			result = dbi.getTableDescription(catalogName, tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+
 
 	/**
 	 * 
