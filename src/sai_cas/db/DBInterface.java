@@ -802,8 +802,8 @@ public class DBInterface
 
 	public void setAttributeDescription(String catalog, String table, String attribute, String description) throws SQLException
 	{
-		String query="UPDATE attribute_list SET description = '"+ description + "'WHERE" +
-		" id = cas_get_attribute_id ( '"+catalog+"','"+table+"','"+attribute+"' )";
+		String query="UPDATE attribute_list SET description = ? WHERE" +
+		" id = cas_get_attribute_id ( ?, ? ,? )";
 		PreparedStatement pstmt = conn.prepareStatement(query); 
 		pstmt.setString(1,description);
 		pstmt.setString(2,catalog);
