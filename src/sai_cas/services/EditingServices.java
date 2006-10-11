@@ -97,7 +97,7 @@ public class EditingServices {
 		catch(SQLException e)
 		{
 			logger.error("Caught an exception... ", e);
-			DBInterface.close(dbi, conn);
+			DBInterface.close(dbi, conn, false);
 			throw new RemoteException(e.getMessage());
 		}
 		DBInterface.close(dbi, conn);	
@@ -118,7 +118,7 @@ public class EditingServices {
 		catch(SQLException e)
 		{
 			logger.error("Caught an exception... ", e);
-			DBInterface.close(dbi, conn);
+			DBInterface.close(dbi, conn, false);
 			throw new RemoteException(e.getMessage());
 		}
 		DBInterface.close(dbi, conn);	
@@ -138,7 +138,7 @@ public class EditingServices {
 		catch(SQLException e)
 		{
 			logger.error("Caught an exception... ", e);
-			DBInterface.close(dbi, conn);
+			DBInterface.close(dbi, conn, false);
 			throw new RemoteException(e.getMessage());
 		}
 		DBInterface.close(dbi, conn);	
@@ -159,7 +159,7 @@ public class EditingServices {
 		catch(SQLException e)
 		{
 			logger.error("Caught an exception... ", e);
-			DBInterface.close(dbi, conn);
+			DBInterface.close(dbi, conn, false);
 			throw new RemoteException(e.getMessage());
 		}
 		DBInterface.close(dbi, conn);	
@@ -179,7 +179,7 @@ public class EditingServices {
 		catch(SQLException e)
 		{
 			logger.error("Caught an exception... ", e);
-			DBInterface.close(dbi, conn);
+			DBInterface.close(dbi, conn, false);
 			throw new RemoteException(e.getMessage());
 		}
 		DBInterface.close(dbi, conn);	
@@ -200,7 +200,7 @@ public class EditingServices {
 		catch(SQLException e)
 		{
 			logger.error("Caught an exception... ", e);
-			DBInterface.close(dbi, conn);
+			DBInterface.close(dbi, conn, false);
 			throw new RemoteException(e.getMessage());
 		}
 		DBInterface.close(dbi, conn);	
