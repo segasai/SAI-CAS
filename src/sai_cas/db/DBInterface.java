@@ -803,7 +803,7 @@ public class DBInterface
 	public void setAttributeDescription(String catalog, String table, String attribute, String description) throws SQLException
 	{
 		String query="UPDATE attribute_list SET description = '"+ description + "'WHERE" +
-		" id = cas_get_table_id ( '"+catalog+"','"+table+"','"+attribute+"' )";
+		" id = cas_get_attribute_id ( '"+catalog+"','"+table+"','"+attribute+"' )";
 		PreparedStatement pstmt = conn.prepareStatement(query); 
 		pstmt.setString(1,description);
 		pstmt.setString(2,catalog);
@@ -814,12 +814,11 @@ public class DBInterface
 	}
 
 
-
 	public void setUnit (String catalog, String table, String column, String unit) throws SQLException
 	{
 		
-		String query = "UPDATE attribute_list SET unit = ? where"+
-		"(cas_get_attribute_id(? ,? ,?)";
+		String query = "UPDATE attribute_list SET unit = ? where id="+
+		"cas_get_attribute_id(? ,? ,?)";
 		PreparedStatement pstmt = conn.prepareStatement(query); 
 		pstmt.setString(1,unit);
 		pstmt.setString(2,catalog);
