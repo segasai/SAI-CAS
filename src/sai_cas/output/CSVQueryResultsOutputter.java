@@ -69,7 +69,7 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 			 *  I'm not really sure that I should report errors here...
 			 */
 			out.print("#ERROR:\nSQL Exception: " + e.getMessage() +
-						"\nContact saicas@sai.msu.ru in case of problems\n");    
+						"\nContact saicas@sai.msu.su in case of problems\n");    
 
 		}
 	}

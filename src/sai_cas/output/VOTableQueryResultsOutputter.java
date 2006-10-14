@@ -129,7 +129,7 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 		{
 			logger.error("Got the SQL exception...",e);
 			out.println("<DESCRIPTION>ERROR:\nSQL Exception: " + e.getMessage() +
-						"\nContact saicas@sai.msu.ru in case of problems\n"+
+						"\nContact saicas@sai.msu.su in case of problems\n"+
 						"</DESCRIPTION>");    
 		}
 		

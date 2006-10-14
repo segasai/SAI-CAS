@@ -135,14 +135,14 @@ public class ConeSearch
 			DBInterface.close(dbi,conn,false);
 			logger.error("Got the SQL exception...",e);
 			qro.printError(out, "ERROR:\nSQL Exception: " + e.getMessage() +
-						"\nContact saicas@sai.msu.ru in case of problems\n");
+						"\nContact saicas@sai.msu.su in case of problems\n");
 			return false;
 		}
 		catch (ConeSearchException e)
 		{
 			DBInterface.close(dbi,conn,false);
 			qro.printError(out, "ERROR: " + e.getMessage() +
-						"\nContact saicas@sai.msu.ru in case of problems\n");    
+						"\nContact saicas@sai.msu.su in case of problems\n");    
 			return false;
 		}
 		return true;
@@ -210,7 +210,7 @@ public class ConeSearch
 				voqro.setResourceInfo("Cone search result from catalogue: "+catalog +
 					", table: "+ table+"\n" +
 					"RA="+ra+" DEC="+dec+" SR="+rad+"\n"+
-					"Contact saicas@sai.msu.ru in case of problems");
+					"Contact saicas@sai.msu.su in case of problems");
 				voqro.setTable(table);
 			}
 			qro.print(out, dbi);
@@ -220,7 +220,7 @@ public class ConeSearch
 		{
 			logger.error("Got the SQL exception...",e);
 			qro.printError(out, "ERROR:\nSQL Exception: " + e.getMessage() +
-						"\nContact saicas@sai.msu.ru in case of problems\n");    
+						"\nContact saicas@sai.msu.su in case of problems\n");    
 		}				
 		dbi.close();
 	}
