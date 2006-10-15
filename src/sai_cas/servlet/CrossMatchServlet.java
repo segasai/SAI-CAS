@@ -280,6 +280,7 @@ public class CrossMatchServlet extends HttpServlet {
 			}
 			catch (Exception e)
 			{
+				logger.error("Failed to delete the temporary file: " + uploadedFile.getCanonicalPath());
 			}
 		}
 		
