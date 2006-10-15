@@ -1204,6 +1204,19 @@ public class DBInterface
 			return tableArray[0];
 		}
 	}
+
+	public long getTableCount(String catalog, String table) throws SQLException
+	{
+		String query="SELECT cas_approximate_count('"+catalog+"','"+table+"');";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		long result = rs.getLong(1);
+		rs.close();
+		return result;
+	}
+
+
 	
 	public void deleteTable(String catalogName, String tableName) throws SQLException
 	{

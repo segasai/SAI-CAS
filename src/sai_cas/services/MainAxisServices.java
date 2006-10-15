@@ -877,6 +877,68 @@ public class MainAxisServices {
 
 
 
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return the (approximate) row count of the table
+	 * @throws Exception
+	 */
+	public static long getTableCount(String catalogName, String tableName)
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		long result = -1;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection();
+			dbi = new DBInterface(conn);
+			result = dbi.getTableCount(catalogName, tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return the (approximate) row count of the table
+	 * @throws Exception
+	 */
+	public static long getTableCount(String catalogName, String tableName, String user, String password)
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		long result = -1;
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(user, password);
+			dbi = new DBInterface(conn, user);
+			result = dbi.getTableCount(catalogName, tableName);
+		}
+		catch(SQLException e)
+		{
+			logger.error("Caught an exception... ", e);			
+		}
+		finally
+		{
+			DBInterface.close(dbi, conn);
+		}
+		return result;
+	}
+
+
+
+
+
 	public static String getConeSearchAsString(String cat, String tab,
 		double ra, double dec, double sr, String format, int verbosity) 
 	{	

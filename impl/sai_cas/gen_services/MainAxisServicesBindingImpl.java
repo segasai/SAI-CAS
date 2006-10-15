@@ -365,6 +365,17 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 			return null;			
 		}
 	}
+
+	public long getTableCount(String catalogName, String tableName)
+	{
+		return MainAxisServices.getTableCount(catalogName, tableName);
+	}
+
+	public long getTableCount(java.lang.String catalogName, String tableName, String user, String password)
+	{
+		return MainAxisServices.getTableCount(catalogName, tableName, user, password);
+	}
+
 	
 	public String getConeSearchAsString(String cat, String tab, double ra, double dec, double sr, String format) 
 	{
