@@ -580,13 +580,13 @@ public class DBInterface
 		rs = stmt.executeQuery(query);
 		if (!rs.next()) 
 		{
-			throw new DBException("Unknown datatype");
+			throw new DBException("Unknown datatype: " + columnType);
 		}
 		
 		columnInternalType = rs.getString(1);
 		if (columnInternalType == null) 
 		{
-			throw new DBException("Unknown datatype");
+			throw new DBException("Unknown datatype: " + columnType);
 		}
 
 		rs.close();
