@@ -584,6 +584,11 @@ public class DBInterface
 		}
 		
 		columnInternalType = rs.getString(1);
+		if (columnInternalType == null) 
+		{
+			throw new DBException("Unknown datatype");
+		}
+
 		rs.close();
 		return columnInternalType;
 	}
