@@ -52,8 +52,8 @@ public class InternalCrossMatchServlet extends HttpServlet {
 	{
 		int len = cats.length;
 		String query="";
-		String ra_col = "__q3c_ra", dec_col = "__q3c_dec";
-		for (int i = 0; i<columns.length; i++)
+		String ra_col = "__match_ra", dec_col = "__match_dec";
+/*		for (int i = 0; i<columns.length; i++)
 		{
 			if (i != 0) {query += ",";}
 			
@@ -67,6 +67,8 @@ public class InternalCrossMatchServlet extends HttpServlet {
 			}
 			else query += columns[i] + " "; 
 		}
+*/
+		query = raArray[0] +" AS " + ra_col + ", " + decArray[0] + " AS " + dec_col +", *";
 		
 		query= "select * from ( select " + query + " from "+cats[0]+"."+tabs[0] + ") as a where q3c_radial_query("+ra_col+","+dec_col+","+ra+","+dec+","+sr+") offset 0";
 		for (int i = 1; i < len; i++)
