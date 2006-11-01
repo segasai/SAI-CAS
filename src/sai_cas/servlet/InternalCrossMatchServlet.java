@@ -151,7 +151,9 @@ public class InternalCrossMatchServlet extends HttpServlet {
 
 			Votable vot = null;
 
-			String raArray[] = new String[cats.length];
+			raArray[] = new String[cats.length];
+			decArray[] = new String[cats.length];
+
 			for(int i=0; i<cats.length; i++)
 			{
 				String tmp[] = dbi.getRaDecColumns(cats[i], tabs[i]);
