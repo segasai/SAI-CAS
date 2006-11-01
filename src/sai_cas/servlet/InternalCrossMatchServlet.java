@@ -151,8 +151,8 @@ public class InternalCrossMatchServlet extends HttpServlet {
 
 			Votable vot = null;
 
-			raArray[] = new String[cats.length];
-			decArray[] = new String[cats.length];
+			raArray = new String[cats.length];
+			decArray = new String[cats.length];
 
 			for(int i=0; i<cats.length; i++)
 			{
