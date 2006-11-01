@@ -84,7 +84,7 @@ public class InternalCrossMatchServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		
-		String	formatString = null;
+		String	formatString;
 		String cat, tab;
 		formats format;
 
@@ -97,7 +97,7 @@ public class InternalCrossMatchServlet extends HttpServlet {
 		String sdec = request.getParameter("DEC");
 		String ssr = request.getParameter("SR");
 		String srad = request.getParameter("RAD");
-
+		formatString = request.getParameter("format");		
 
 		if ((formatString==null)||(formatString.equalsIgnoreCase("votable")))
 		{
