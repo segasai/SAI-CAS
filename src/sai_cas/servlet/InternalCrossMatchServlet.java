@@ -144,6 +144,19 @@ public class InternalCrossMatchServlet extends HttpServlet {
 			ra = Double.parseDouble(sra);
 			dec = Double.parseDouble(sdec); 
 
+			if (sr>sai_cas.Parameters.getMaxConeSearchRadius())
+			{
+				throw new InternalCrossMatchServletException("The radius of the query is too big");
+			}
+			/* TODO 
+			 * !!!!!!!! IMPORTANT !!!!!!!!!!!!!! 
+			 * I should redo the logic of the max crossmatch radius 
+			 */
+			if (rad>10./3600) //10 arcseconds
+			{
+				throw new InternalCrossMatchServletException("The radius of the  is too big");
+			}
+
 			if ((cat==null)||(tab==null))
 			{
 				throw new InternalCrossMatchServletException("The catalog and table lists must be specified");
