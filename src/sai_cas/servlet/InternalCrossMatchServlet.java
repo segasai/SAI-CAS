@@ -88,8 +88,8 @@ public class InternalCrossMatchServlet extends HttpServlet {
 
 		cat = request.getParameter("cats");
 		tab = request.getParameter("tabs");
-		cats = cat.split(cat);
-		tabs = cat.split(tab);
+		cats = cat.split(",");
+		tabs = tab.split(",");
 		
 		String sra = request.getParameter("RA");
 		String sdec = request.getParameter("DEC");
