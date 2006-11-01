@@ -68,7 +68,7 @@ public class InternalCrossMatchServlet extends HttpServlet {
 			else query += columns[i] + " "; 
 		}
 		
-		query= "select * from ( select " + query + " from "+cats[0]+"."+tabs[0] + ") as a where q3c_radial_query("+ra_col+","+dec_col+","+ra+","+dec+","+rad+") offset 0";
+		query= "select * from ( select " + query + " from "+cats[0]+"."+tabs[0] + ") as a where q3c_radial_query("+ra_col+","+dec_col+","+ra+","+dec+","+sr+") offset 0";
 		for (int i = 1; i < len; i++)
 		{
 			query = "select * from (" + query + ") as a left join " + cats[i]+"."+tabs[i] +" as b on q3c_join(a."+ra_col+",a."+dec_col+",b."+raArray[i]+",b."+decArray[i]+","+rad+") offset 0";
