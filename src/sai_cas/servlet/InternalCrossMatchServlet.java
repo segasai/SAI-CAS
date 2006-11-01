@@ -134,16 +134,46 @@ public class InternalCrossMatchServlet extends HttpServlet {
 
 		try
 		{
+			if ((sra==null)||(sdec==null)||(ssr==null)||(srad==null))
+			{
+				throw new InternalCrossMatchServletException("You must specify the RA,DEC, SR and RAD fields");							
+			}
+			
 			rad = Double.parseDouble(srad);
 			sr = Double.parseDouble(ssr);
 			ra = Double.parseDouble(sra);
-			dec = Double.parseDouble(sdec);
-			
+			dec = Double.parseDouble(sdec); 
+
+			if ((cat==null)||(tab==null))
+			{
+				throw new InternalCrossMatchServletException("The catalog and table lists must be specified");
+			}
+			cats = cat.split(",");
+			tabs = tab.split(",");
+
 			if (cats.length != tabs.length)
 			{
-				throw new InternalCrossMatchServletException("Wrong list of tables or catalogs");			
+				throw new InternalCrossMatchServletException("Wrong list of tables or catalogs");
 			}
-			
+			for(int i=0; i<cats.length; i++)
+			{
+				if ((cats[i]==null)||(tabs[i]==null))
+				{
+				throw new InternalCrossMatchServletException("The table and catalogs must not be nulls");					
+				}
+			}
+
+			for(int i=0; i<cats.length; i++)
+			{
+				if ((cats[i]==null)||(tabs[i]==null))
+				{
+				throw new InternalCrossMatchServletException("The table and catalogs must not be nulls");					
+				}
+				if (!dbi.checkTableExists(cats[i],tabs[i])) 
+				{
+					throw new InternalCrossMatchServletException("The table "+cats[i]+"."+tabs[i] +" does not exist");
+				}
+			}			
 
 			String[] userPasswd = sai_cas.Parameters.getDefaultDBUserPasswd();
 			String user = userPasswd[0];
@@ -163,7 +193,7 @@ public class InternalCrossMatchServlet extends HttpServlet {
 				decArray[i]= tmp[1];
 			}
 			
-			columns = dbi.getColumnNames(cats[0],tabs[0]);
+			//columns = dbi.getColumnNames(cats[0],tabs[0]);
 
 			response.setHeader("Content-Disposition",
 					"attachment; filename=crossmatch.dat");
@@ -171,10 +201,17 @@ public class InternalCrossMatchServlet extends HttpServlet {
 			dbi.executeQuery(query);
 			if (format.equals(formats.VOTABLE))
 			{
-				voqro.setResource("RES" );
-				voqro.setResourceDescription("This is the table obtained by "+
-						"Radius of the crossmatch: "+rad+"deg");
-				voqro.setTable("main" );
+				String tmp=""; 
+				for(int i=0;i<cats.length;i++)
+				{
+					tmp+=" "+cats[i]+"."+tabs[i];
+				}
+				
+				voqro.setResource("crossmatch_res" );
+				voqro.setResourceDescription("This table was obtained by crossmatching the tables: \n"+
+				tmp+"\n with the crossmatch radius of " + rad + " in the"+
+				sr+"deg circular region around ("+ra+","+dec+")");
+				voqro.setTable("main");
 			}
 			qro.print(out,dbi);
 		}
