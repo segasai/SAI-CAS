@@ -19,6 +19,11 @@
 	</servlet>
 
 	<servlet>
+		<servlet-name>InternalCrossMatchServlet</servlet-name>
+		<servlet-class>sai_cas.servlet.InternalCrossMatchServlet</servlet-class>
+	</servlet>
+
+	<servlet>
 		<servlet-name>UploadServlet</servlet-name>
 		<servlet-class>sai_cas.servlet.UploadServlet</servlet-class>
 	</servlet>
@@ -48,6 +53,17 @@
 	<servlet-mapping>
 		<servlet-name>CrossMatchServlet</servlet-name>
 		<url-pattern>/crossmatch</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet-mapping>
+		<servlet-name>InternalCrossMatchServlet</servlet-name>
+		<url-pattern>/InternalCrossMatch</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>InternalCrossMatchServlet</servlet-name>
+		<url-pattern>/internalcrossmatch</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
