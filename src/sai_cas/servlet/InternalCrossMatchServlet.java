@@ -167,11 +167,7 @@ public class InternalCrossMatchServlet extends HttpServlet {
 			{
 				if ((cats[i]==null)||(tabs[i]==null))
 				{
-				throw new InternalCrossMatchServletException("The table and catalogs must not be nulls");					
-				}
-				if (!dbi.checkTableExists(cats[i],tabs[i])) 
-				{
-					throw new InternalCrossMatchServletException("The table "+cats[i]+"."+tabs[i] +" does not exist");
+					throw new InternalCrossMatchServletException("The table and catalogs must not be nulls");					
 				}
 			}			
 
@@ -181,7 +177,14 @@ public class InternalCrossMatchServlet extends HttpServlet {
 			conn = DBConnection.getPooledPerUserConnection(user, passwd);
 			dbi = new DBInterface(conn);
 
-			Votable vot = null;
+			for(int i=0; i<cats.length; i++)
+			{
+				if (!dbi.checkTableExists(cats[i],tabs[i])) 
+				{
+					throw new InternalCrossMatchServletException("The table "+cats[i]+"."+tabs[i] +" does not exist");
+				}
+			}			
+
 
 			raArray = new String[cats.length];
 			decArray = new String[cats.length];
