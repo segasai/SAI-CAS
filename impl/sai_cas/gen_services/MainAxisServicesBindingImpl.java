@@ -382,11 +382,6 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		return MainAxisServices.getConeSearchAsString(cat, tab, ra, dec, sr, format);
 	}
 
-	public String getConeSearchAsString(String cat, String tab, double ra, double dec, double sr, String format, int verbosity) 
-	{
-		return MainAxisServices.getConeSearchAsString(cat, tab, ra, dec, sr,
-			format, verbosity);
-	}
 
 	public String getConeSearchAsString(String cat, String tab, double ra, double dec, double sr, String format, String columnList[])
 	{
