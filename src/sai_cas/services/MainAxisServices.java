@@ -942,9 +942,9 @@ public class MainAxisServices {
 	public static String getConeSearchAsString(String cat, String tab,
 		double ra, double dec, double sr, String format, int verbosity) 
 	{	
-		StringBuffer sb;
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
+		logger.debug("Invoking getConeSearchAsString A");
 		ConeSearch cs = new ConeSearch(pw, format);
 		if (cs.initConeSearch(cat, tab, ra, dec, sr))
 		{
@@ -957,9 +957,9 @@ public class MainAxisServices {
 	public static String getConeSearchAsString(String cat, String tab,
 		double ra, double dec, double sr, String format) 
 	{	
-		StringBuffer sb;
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
+		logger.debug("Invoking getConeSearchAsString B");
 		ConeSearch cs = new ConeSearch(pw, format);
 		if (cs.initConeSearch(cat, tab, ra, dec, sr))
 		{
@@ -972,13 +972,20 @@ public class MainAxisServices {
 	public static String getConeSearchAsString(String cat, String tab,
 		double ra, double dec, double sr, String format, String columnList[] ) 
 	{	
-		StringBuffer sb;
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
+		logger.debug("Invoking getConeSearchAsString C");
 		ConeSearch cs = new ConeSearch(pw, format);
 		if (cs.initConeSearch(cat, tab, ra, dec, sr))
 		{
-			cs.setColumnList(columnList, false);
+//			if (columnList!=null)
+			{
+				cs.setColumnList(columnList, false);
+			}
+//			else
+			{
+//				cs.setColumnList(3, false);			
+			}
 			cs.printConeSearch();
 		}
 		return sw.toString();	
