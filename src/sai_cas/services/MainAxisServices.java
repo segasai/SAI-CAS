@@ -978,13 +978,13 @@ public class MainAxisServices {
 		ConeSearch cs = new ConeSearch(pw, format);
 		if (cs.initConeSearch(cat, tab, ra, dec, sr))
 		{
-//			if (columnList!=null)
+			if (columnList!=null)
 			{
 				cs.setColumnList(columnList, false);
 			}
-//			else
+			else
 			{
-//				cs.setColumnList(3, false);			
+				cs.setColumnList(3, false);			
 			}
 			cs.printConeSearch();
 		}
