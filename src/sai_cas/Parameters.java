@@ -26,4 +26,10 @@ public class Parameters
 		return res;
 	}
 
+	public static String getSupportEmail()
+	{
+		String email = "saicas@sai.msu.ru";
+		return email;
+	}
+
 }

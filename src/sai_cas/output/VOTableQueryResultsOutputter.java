@@ -3,6 +3,7 @@ package sai_cas.output;
 import java.io.PrintWriter;
 import org.apache.log4j.Logger;
 import sai_cas.db.DBInterface;
+import sai_cas.Parameters;
 
 public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 {
@@ -129,7 +130,7 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 		{
 			logger.error("Got the SQL exception...",e);
 			out.println("<DESCRIPTION>ERROR:\nSQL Exception: " + e.getMessage() +
-						"\nContact saicas@sai.msu.su in case of problems\n"+
+						"\nContact "+Parameters.getSupportEmail()+" in case of problems\n"+
 						"</DESCRIPTION>");    
 		}
 		

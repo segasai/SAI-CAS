@@ -2,6 +2,7 @@ package sai_cas.output;
 import java.io.PrintWriter;
 import org.apache.log4j.Logger;
 import sai_cas.db.DBInterface;
+import sai_cas.Parameters;;
 
 public class CSVQueryResultsOutputter implements QueryResultsOutputter
 {
@@ -69,7 +70,7 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 			 *  I'm not really sure that I should report errors here...
 			 */
 			out.print("#ERROR:\nSQL Exception: " + e.getMessage() +
-						"\nContact saicas@sai.msu.su in case of problems\n");    
+						"\nContact "+Parameters.getSupportEmail()+" in case of problems\n");    
 
 		}
 	}
