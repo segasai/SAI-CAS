@@ -56,7 +56,7 @@ public class MainAxisServices {
 			conn = DBConnection.getPooledPerUserConnection(adminUser, adminPassword);
 			dbi = new DBInterface(conn);
 			xmlc = new XMLCatalog(uri);
-			xmlc.insertDataToDB(dbi);
+			xmlc.insertCatalogueToDB(dbi);
 		}
 		catch (SQLException e)
 		{
@@ -99,7 +99,51 @@ public class MainAxisServices {
 				adminPassword);
 			dbi = new DBInterface(conn);
 			xmlc = new XMLCatalog(catalogString);
-			xmlc.insertDataToDB(dbi);
+			xmlc.insertCatalogueToDB(dbi);
+		}
+		catch (SQLException e)
+		{
+			logger.error("Got an exception... ", e);
+			DBInterface.close(dbi, conn, false);
+			throw new RemoteException(e.getMessage());			
+		}
+		catch (XMLCatalogException e)
+		{
+			logger.error("Got an XMLCatalog exception... ", e);
+			DBInterface.close(dbi, conn, false);		
+			throw new RemoteException(e.getMessage());
+		}
+		catch (DBException e)
+		{
+			logger.error("Got an DB exception... ", e);
+			DBInterface.close(dbi, conn, false);
+			throw new RemoteException(e.getMessage());
+		}
+		DBInterface.close(dbi, conn);
+	}
+
+
+	/**
+	 * The method is meant to be run as an admin ! user !! 
+	 * @param catalogString -- The whole catalogue as a string
+	 * @throws Exception
+	 * @return void
+	 */
+	public static void insertTable(String catalogString,
+		String adminUser,
+		String adminPassword) throws RemoteException
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		XMLCatalog xmlc;
+		
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(adminUser,
+				adminPassword);
+			dbi = new DBInterface(conn);
+			xmlc = new XMLCatalog(catalogString);
+			xmlc.insertTableToDB(dbi);
 		}
 		catch (SQLException e)
 		{

@@ -616,6 +616,13 @@ public class DBInterface
 		rs.close();
 	}
 
+	public void allowTableUse(String cat, String tab) throws SQLException
+	{
+		stmt.executeQuery("select cas_allow_table_use('"+cat+"','"+tab+"')");
+		ResultSet rs = stmt.getResultSet();
+		rs.close();
+	}
+
 	public String getUserMetaDataSchemaName() throws SQLException
 	{
 		stmt.executeQuery("SELECT cas_metadata.cas_get_user_metadata_schema_name('"+userLogged+"')");

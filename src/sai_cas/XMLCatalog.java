@@ -212,7 +212,7 @@ public class XMLCatalog
 		return  sw.toString();
 	}
 	
-	public void insertDataToDB(DBInterface dbi) throws SQLException, DBException, XMLCatalogException
+	public void insertCatalogueToDB(DBInterface dbi) throws SQLException, DBException, XMLCatalogException
 	{
 		/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
 		 *  I do the convertion to lower case.
@@ -381,6 +381,163 @@ public class XMLCatalog
 		dbi.allowCatalogueUse(catalogName);  
 	}
 	
+
+
+	public void insertTableToDB(DBInterface dbi) throws SQLException, DBException, XMLCatalogException
+	{
+		/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
+		 *  I do the convertion to lower case.
+		 */
+		logger.debug("Beginning of DB work in inserting the catalogue... ");
+		String catalogName = cat.getName().toLowerCase();
+
+		List<Table> tableList = cat.getTable();
+
+		logger.debug("Looping through tables in the catalogue... ");				
+		for(Table table : tableList)
+		{
+			/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
+			 * I do the convertion to lower case.
+			 */
+			
+			String tableName = table.getName().toLowerCase();
+			logger.debug("Inserting the table: "+tableName);				
+			
+			String tableInfo = table.getInfo();
+			String tableDescription = table.getDescription();
+			List<String[]> tableProperties;
+			try
+			{
+				tableProperties = convertProperties(table.getPropertyList().getProperty());	
+			}
+			catch (NullPointerException e)
+			{
+				tableProperties = new ArrayList<String[]>();
+			}
+
+			
+			List<Column> columnList = table.getColumn();			
+			List<String> datatypeList = new ArrayList<String>();
+			List<String> columnNameList = new ArrayList<String>();
+			List<String> unitList = new ArrayList<String>();
+			List<String> ucdList = new ArrayList<String>();
+
+			List<String> columnDescriptionList = new ArrayList<String>();
+			List<String> columnInfoList = new ArrayList<String>();
+			String unit, ucd, columnName, datatype, columnInfo, columnDescription;
+			int ncols = columnList.size();
+			
+			for (Column column : columnList)
+			{
+				datatype = column.getDatatype();
+				/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
+				 *   I do the convertion to lower case.
+				 */
+				columnName = column.getName().toLowerCase();
+				unit =  column.getUnit();
+				ucd = column.getUcd();
+				columnDescription = column.getDescription();
+				columnInfo = column.getInfo();
+				/* TODO 
+				 * I should write the handling of the column properties too
+				 * Now I don't do that since in that loop I should kind of 
+				 * create the list of lists of properties ... 
+				 */
+//				List<Property> columnProperties = table.getPropertyList().getProperty();
+				datatypeList.add(datatype);
+				columnNameList.add(columnName);
+				unitList.add(unit);
+				ucdList.add(ucd);
+				columnDescriptionList.add(columnDescription);
+				columnInfoList.add(columnInfo);
+			}
+			logger.debug("Inserting the columns, table metadata... ");				
+			dbi.insertTable(catalogName, tableName, columnNameList, datatypeList, unitList, columnInfoList, columnDescriptionList);
+			dbi.setUcds(catalogName, tableName, columnNameList, ucdList);
+			dbi.setTableInfo(catalogName, tableName, tableInfo);
+			dbi.setTableDescription(catalogName, tableName, tableDescription);
+			dbi.setTableProperties(catalogName, tableName, tableProperties);
+			logger.debug("Preparing to read the data... ");							
+			/* Now we are handling the data in the table */			
+			Data d = table.getData();
+			
+			if (d == null)
+			{
+				continue;
+				/* That means that there is no data, or data reference for that table */
+			}
+			
+			Tabledata td = d.getTabledata();
+			
+			if (td != null)
+			
+			{
+				throw new XMLCatalogException("The data directly embedded (in <tabledata> tags) in the XML file  is not supported\nStore the data in the separate file (and use <externaldata> tag)");
+			}
+			
+			Externaldata ed = d.getExternaldata();
+			DataReader dr; 
+			
+			if (ed != null)
+			{
+				String format = ed.getFormat().value();
+				
+				if (format.equals("delimited"))
+				{
+					dr = new DelimitedDataReader(ed, ncols);
+				}
+				else if (format.equals("fixed-width"))
+				{
+					dr = new FixedWidthDataReader(ed, ncols);				
+				}
+				else
+				{
+					throw new XMLCatalogException("The format '"+format+"' of the data is not supported");
+				}
+
+				String[] datatypeArray = new String[datatypeList.size()];
+				logger.debug("Preparing to insert the data into the DB... ");							
+				dbi.prepareInsertingData(catalogName, tableName, datatypeList.toArray(datatypeArray));
+				logger.debug("Inserting the data into the DB... ");							
+				while (true)
+				{
+					String []sarr;
+					try 
+					{
+						sarr = dr.getData();
+					}
+					catch (IOException e)
+					{
+						throw new XMLCatalogException("Problem with reading data from " + dr.currentURL.toString());
+					}
+					if (sarr == null)
+					{
+						break;
+					}
+					if (sarr.length!=ncols)
+					{
+						throw new XMLCatalogException("The number of columns in the data file ("+sarr.length+") is not equal to the number of the fields in the XML declaration("+ncols+")");
+					}
+
+					try
+					{
+						dbi.insertData(sarr);
+					}
+					catch (NumberFormatException e)
+					{
+						throw new XMLCatalogException("NumberFormatException in "+ dr.currentURL.toString()+ " "+e.getMessage());					
+					}
+
+				}
+				logger.debug("The data seems to be ingested correctly");
+				dbi.allowTableUse(catalogName,tableName);  
+
+			}
+		}
+		/* Set the permissions */
+	}
+	
+
 
 
 	public List<String[]> convertProperties(List<Property> propertyList)
