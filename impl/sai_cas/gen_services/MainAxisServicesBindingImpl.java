@@ -88,7 +88,7 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		java.lang.String adminUser,
 		java.lang.String adminPassword) throws java.rmi.RemoteException
 	{
-		logger.info("Running insertCatalog...");
+		logger.info("Dumping the Catalog " + catalogName + "...");
 		
 		try
 		{
