@@ -166,6 +166,51 @@ public class MainAxisServices {
 		DBInterface.close(dbi, conn);
 	}
 
+	/**
+	 * The method is meant to be run as an admin ! user !! 
+	 * @param catalogString -- The whole catalogue as a string
+	 * @throws Exception
+	 * @return void
+	 */
+	public static String dumpCatalog(String catalogName,
+		String adminUser,
+		String adminPassword) throws RemoteException
+	{
+		Connection conn = null;
+		DBInterface dbi = null;
+		XMLCatalog xmlc;
+		
+		try
+		{
+			conn = DBConnection.getPooledPerUserConnection(adminUser,
+				adminPassword);
+			dbi = new DBInterface(conn);
+			xmlc = new XMLCatalog(dbi, catalogName);
+		}
+		catch (SQLException e)
+		{
+			logger.error("Got an exception... ", e);
+			DBInterface.close(dbi, conn, false);
+			throw new RemoteException(e.getMessage());			
+		}
+		catch (XMLCatalogException e)
+		{
+			logger.error("Got an XMLCatalog exception... ", e);
+			DBInterface.close(dbi, conn, false);		
+			throw new RemoteException(e.getMessage());
+		}
+		catch (DBException e)
+		{
+			logger.error("Got an DB exception... ", e);
+			DBInterface.close(dbi, conn, false);
+			throw new RemoteException(e.getMessage());
+		}
+		DBInterface.close(dbi, conn);
+		return xmlc.toString();
+	}
+
+
+
 
 	/**
 	 *

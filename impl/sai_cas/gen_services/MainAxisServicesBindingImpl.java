@@ -53,6 +53,7 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 	}
 
 
+
 	public void insertTable(java.lang.String catalogString,
 		java.lang.String adminUser,
 		java.lang.String adminPassword) throws java.rmi.RemoteException
@@ -73,9 +74,7 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		{
 			throw new java.rmi.RemoteException(e.getMessage());
 		}
-
 	}
-
 
 	public void insertCatalogFromVotable(java.lang.String catalogString, String user, String password) throws java.rmi.RemoteException
 	{
@@ -84,6 +83,29 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		
 		sai_cas.services.MainAxisServices.insertCatalogFromVotable(catalogString,user,password);
 	}
+
+	public String dumpCatalog(java.lang.String catalogName,
+		java.lang.String adminUser,
+		java.lang.String adminPassword) throws java.rmi.RemoteException
+	{
+		logger.info("Running insertCatalog...");
+		
+		try
+		{
+			return sai_cas.services.MainAxisServices.dumpCatalog(catalogName,
+				adminUser, adminPassword);
+		}
+		catch (java.rmi.RemoteException e)
+		{
+			throw new java.rmi.RemoteException(e.getMessage());
+		}
+		catch (java.lang.NullPointerException e)
+		{
+			throw new java.rmi.RemoteException(e.getMessage());
+		}
+
+	}
+
 
 	public void deleteCatalog(String catalog, String user, String password) throws java.rmi.RemoteException
 	{
