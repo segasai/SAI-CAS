@@ -6,10 +6,12 @@
 	<property name="tomcat.common.lib" value="${tomcat.home}/common/lib/"/>
 	<property name="tomcat.server.lib" value="${tomcat.home}/server/lib/"/>
 
-	<property name="axis2.web-inf.lib" value="${tomcat.home}/webapps/axis2/WEB-INF/lib"/>	
-	<property name="axis2.services" value="${tomcat.home}/webapps/axis2/WEB-INF/services"/>	
+	<property name="axis2.web-inf.lib"
+	value="${tomcat.home}/webapps/axis2/WEB-INF/lib"/>	
+	<property name="axis2.services"
+	value="${tomcat.home}/webapps/axis2/WEB-INF/services"/>	
 
-	<property name="axis.codegen.plugin" value="/tmp/codegen/plugins/Axis2_Codegen_Wizard_1.2.0/"/>
+	<property name="axis.codegen.plugin" value="/tmp/codegen/Axis2_Codegen_Wizard_1.2.0/"/>
 	
 	<property name="build" value="${basedir}/build/"/>
 	<property name="build.classes" value="${build}/classes/"/>
@@ -31,7 +33,8 @@
 	<taskdef name="axis-wsdl2java" classname="org.apache.axis2.tool.ant.AntCodegenTask">
 		<classpath>
 			<fileset dir="${axis.codegen.plugin}" includes="*jar" />
-			<fileset dir="${axis2.web-inf.lib}" includes="*.jar" />
+<!--			<fileset dir="${axis2.web-inf.lib}" includes="*.jar" />-->
+			<fileset dir="${axis.codegen.plugin}/lib" includes="*jar" />
 			<fileset dir="${log4j.lib}" includes="*jar" />
 
 <!--			<fileset dir="${jwsdp.home}" includes="sjsxp/lib/*jar" />-->
@@ -111,6 +114,7 @@
 				<fileset dir="${jwsdp.home}" includes="jwsdp-shared/lib/*.jar" />
 				<fileset dir="${tomcat.common.lib}" includes="*.jar" />
 				<fileset dir="${log4j.lib}" includes="*jar" />
+				<fileset dir="${axis2.web-inf.lib}" includes="*jar" />   
 			</classpath>
 		</javac>
 	</target>
@@ -144,14 +148,13 @@
 			classname="sai_cas.services.MainAxisServices"
 			outputFileName="sai_cas.wsdl"
 			outputLocation="${build.wsdl}"
-			classpathURI="${build.classes}"
 			serviceName="sai_cas">
-<!--			<classpath>
-			classpathURI="${log4j.lib}:${basedir}/build/classes"
-			classpathURI="${build.classes}"
-				<fileset dir="${log4j.lib}" includes="*jar" />
 
-			</classpath>-->
+			<classpath>
+				<fileset dir="${log4j.lib}" includes="*jar" />
+				<fileset dir="${build.classes}" includes="*jar" />
+
+			</classpath>
 		</axis-java2wsdl>
 	</target>
 	
