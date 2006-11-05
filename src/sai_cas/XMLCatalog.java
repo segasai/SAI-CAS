@@ -274,11 +274,18 @@ public class XMLCatalog
 			
 			for (Column column : columnList)
 			{
+				columnName = column.getName().toLowerCase();
+
 				datatype = column.getDatatype();
+
+				if (datatype == null) 
+				{
+					throw new XMLCatalogException("The datatype attribute MUST be specified for the column "+columnName);
+				}
+
 				/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
 				 *   I do the convertion to lower case.
 				 */
-				columnName = column.getName().toLowerCase();
 				unit =  column.getUnit();
 				ucd = column.getUcd();
 				columnDescription = column.getDescription();
