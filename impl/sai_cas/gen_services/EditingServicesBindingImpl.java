@@ -71,10 +71,10 @@ public class EditingServicesBindingImpl implements sai_cas.gen_services.EditingS
 	}
 
 	public void setCatalogInfo(java.lang.String in0, java.lang.String in1,
-			java.lang.String in2, java.lang.String in3, java.lang.String in4)
+			java.lang.String in2, java.lang.String in3)
 	throws java.rmi.RemoteException
 	{
-		sai_cas.services.EditingServices.setCatalogInfo(in0, in1, in2, in3, in4);
+		sai_cas.services.EditingServices.setCatalogInfo(in0, in1, in2, in3);
 	}
 
 }

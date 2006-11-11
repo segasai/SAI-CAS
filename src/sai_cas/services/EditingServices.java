@@ -206,8 +206,8 @@ public class EditingServices {
 		DBInterface.close(dbi, conn);	
 	}
 
-	public static void setCatalogInfo(String catalog, String table,
-		String info, String user, String password) throws java.rmi.RemoteException
+	public static void setCatalogInfo(String catalog, String info,
+		String user, String password) throws java.rmi.RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
