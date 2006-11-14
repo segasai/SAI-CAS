@@ -2,7 +2,6 @@ package sai_cas.db;
 import java.sql.*;
 import java.util.Arrays;
 
-import javax.servlet.ServletContext;
 import javax.sql.*;
 import javax.naming.*;
 import org.apache.log4j.Logger;
@@ -50,8 +49,6 @@ public class DBConnection
 
 		logger.info("The pooled DB connection successfully retrieved");
 
-		//this.conn = conn;
-
 		/* By default we always return the notAutoCommited connection */ 
 		try
 		{
@@ -68,8 +65,15 @@ public class DBConnection
 	public static Connection getPooledPerUserConnection() throws SQLException
 	{
 		String[] defaultDBUserPasswd = Parameters.getDefaultDBUserPasswd();
-		return getPooledPerUserConnection(defaultDBUserPasswd[0], defaultDBUserPasswd[1]);
+		return getPooledPerUserConnection(DBInterface.getInternalLoginName(defaultDBUserPasswd[0]), defaultDBUserPasswd[1]);
 	}
+
+	public static Connection getPooledPerUserAdminConnection() throws SQLException
+	{
+		String[] adminDBUserPasswd = Parameters.getAdminDBUserPasswd();
+		return getPooledPerUserConnection(DBInterface.getInternalLoginName(adminDBUserPasswd[0]), adminDBUserPasswd[1]);
+	}
+
 	
 	public static Connection getPooledPerUserConnection(String user, String password) throws SQLException
 	{
@@ -98,13 +102,14 @@ public class DBConnection
 		try
 		{
 			//ds2.setDataSourceName("java://comp/env/jdbc/DriverAdapterCPDS");
-			conn = pupds.getConnection(user, password);
+			conn = pupds.getConnection(DBInterface.getInternalLoginName(user),
+				password);
 		}
 		catch (SQLException e)
 		{
 			logger.error("Failed to get the Pooled Connection");
 			logger.error("The cause of that" + e.getMessage()+" "+e.getCause());
-			return null;
+			throw e;
 		}
 		try
 		{
@@ -116,30 +121,23 @@ public class DBConnection
 		}
 
 		logger.info("The pooled DB connection successfully retrieved");
-		//this.conn = conn;
 		return conn;
 	}
 	
   
 	public static Connection getSimpleConnection() throws SQLException
 	{
-		Connection conn =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas","math","");
-		//this.conn = conn;
+		Connection conn =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas",
+			"math", "");
 		return conn;
 	}
 	
 	public static Connection getSimpleConnection(String user, String password) throws SQLException
 	{
-		Connection conn =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas",user,password);
-		//this.conn = conn;
+		Connection conn =  DriverManager.getConnection("jdbc:postgresql://localhost:5432/cas",
+			DBInterface.getInternalLoginName(user), password);
 		return conn;
 	}
 
-/*  public void close() throws SQLException
-  {
-    if (conn!=null) conn.close();
-  }
-*/
-//  Connection conn;
 
 }
