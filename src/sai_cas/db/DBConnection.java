@@ -65,13 +65,13 @@ public class DBConnection
 	public static Connection getPooledPerUserConnection() throws SQLException
 	{
 		String[] defaultDBUserPasswd = Parameters.getDefaultDBUserPasswd();
-		return getPooledPerUserConnection(defaultDBUserPasswd[0], defaultDBUserPasswd[1]);
+		return getPooledPerUserConnection(DBInterface.getInternalLoginName(defaultDBUserPasswd[0]), defaultDBUserPasswd[1]);
 	}
 
 	public static Connection getPooledPerUserAdminConnection() throws SQLException
 	{
 		String[] adminDBUserPasswd = Parameters.getAdminDBUserPasswd();
-		return getPooledPerUserConnection(adminDBUserPasswd[0], adminDBUserPasswd[1]);
+		return getPooledPerUserConnection(DBInterface.getInternalLoginName(adminDBUserPasswd[0]), adminDBUserPasswd[1]);
 	}
 
 	
