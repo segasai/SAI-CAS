@@ -12,7 +12,24 @@ public class Parameters
 	}
 	public static String[] getDefaultDBUserPasswd()
 	{
-		String[] res={"cas_user","aspen"};
+		String[] res={"user","aspen"};
 		return res;
 	}
+	public static String[] getDefaultTempDBUserPasswd()
+	{
+		String[] res={"user_tmp","aspen"};
+		return res;
+	}
+	public static String[] getAdminDBUserPasswd()
+	{
+		String[] res={"admin","aspen"};
+		return res;
+	}
+
+	public static String getSupportEmail()
+	{
+		String email = "saicas@sai.msu.ru";
+		return email;
+	}
+
 }

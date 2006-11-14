@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.postgresql.*;
 
 
-public class DBInterface  extends Object
+public class DBInterface
 {
 	static Logger logger = Logger.getLogger("sai_cas.DBInterface");
 	private PreparedStatement pstmtBuffered;
@@ -34,16 +34,26 @@ public class DBInterface  extends Object
 	}
 
 	/* TODO need to be refactored (concerning user_schema) */
-	public DBInterface(Connection conn, String userSchema) throws java.sql.SQLException
+	public DBInterface(Connection conn, String user) throws java.sql.SQLException
 	{
 		this.conn = conn;
-		
-		String query = "SET search_path TO " + userSchema + ", cas_metadata, public;";
-		stmt = conn.createStatement();
+		String userSchema;
+		String query;
+		if (!user.equals("admin"))
+		{
+			userLogged = getInternalLoginName(user);
+			stmt = conn.createStatement();
+			userSchema = this.getUserMetaDataSchemaName() ; 
+			query = "SET search_path TO " + userSchema + ", cas_metadata, public;";
+		}
+		else
+		{
+			stmt = conn.createStatement();
+			query = "SET search_path TO  cas_metadata, public;";		
+		}
 		stmt.execute(query);
 		logger.info("The DB interface is successfully created...");
 		curNBatchStatements = 0;
-		userLogged = userSchema;
 	}
 
 
@@ -52,8 +62,13 @@ public class DBInterface  extends Object
 		close(true);
 	}
 
+	/**
+	 * Close the {@link DBInterface}
+	 * @param commit_flag
+	 */
 	public void close(boolean commit_flag)
 	{
+		logger.debug("The DB interface is being closed...");
 		try
 		{
 			if (stmt != null)
@@ -95,6 +110,8 @@ public class DBInterface  extends Object
 			}
 			else if (conn != null)
 			{
+				logger.debug("The DB interface is being closed...");
+
 				if (commit_flag)
 				{
 					conn.commit();
@@ -111,6 +128,11 @@ public class DBInterface  extends Object
 		}
 	}
 
+	/**
+	 * Flush the SQL commands staying the buffer of the batch execution
+	 * (used during the batch inserts)
+	 * @throws SQLException
+	 */
 	public void flushData() throws SQLException
 	{
 		if (pstmtBuffered != null)
@@ -558,10 +580,15 @@ public class DBInterface  extends Object
 		rs = stmt.executeQuery(query);
 		if (!rs.next()) 
 		{
-			throw new DBException("Unknown datatype");
+			throw new DBException("Unknown datatype: " + columnType);
 		}
 		
 		columnInternalType = rs.getString(1);
+		if (columnInternalType == null) 
+		{
+			throw new DBException("Unknown datatype: " + columnType);
+		}
+
 		rs.close();
 		return columnInternalType;
 	}
@@ -571,6 +598,41 @@ public class DBInterface  extends Object
 		logger.debug("Analyzing "+catalog+"."+table +" ...");
 		stmt.executeUpdate("ANALYZE "+catalog+"."+table);
 	}
+	
+	public String getUserDataSchemaName() throws SQLException
+	{
+		stmt.executeQuery("SELECT cas_metadata.cas_get_user_data_schema_name('"+userLogged+"')");
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		String result = rs.getString(1);
+		rs.close();
+		return result;
+	}
+	
+	public void allowCatalogueUse(String cat) throws SQLException
+	{
+		stmt.executeQuery("select cas_allow_catalogue_use('"+cat+"')");
+		ResultSet rs = stmt.getResultSet();
+		rs.close();
+	}
+
+	public void allowTableUse(String cat, String tab) throws SQLException
+	{
+		stmt.executeQuery("select cas_allow_table_use('"+cat+"','"+tab+"')");
+		ResultSet rs = stmt.getResultSet();
+		rs.close();
+	}
+
+	public String getUserMetaDataSchemaName() throws SQLException
+	{
+		stmt.executeQuery("SELECT cas_metadata.cas_get_user_metadata_schema_name('"+userLogged+"')");
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		String result = rs.getString(1);
+		rs.close();
+		return result;
+	}
+
 	
 	public boolean checkTableExists(String catalog, String table) throws SQLException
 	{
@@ -752,8 +814,8 @@ public class DBInterface  extends Object
 
 	public void setAttributeDescription(String catalog, String table, String attribute, String description) throws SQLException
 	{
-		String query="UPDATE attribute_list SET description = '"+ description + "'WHERE" +
-		" id = cas_get_table_id ( '"+catalog+"','"+table+"','"+attribute+"' )";
+		String query="UPDATE attribute_list SET description = ? WHERE" +
+		" id = cas_get_attribute_id ( ?, ? ,? )";
 		PreparedStatement pstmt = conn.prepareStatement(query); 
 		pstmt.setString(1,description);
 		pstmt.setString(2,catalog);
@@ -764,12 +826,11 @@ public class DBInterface  extends Object
 	}
 
 
-
 	public void setUnit (String catalog, String table, String column, String unit) throws SQLException
 	{
 		
-		String query = "UPDATE attribute_list SET unit = ? where"+
-		"(cas_get_attribute_id(? ,? ,?)";
+		String query = "UPDATE attribute_list SET unit = ? where id="+
+		"cas_get_attribute_id(? ,? ,?)";
 		PreparedStatement pstmt = conn.prepareStatement(query); 
 		pstmt.setString(1,unit);
 		pstmt.setString(2,catalog);
@@ -811,10 +872,13 @@ public class DBInterface  extends Object
 			List<String> ucdList) throws SQLException
 	{
 		
-		String query = "UPDATE attribute_list SET ucd_id = cas_get_ucd_id(?)" +
-				"WHERE id = cas_get_attribute_id('" + catalog + "','" +
-				table + "',?)";
-		PreparedStatement pstmt = conn.prepareStatement(query); 
+		/* TODO 
+		 * For whatever reason (seems to be related how the PG planner
+		 * works with the prepared statements), if I run the main 
+		 * UPDATE of this function as the prepared statement, it 
+		 * runs as seq. scan... So I switched back to the normal
+		 * statement
+		 */
 		ListIterator<String> columnListIterator = columnList.listIterator();
 		ListIterator<String> ucdListIterator = ucdList.listIterator();
 		String ucd, column;
@@ -832,11 +896,10 @@ public class DBInterface  extends Object
 				String query1 = "INSERT INTO ucd_list (name) VALUES ('" + ucd+"')";
 				stmt.executeUpdate(query1);
 			}
-			pstmt.setString(1,ucd);
-			pstmt.setString(2,column);
-			pstmt.executeUpdate();	
+			stmt.executeUpdate ("UPDATE attribute_list SET ucd_id = cas_get_ucd_id('"+ucd+"')" +
+				"WHERE id = cas_get_attribute_id('" + catalog + "','" +
+				table + "','"+column+"')");
 		}
-		pstmt.close();
 		
 	}
 
@@ -1030,6 +1093,47 @@ public class DBInterface  extends Object
 		return als.toArray(result);
 	}
 	
+	public String[][] getUserNames() throws SQLException
+	{
+		String query="SELECT name, fullname from user_list;";
+		logger.debug("Running query: "+query);
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ArrayList<String[]> als = new ArrayList<String[]>();
+		while(rs.next())
+		{
+			String[] row = new String[2];
+			row[0]=rs.getString(1);
+			row[1]=rs.getString(2);			
+			als.add(row);
+		}
+		String[][] result = new String[1][1];
+		rs.close();
+		return als.toArray(result);
+	}
+	
+	public String[][] getUserNamesAndEmails() throws SQLException
+	{
+		String query="SELECT name, fullname, email from user_list;";
+		logger.debug("Running query: "+query);
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		ArrayList<String[]> als = new ArrayList<String[]>();
+		while(rs.next())
+		{
+			String[] row = new String[3];
+			row[0]=rs.getString(1);
+			row[1]=rs.getString(2);			
+			row[2]=rs.getString(3);			
+			als.add(row);
+		}
+		String[][] result = new String[1][1];
+		rs.close();
+		return als.toArray(result);
+	}
+
+
+	
 	public String[] getRaDecColumns(String catalogName, String tableName) throws SQLException
 	{
 //		String query="?=CALL cas_get_table_ra_dec(?,?)";
@@ -1061,7 +1165,13 @@ public class DBInterface  extends Object
 		rs.close();
 		return result;
 	}
-
+	/**
+	 * 
+	 * @param catalogName
+	 * @param tableName
+	 * @return the name of columns having the UCD of ra & dec
+	 * @throws SQLException
+	 */
 	public String[] getRaDecColumnsFromUCD(String catalogName, String tableName) throws SQLException
 	{
 		String query="SELECT * FROM cas_get_table_ra_dec_from_ucd('" + catalogName + "'," +
@@ -1097,7 +1207,7 @@ public class DBInterface  extends Object
 	public String getSingleTableFromCatalog(String catalogName) throws SQLException
 	{
 		String tableArray[] = getTableNames(catalogName);
-		if (tableArray.length>1)
+		if (tableArray.length > 1)
 		{
 			return null;
 		}
@@ -1105,6 +1215,39 @@ public class DBInterface  extends Object
 		{
 			return tableArray[0];
 		}
+	}
+
+	public long getTableCount(String catalog, String table) throws SQLException
+	{
+		String query="SELECT cas_approximate_count('"+catalog+"','"+table+"');";
+		stmt.executeQuery(query);
+		ResultSet rs = stmt.getResultSet();
+		rs.next();
+		long result = rs.getLong(1);
+		rs.close();
+		return result;
+	}
+
+
+	
+	public void deleteTable(String catalogName, String tableName) throws SQLException
+	{
+		stmt.execute("select cas_delete_table('" + catalogName + "','" + tableName + "')");
+	}
+
+	public void renameTable(String catalogName, String tableName, String newTableName) throws SQLException
+	{
+		stmt.execute("select cas_rename_table('" + catalogName + "','" + tableName + "', '" + newTableName + "')");
+	}
+
+	public void renameColumn(String catalogName, String tableName, String columnName, String newColumnName) throws SQLException
+	{
+		stmt.execute("select cas_rename_column('" + catalogName + "','" + tableName + "', '" + columnName + "','" + newColumnName +  "')");
+	}
+
+	public void deleteCatalog(String catalogName) throws SQLException
+	{
+		stmt.execute("select cas_delete_catalog('" + catalogName + "')");
 	}
 	
 	public void executeQuery(String query) throws java.sql.SQLException
@@ -1114,12 +1257,21 @@ public class DBInterface  extends Object
 		 * cursor based ResultSet is working
 		 */ 
 		logger.debug("Executing Query: "+ query);
-		PreparedStatement stmt = conn.prepareStatement(query,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
-		stmt.setFetchSize(100);
-		this.qr = new QueryResults(stmt.executeQuery());
+		PreparedStatement pstmt = conn.prepareStatement(query,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+		pstmt.setFetchSize(100);
+		this.qr = new QueryResults(pstmt.executeQuery());
+	}
+
+	public void executeSimpleQuery(String query) throws java.sql.SQLException
+	{
+		stmt.execute(query);
+	}	
+
+	public static String getInternalLoginName(String user)
+	{
+		return "cas_"+user;
 	}
 	
-
 	public class QueryResults
 	{
 		public QueryResults(ResultSet rs) throws SQLException
