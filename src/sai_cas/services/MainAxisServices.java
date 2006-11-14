@@ -396,6 +396,7 @@ public class MainAxisServices {
 	 * @return String[] -- the array of UCD's of columns in the table of the catalogue
 	 * @throws Exception
 	 */
+/*
 	public static String[] getColumnUCDs(String catalogName, String tableName) throws SAICASFault
 	{
 		Connection conn = null;
@@ -419,7 +420,7 @@ public class MainAxisServices {
 		return result;
 	}
 
-
+*/
 	/**
 	 * 
 	 * @param catalogName
