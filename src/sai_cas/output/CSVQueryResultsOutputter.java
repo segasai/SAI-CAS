@@ -27,7 +27,7 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 		{	
 			int ncols = dbi.qr.getColumnCount();
 			
-			logger.debug("Printing VOtable header ...");
+			logger.debug("Printing CSV header ...");
 			for (int i = 1; i <= ncols; i++)
 			{
 				String datatype = dbi.qr.getDatatype(i);
