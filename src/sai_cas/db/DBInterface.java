@@ -729,7 +729,7 @@ public class DBInterface
 
 		String []propertyPair = new String[2];
 		List<String[]> propertiesList = new ArrayList<String[]>();
-		String query="SELECT * FROM cas_get_table_properties ('"+catalog+"','"+table+"') as (a varchar, b varchar);";
+		String query="SELECT * FROM cas_get_table_properties ('"+catalog+"','"+table+"')";
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
 
@@ -1101,7 +1101,7 @@ public class DBInterface
 	public String[][] getIndexes(String catalogName, String tableName) throws SQLException
 	{
 		String query="SELECT * FROM cas_get_table_indexes('" + catalogName +
-			"','" + tableName + "') AS (a varchar, b varchar);";
+			"','" + tableName + "');";
 		logger.debug("Running query: "+query);
 		stmt.executeQuery(query);
 		ResultSet rs = stmt.getResultSet();
@@ -1162,7 +1162,7 @@ public class DBInterface
 	public String[] getRaDecColumns(String catalogName, String tableName) throws SQLException
 	{
 //		String query="?=CALL cas_get_table_ra_dec(?,?)";
-		String query = "SELECT * from cas_get_table_ra_dec('"+catalogName+"','"+tableName+"') as (a varchar, b varchar)";
+		String query = "SELECT * from cas_get_table_ra_dec('"+catalogName+"','"+tableName+"')";
 		logger.debug("Running query: "+query);
 /*		Statement stmt = conn.prepareCall(query);
 		stmt.setString(2,catalogName);
