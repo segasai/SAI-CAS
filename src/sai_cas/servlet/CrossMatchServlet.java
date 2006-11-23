@@ -177,7 +177,7 @@ public class CrossMatchServlet extends HttpServlet {
 			
 			if (fi == null)
 			{
-				throw new ServletException("File should be specified" + fileItemList.size() );			
+				throw new CrossMatchServletException("File should be specified" + fileItemList.size() );			
 			}
 			long size = fi.getSize();
 
@@ -302,7 +302,10 @@ public class CrossMatchServlet extends HttpServlet {
 			/* Always rollback */
 			try 
 			{
-				uploadedFile.delete();
+				if (uploadedFile != null)
+				{
+					uploadedFile.delete();
+				}
 			}
 			catch (Exception e)
 			{
