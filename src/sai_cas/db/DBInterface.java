@@ -339,7 +339,7 @@ public class DBInterface
 			String value1 = value.trim();
 			if (value1.length() == 0)
 			{
-				pstmt.setNull(i, Types.FLOAT);
+				pstmt.setNull(i, Types.BOOLEAN);
 				return;
 			}
 
