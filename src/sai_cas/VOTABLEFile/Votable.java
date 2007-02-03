@@ -127,7 +127,7 @@ public class Votable
 			tab.data.tabledata = new TABLEDATA();
 			ArrayList<TR> trList = new ArrayList<TR>();
 			tab.data.tabledata.tr = trList;
-
+			boolean formatFlags[] = new boolean[ncols]; 
 			while((data = br.readLine()) != null)
 			{
 				String[] dataArray = data.split(",",ncols+1);
@@ -143,12 +143,31 @@ public class Votable
 				for (int i = 0; i < nrecs; i++)
 				{
 					TD td = new TD();
-					//String tok = stoken.nextToken();
-					//td.value = (tok == null) ? "" : tok;
+					
 					td.value = dataArray[i];
+					if (td.value.length()>0)
+					{
+						try
+						{
+							Double.valueOf(td.value);
+						}	
+						catch (NumberFormatException e)
+						{
+							formatFlags[i]=true;
+						}
+					}
 					tr.td.add(td);
 				}
 				trList.add(tr);
+			}
+			int i=0;
+			/* Fix the format of the columns which contain not Numbers */
+			for (Object o:fieldList)
+			{
+				if (formatFlags[i++])
+				{
+					((FIELD)o).setDatatype(sai_cas.VOTABLEFile.DataType.CHAR);
+				}
 			}
 			return vot;
 		}
