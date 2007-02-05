@@ -155,7 +155,7 @@ public class CrossMatchServlet extends HttpServlet {
 		{
 		case CSV:
 			response.setContentType("text/csv");			
-			csvqro = new CSVQueryResultsOutputter();
+			csvqro = new CSVQueryResultsOutputter(null);
 			qro = csvqro;
 			break;
 		case VOTABLE:

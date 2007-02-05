@@ -1056,7 +1056,7 @@ public class MainAxisServices {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		logger.debug("Invoking getConeSearchAsString without columnList");
-		ConeSearch cs = new ConeSearch(pw, format);
+		ConeSearch cs = new ConeSearch(pw, format, null);
 		if (cs.initConeSearch(cat, tab, ra, dec, sr))
 		{
 			cs.setVerbosity(3, false);
@@ -1071,7 +1071,7 @@ public class MainAxisServices {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		logger.debug("Invoking getConeSearchAsString with columnList");
-		ConeSearch cs = new ConeSearch(pw, format);
+		ConeSearch cs = new ConeSearch(pw, format, null);
 		if (cs.initConeSearch(cat, tab, ra, dec, sr))
 		{
 			if (columnList!=null)

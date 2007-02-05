@@ -123,6 +123,7 @@ public class InternalCrossMatchServlet extends HttpServlet {
 		String ssr = request.getParameter("SR");
 		String srad = request.getParameter("RAD");
 		formatString = request.getParameter("format");		
+		String nulls = request.getParameter("NULLS");
 
 		if ((formatString==null)||(formatString.equalsIgnoreCase("votable")))
 		{
@@ -144,7 +145,7 @@ public class InternalCrossMatchServlet extends HttpServlet {
 		{
 		case CSV:
 			response.setContentType("text/csv");			
-			csvqro = new CSVQueryResultsOutputter();
+			csvqro = new CSVQueryResultsOutputter(nulls);
 			qro = csvqro;
 			break;
 		case VOTABLE:
