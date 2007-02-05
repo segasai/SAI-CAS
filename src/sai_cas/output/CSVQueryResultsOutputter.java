@@ -33,10 +33,12 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 {
 	static Logger logger = Logger.getLogger("sai_cas.output.CVSQueryResultsOutputter");
 
-	String resource, table, resourceInfo, resourceDescription;
-
-	public CSVQueryResultsOutputter()
-	{}
+	String resource, table, resourceInfo, resourceDescription, nulls;
+	
+	public CSVQueryResultsOutputter(String nulls)
+	{
+		this.nulls = nulls;
+	}
 		
 	public void printError(PrintWriter out, String message)
 	{
@@ -73,7 +75,16 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 				for (int i = 0; i < ncols; i++)
 				{
 					String s = dataArray[i];
-					if (s == null) s = "";
+					if (s == null)
+					{
+						if (nulls ==null)
+						{	s = "";
+						}
+						else
+						{
+							s=nulls;
+						}
+					}
 					if (i != 0) 
 					{
 						out.print("," + s);

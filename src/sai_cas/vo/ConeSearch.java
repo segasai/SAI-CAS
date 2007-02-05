@@ -64,7 +64,7 @@ public class ConeSearch
 			super(s);
 		}
 	}
-	public ConeSearch(PrintWriter out, String format)
+	public ConeSearch(PrintWriter out, String format, String nulls)
 	{
 		this.out = out;
 		this.format = format;	
@@ -75,7 +75,7 @@ public class ConeSearch
 		}
 		else if (format.equals("csv"))
 		{
-			qro = new CSVQueryResultsOutputter();		
+			qro = new CSVQueryResultsOutputter(nulls);		
 		}
 		else 
 		{

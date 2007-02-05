@@ -62,6 +62,7 @@ public class ConeSearchServlet extends HttpServlet {
 		String sra = request.getParameter("RA");
 		String sdec = request.getParameter("DEC");
 		String ssr = request.getParameter("SR");
+		String nulls = request.getParameter("NULLS");
 
 
 		String format = request.getParameter("format");
@@ -141,7 +142,7 @@ public class ConeSearchServlet extends HttpServlet {
 			ssr = request.getParameter("sr");
 		}
 		
-		ConeSearch cs = new ConeSearch(out, format);
+		ConeSearch cs = new ConeSearch(out, format, nulls);
 
 		try 
 		{
