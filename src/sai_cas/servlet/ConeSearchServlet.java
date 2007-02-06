@@ -173,7 +173,7 @@ public class ConeSearchServlet extends HttpServlet {
 				String out_filename = cat + "." + (tab == null ? "" : tab) +
 					"_" + String.format(Locale.US,"%.3f",ra) +
 					"_" + String.format(Locale.US,"%.3f",dec) +
-					"_" + String.format(Locale.US,"%.3f", ssr)+
+					"_" + String.format(Locale.US,"%.3f", sr)+
 					"." + fileExtension;
 
 				response.setHeader("Content-Disposition",
