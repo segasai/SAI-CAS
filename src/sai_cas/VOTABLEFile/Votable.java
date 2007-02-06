@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.StringTokenizer;
 import java.sql.*;
 
@@ -106,11 +107,12 @@ public class Votable
 
 			vot0.resource= new ArrayList<sai_cas.VOTABLEFile.RESOURCE>();
 			RESOURCE res = new RESOURCE();
-			res.setName("crossmatch");
+			setRandomResourceName(vot,"crossmatch_");
 			vot0.resource.add(res);
 			res.table = new ArrayList<TABLE>();
 			TABLE tab = new TABLE();
-			tab.setName("table");
+			/* Setup random name for the table */
+			tab.setName("table_"+(new Random((new Date().getTime()))).nextInt());
 			res.table.add(tab);
 			tab.fieldOrPARAMOrGROUP = new ArrayList<Object>();
 			List<Object> fieldList = tab.fieldOrPARAMOrGROUP;
@@ -177,6 +179,15 @@ public class Votable
 		}
 	}
 	
+	public static void setRandomResourceName(Votable vot0, String prefix)
+	{
+		try
+		{
+			RESOURCE res = vot0.vot.resource.get(0);
+			res.name = prefix+(new Random((new Date().getTime()))).nextInt();
+		}catch(Exception e){}
+	}
+
 	public Votable(URI uri) throws  VotableException
 	{
 		Unmarshaller um;
@@ -264,7 +275,7 @@ public class Votable
 		{
 			catalogName = null;
 		}
-			
+		
 		catalogName = (catalogName0 == null)?catalogName:catalogName0;
 		catalogName.replace('.','_');
 
