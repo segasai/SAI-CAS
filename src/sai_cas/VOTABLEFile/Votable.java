@@ -187,7 +187,7 @@ public class Votable
 		try
 		{
 			RESOURCE res = vot.resource.get(0);
-			res.name = "_"+(new Random((new Date().getTime()))).nextInt();
+			res.name = "_"+Math.abs((new Random((new Date().getTime()))).nextInt());
 		}catch(Exception e){}
 	}
 
@@ -200,7 +200,7 @@ public class Votable
 		try
 		{
 			TABLE tab = vot.resource.get(0).getTABLE().get(0);
-			tab.name +="_"+(new Random((new Date().getTime()))).nextInt();
+			tab.name +="_"+Math.abs((new Random((new Date().getTime()))).nextInt());
 		}catch(Exception e){}
 	}
 

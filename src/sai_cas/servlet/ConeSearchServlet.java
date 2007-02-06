@@ -25,6 +25,7 @@
 
 package sai_cas.servlet;
 import java.io.*;
+import java.util.Locale;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -64,8 +65,9 @@ public class ConeSearchServlet extends HttpServlet {
 		String ssr = request.getParameter("SR");
 		String nulls = request.getParameter("NULLS");
 
-
 		String format = request.getParameter("format");
+		String fileExtension;
+
 		if (format == null)
 		{
 			format="votable";
@@ -74,14 +76,17 @@ public class ConeSearchServlet extends HttpServlet {
 		if (format.equals("votable"))
 		{
 			response.setContentType("text/xml");
+			fileExtension = "xml";
 		}
 		else if (format.equals("csv"))
 		{
 			response.setContentType("text/csv");
+			fileExtension = "csv";
 		}
 		else 
 		{
 			response.setContentType("text/plain");
+			fileExtension = "dat";
 		}
 
 
@@ -165,10 +170,14 @@ public class ConeSearchServlet extends HttpServlet {
 			if (cs.initConeSearch(cat, tab, ra, dec, sr))
 			{
 
+				String out_filename = cat + "." + (tab == null ? "" : tab) +
+					"_" + String.format(Locale.US,"%.3f",ra) +
+					"_" + String.format(Locale.US,"%.3f",dec) +
+					"_" + String.format(Locale.US,"%.3f", ssr)+
+					"." + fileExtension;
+
 				response.setHeader("Content-Disposition",
-					"attachment; filename=" + cat + "." +
-					(tab == null ? "" : tab) + "_" + String.valueOf(ra) + "_" +
-					String.valueOf(dec) + "_" + String.valueOf(ssr)+".dat");
+					"attachment; filename=" + out_filename);
 				
 				if (columnList == null)
 				{

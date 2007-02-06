@@ -35,6 +35,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Calendar;
 import java.util.logging.Logger;
+import java.util.Locale;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -112,6 +113,7 @@ public class InternalCrossMatchServlet extends HttpServlet {
 		String	formatString;
 		String cat, tab;
 		formats format;
+		String fileExtension;
 
 		cat = request.getParameter("cats");
 		tab = request.getParameter("tabs");
@@ -128,14 +130,17 @@ public class InternalCrossMatchServlet extends HttpServlet {
 		if ((formatString==null)||(formatString.equalsIgnoreCase("votable")))
 		{
 			format = formats.VOTABLE;
+			fileExtension = "xml";
 		}
 		else if (formatString.equalsIgnoreCase("CSV"))
 		{
 			format = formats.CSV;
+			fileExtension = "csv";
 		}
 		else
 		{
 			format = formats.VOTABLE;
+			fileExtension = "xml";
 		}
 
 		QueryResultsOutputter qro = null;
@@ -237,8 +242,11 @@ public class InternalCrossMatchServlet extends HttpServlet {
 			
 			//columns = dbi.getColumnNames(cats[0],tabs[0]);
 
+			String outputFilename="crossmatch."+fileExtension;
+
 			response.setHeader("Content-Disposition",
-					"attachment; filename=crossmatch.dat");
+					"attachment; filename=" + outputFilename);
+
 			String query = getQuery();
 			dbi.executeQuery(query);
 			if (format.equals(formats.VOTABLE))
@@ -251,8 +259,8 @@ public class InternalCrossMatchServlet extends HttpServlet {
 				
 				voqro.setResource("crossmatch_res" );
 				voqro.setResourceDescription("This table was obtained by crossmatching the tables: \n"+
-				tmp+"\n with the crossmatch radius of " + rad + " in the"+
-				sr+"deg circular region around ("+ra+","+dec+")");
+				tmp+"\n with the crossmatch radius of " + rad + " degrees in the"+
+				sr+" degrees circular region around ("+ra+","+dec+")");
 				voqro.setTable("main");
 			}
 			qro.print(out,dbi);

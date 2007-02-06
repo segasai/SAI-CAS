@@ -36,6 +36,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Calendar;
 import java.util.logging.Logger;
+import java.util.Locale;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -172,7 +173,7 @@ public class CrossMatchServlet extends HttpServlet {
 		try
 		{
 			double rad = 0;
-			
+			String inputFilename = fi.getName();
 			rad = Double.parseDouble(radString);
 			
 			if (fi == null)
@@ -252,9 +253,14 @@ public class CrossMatchServlet extends HttpServlet {
 				raDecArray1[1] = decColumn;	
 			}
 
+			String outputFilename = cat + "." + (tab == null ? "" : tab) +
+				"_" + String.format(Locale.US,"%.4f",rad) +
+				"_" + inputFilename;
+
 			response.setHeader("Content-Disposition",
-					"attachment; filename=" + cat + "_" + 
-					fi.getName() + "_" + String.valueOf(rad) + ".dat");
+					"attachment; filename=" + outputFilename);
+
+
 			dbi.executeQuery("select * from " + userDataSchema + "." + tableName +
 					" AS a LEFT JOIN " + cat + "." + tab + " AS b "+
 					"ON q3c_join(a."+raDecArray1[0]+",a."+raDecArray1[1]+",b."+
