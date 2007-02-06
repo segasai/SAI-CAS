@@ -107,12 +107,11 @@ public class Votable
 
 			vot0.resource= new ArrayList<sai_cas.VOTABLEFile.RESOURCE>();
 			RESOURCE res = new RESOURCE();
-			setRandomResourceName(vot,"crossmatch_");
+			res.name="crossmatch";
 			vot0.resource.add(res);
 			res.table = new ArrayList<TABLE>();
 			TABLE tab = new TABLE();
-			/* Setup random name for the table */
-			tab.setName("table_"+(new Random((new Date().getTime()))).nextInt());
+			tab.setName("table");
 			res.table.add(tab);
 			tab.fieldOrPARAMOrGROUP = new ArrayList<Object>();
 			List<Object> fieldList = tab.fieldOrPARAMOrGROUP;
@@ -178,16 +177,34 @@ public class Votable
 			throw new VotableException(e.getMessage());
 		}
 	}
-	
-	public static void setRandomResourceName(Votable vot0, String prefix)
+
+	/*
+	 * Add some random number to the name of the first resource
+	 * to prevent collisions 
+	 */
+	public void randomizeResourceName()
 	{
 		try
 		{
-			RESOURCE res = vot0.vot.resource.get(0);
-			res.name = prefix+(new Random((new Date().getTime()))).nextInt();
+			RESOURCE res = vot.resource.get(0);
+			res.name = "_"+(new Random((new Date().getTime()))).nextInt();
 		}catch(Exception e){}
 	}
 
+	/*
+	 * Add some random number to the name of the first table
+	 * to prevent collisions 
+	 */
+	public void randomizeTableName()
+	{
+		try
+		{
+			TABLE tab = vot.resource.get(0).getTABLE().get(0);
+			tab.name +="_"+(new Random((new Date().getTime()))).nextInt();
+		}catch(Exception e){}
+	}
+
+	
 	public Votable(URI uri) throws  VotableException
 	{
 		Unmarshaller um;

@@ -229,6 +229,8 @@ public class CrossMatchServlet extends HttpServlet {
 				vot = new Votable (uploadedFile);
 				break;
 			}
+			vot.randomizeResourceName();
+			vot.randomizeTableName();
 			String userDataSchema = dbi.getUserDataSchemaName();
 			String tableName = vot.insertDataToDB(dbi,userDataSchema);
 			dbi.analyze(userDataSchema, tableName);
