@@ -26,6 +26,7 @@
 package sai_cas.VOTABLEFile;
 import sai_cas.db.*;
 import sai_cas.VOTABLEFile.*;
+import sai_cas.input.csv.*;
 
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.bind.*;
@@ -97,12 +98,12 @@ public class Votable
 			vot.vot = vot0;
 			BufferedReader br; // to fetch file data
 			br = new BufferedReader(new FileReader(file));
-			
+			CSVParser parser = new CSVParser(br);
 			String data;
 			/* Getting the columnNames */
 
-			data=br.readLine();
-			List<String> columns =  Arrays.asList(data.split(","));
+			//data=br.readLine();
+			List<String> columns =  Arrays.asList(parser.getLine());
 			int ncols = columns.size();
 
 			vot0.resource= new ArrayList<sai_cas.VOTABLEFile.RESOURCE>();
@@ -131,7 +132,7 @@ public class Votable
 			boolean formatFlags[] = new boolean[ncols]; 
 			while((data = br.readLine()) != null)
 			{
-				String[] dataArray = data.split(",",ncols+1);
+				String[] dataArray = parser.getLine();
 				int nrecs = dataArray.length;
 
 				if (nrecs != ncols)
