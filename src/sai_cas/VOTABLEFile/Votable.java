@@ -99,11 +99,11 @@ public class Votable
 			BufferedReader br; // to fetch file data
 			br = new BufferedReader(new FileReader(file));
 			CSVParser parser = new CSVParser(br);
-			String data;
+			String data[];
 			/* Getting the columnNames */
 
-			//data=br.readLine();
-			List<String> columns =  Arrays.asList(parser.getLine());
+			data=parser.getLine();
+			List<String> columns =  Arrays.asList(data);
 			int ncols = columns.size();
 
 			vot0.resource= new ArrayList<sai_cas.VOTABLEFile.RESOURCE>();
@@ -130,10 +130,9 @@ public class Votable
 			ArrayList<TR> trList = new ArrayList<TR>();
 			tab.data.tabledata.tr = trList;
 			boolean formatFlags[] = new boolean[ncols]; 
-			while((data = br.readLine()) != null)
+			while((data = parser.getLine()) != null)
 			{
-				String[] dataArray = parser.getLine();
-				int nrecs = dataArray.length;
+				int nrecs = data.length;
 
 				if (nrecs != ncols)
 				{
@@ -146,7 +145,7 @@ public class Votable
 				{
 					TD td = new TD();
 					
-					td.value = dataArray[i];
+					td.value = data[i];
 					if (td.value.length()>0)
 					{
 						try

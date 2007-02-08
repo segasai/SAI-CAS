@@ -65,7 +65,7 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 					out.print(",");
 				}
 			}
-			out.print("\n");
+			out.println("");
 			logger.debug("Retrieving and outputting the data ...");
 			
 			String dataArray[];
