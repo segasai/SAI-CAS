@@ -87,7 +87,7 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 					}
 					if ((s.indexOf(",")!=-1)||(s.indexOf("\n")!=-1)||(s.indexOf("\"")!=-1))
 					{
-						s.replaceAll("\"","\"\"");
+						s=s.replace("\"","\"\"");
 						s="\""+s+"\"";
 					}
 					if (i != 0) 
