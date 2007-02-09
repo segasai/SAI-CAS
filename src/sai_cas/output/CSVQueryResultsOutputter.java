@@ -85,11 +85,11 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 							s=nulls;
 						}
 					}
-					if ((s.indexOf(",")!=-1)||(s.indexOf("\n")!=-1))
+					if ((s.indexOf(",")!=-1)||(s.indexOf("\n")!=-1)||(s.indexOf("\"")!=-1))
 					{
+						s.replaceAll("\"","\"\"");
 						s="\""+s+"\"";
 					}
-					s.replace("\"","\"\"");
 					if (i != 0) 
 					{
 						out.print("," + s);
