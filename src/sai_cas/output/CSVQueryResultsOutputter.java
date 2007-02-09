@@ -89,6 +89,7 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 					{
 						s="\""+s+"\"";
 					}
+					s.replace("\"","\"\"");
 					if (i != 0) 
 					{
 						out.print("," + s);

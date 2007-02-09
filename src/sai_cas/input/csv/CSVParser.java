@@ -1,5 +1,5 @@
 /*
- * Read files in comma separated value format.
+ * Read files in Excel comma separated value format.
  * Copyright (C) 2001-2004 Stephen Ostermiller
  * http://ostermiller.org/contact.pl?regarding=Java+Utilities
  *
@@ -22,47 +22,50 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Read files in comma separated value format.
+ * Read files in comma separated value format as outputted by the Microsoft
+ * Excel Spreadsheet program.
  * More information about this class is available from <a target="_top" href=
- * "http://ostermiller.org/utils/CSVLexer.html">ostermiller.org</a>.
- *
- * CSV is a file format used as a portable representation of a database.
+ * "http://ostermiller.org/utils/ExcelCSV.html">ostermiller.org</a>.
+ * <P>
+ * Excel CSV is a file format used as a portable representation of a database.
  * Each line is one entry or record and the fields in a record are separated by commas.
- * Commas may be preceded or followed by arbitrary space and/or tab characters which are
- * ignored.
  * <P>
  * If field includes a comma or a new line, the whole field must be surrounded with double quotes.
- * When the field is in quotes, any quote literals must be escaped by \" Backslash
- * literals must be escaped by \\.    Otherwise a backslash and the character following
- * will be treated as the following character, IE. "\n" is equivalent to "n". Other escape
- * sequences may be set using the setEscapes() method.    Text that comes after quotes that have
- * been closed but come before the next comma will be ignored.
+ * When the field is in quotes, any quote literals must be escaped by two quotes ("").
+ * Text that comes after quotes that have been closed but come before the next comma will be ignored.
  * <P>
  * Empty fields are returned as as String of length zero: "". The following line has three empty
  * fields and three non-empty fields in it. There is an empty field on each end, and one in the
  * middle. One token is returned as a space.<br>
- * <pre>,second,," ",fifth,</pre>
+ * <pre>,second,, ,fifth,</pre>
  * <P>
  * Blank lines are always ignored.    Other lines will be ignored if they start with a
  * comment character as set by the setCommentStart() method.
  * <P>
  * An example of how CVSLexer might be used:
  * <pre>
- * CSVParser shredder = new CSVParser(System.in);
- * shredder.setCommentStart("#;!");
- * shredder.setEscapes("nrtf", "\n\r\t\f");
+ * ExcelCSVParser shredder = new ExcelCSVParser(System.in);
  * String t;
  * while ((t = shredder.nextValue()) != null){
  *     System.out.println("" + shredder.lastLineNumber() + " " + t);
  * }
  * </pre>
  * <P>
- * Some applications do not output CSV according to the generally accepted standards and this parse may
- * not be able to handle it. One such application is the Microsoft Excel spreadsheet. A
- * separate class must be use to read
- * <a href="http://ostermiller.org/utils/ExcelCSV.html">Excel CSV</a>.
+ * The CSV that Excel outputs differs from the
+ * <a href="http://ostermiller.org/utils/CSVLexer.html">standard</a>
+ * in several respects:
+ * <ul><li>Leading and trailing whitespace is significant.</li>
+ * <li>A backslash is not a special character and is not used to escape anything.</li>
+ * <li>Quotes inside quoted strings are escaped with a double quote rather than a backslash.</li>
+ * <li>Excel may convert data before putting it in CSV format:<ul>
+ * <li>Tabs are converted to a single space.</li>
+ * <li>New lines in the data are always represented as the UNIX new line. ("\n")</li>
+ * <li>Numbers that are greater than 12 digits may be represented in truncated
+ * scientific notation form.</li></ul>
+ * This parser does not attempt to fix these excel conversions, but users should be aware
+ * of them.</li></ul>
  *
- * @see com.Ostermiller.util.ExcelCSVParser
+ * @see com.Ostermiller.util.CSVParser
  *
  * @author Stephen Ostermiller http://ostermiller.org/contact.pl?regarding=Java+Utilities
  * @since ostermillerutils 1.00.00
@@ -119,27 +122,8 @@ public class CSVParser implements CSVParse {
     private int lastLine = -1;
 
     /**
-     * Create a parser to parse comma separated values from
-     * an InputStream.
-     * <p>
-     * Byte to character conversion is done using the platform
-     * default locale.
-     *
-     * @param in stream that contains comma separated values.
-     *
-     * @since ostermillerutils 1.00.00
-     */
-    public CSVParser(InputStream in){
-        inStream = in;
-        lexer = new CSVLexer(in);
-    }
-
-    /**
      * Create a parser to parse delimited values from
      * an InputStream.
-     * <p>
-     * Byte to character conversion is done using the platform
-     * default locale.
      *
      * @param in stream that contains comma separated values.
      * @param delimiter record separator
@@ -149,21 +133,19 @@ public class CSVParser implements CSVParse {
      * @since ostermillerutils 1.02.24
      */
     public CSVParser(InputStream in, char delimiter) throws BadDelimiterException {
-        inStream = in;
         lexer = new CSVLexer(in);
         changeDelimiter(delimiter);
     }
 
     /**
      * Create a parser to parse comma separated values from
-     * a Reader.
+     * an InputStream.
      *
-     * @param in reader that contains comma separated values.
+     * @param in stream that contains comma separated values.
      *
      * @since ostermillerutils 1.00.00
      */
-    public CSVParser(Reader in){
-        inReader = in;
+    public CSVParser(InputStream in){
         lexer = new CSVLexer(in);
     }
 
@@ -179,76 +161,7 @@ public class CSVParser implements CSVParse {
      * @since ostermillerutils 1.02.24
      */
     public CSVParser(Reader in, char delimiter) throws BadDelimiterException {
-        inReader = in;
         lexer = new CSVLexer(in);
-        changeDelimiter(delimiter);
-    }
-
-    /**
-     * Create a parser to parse delimited values from
-     * an InputStream.
-     * <p>
-     * Byte to character conversion is done using the platform
-     * default locale.
-     *
-     * @param in stream that contains comma separated values.
-     * @param escapes a list of characters that will represent escape sequences.
-     * @param replacements the list of replacement characters for those escape sequences.
-     * @param commentDelims list of characters a comment line may start with.
-     * @param delimiter record separator
-     *
-     * @throws BadDelimiterException if the specified delimiter cannot be used
-     *
-     * @since ostermillerutils 1.02.24
-     */
-    public CSVParser(InputStream in, char delimiter, String escapes, String replacements, String commentDelims) throws BadDelimiterException {
-        inStream = in;
-        lexer = new CSVLexer(in);
-        setEscapes(escapes, replacements);
-        setCommentStart(commentDelims);
-        changeDelimiter(delimiter);
-    }
-
-    /**
-     * Create a parser to parse comma separated values from
-     * an InputStream.
-     * <p>
-     * Byte to character conversion is done using the platform
-     * default locale.
-     *
-     * @param in stream that contains comma separated values.
-     * @param escapes a list of characters that will represent escape sequences.
-     * @param replacements the list of replacement characters for those escape sequences.
-     * @param commentDelims list of characters a comment line may start with.
-     *
-     * @since ostermillerutils 1.00.00
-     */
-    public CSVParser(InputStream in, String escapes, String replacements, String commentDelims){
-        inStream = in;
-        lexer = new CSVLexer(in);
-        setEscapes(escapes, replacements);
-        setCommentStart(commentDelims);
-    }
-
-    /**
-     * Create a parser to parse delimited values from
-     * a Reader.
-     *
-     * @param in reader that contains comma separated values.
-     * @param escapes a list of characters that will represent escape sequences.
-     * @param replacements the list of replacement characters for those escape sequences.
-     * @param commentDelims list of characters a comment line may start with.
-     * @param delimiter record separator
-     *
-     * @throws BadDelimiterException if the specified delimiter cannot be used
-     *
-     * @since ostermillerutils 1.02.24
-     */
-    public CSVParser(Reader in, char delimiter, String escapes, String replacements, String commentDelims) throws BadDelimiterException {
-        inReader = in;
-        lexer = new CSVLexer(in);
-        setEscapes(escapes, replacements);
-        setCommentStart(commentDelims);
         changeDelimiter(delimiter);
     }
 
@@ -257,17 +170,11 @@ public class CSVParser implements CSVParse {
      * a Reader.
      *
      * @param in reader that contains comma separated values.
-     * @param escapes a list of characters that will represent escape sequences.
-     * @param replacements the list of replacement characters for those escape sequences.
-     * @param commentDelims list of characters a comment line may start with.
      *
      * @since ostermillerutils 1.00.00
      */
-    public CSVParser(Reader in, String escapes, String replacements, String commentDelims){
-        inReader = in;
+    public CSVParser(Reader in){
         lexer = new CSVLexer(in);
-        setEscapes(escapes, replacements);
-        setCommentStart(commentDelims);
     }
 
     /**
@@ -376,29 +283,6 @@ public class CSVParser implements CSVParse {
     }
 
     /**
-     * Specify escape sequences and their replacements.
-     * Escape sequences set here are in addition to \\ and \".
-     * \\ and \" are always valid escape sequences. This method
-     * allows standard escape sequenced to be used. For example
-     * "\n" can be set to be a newline rather than an 'n'.
-     * A common way to call this method might be:<br>
-     * <code>setEscapes("nrtf", "\n\r\t\f");</code><br>
-     * which would set the escape sequences to be the Java escape
-     * sequences. Characters that follow a \ that are not escape
-     * sequences will still be interpreted as that character.<br>
-     * The two arguments to this method must be the same length. If
-     * they are not, the longer of the two will be truncated.
-     *
-     * @param escapes a list of characters that will represent escape sequences.
-     * @param replacements the list of replacement characters for those escape sequences.
-     *
-     * @since ostermillerutils 1.00.00
-     */
-    public void setEscapes(String escapes, String replacements){
-        lexer.setEscapes(escapes, replacements);
-    }
-
-    /**
      * Change this parser so that it uses a new delimiter.
      * <p>
      * The initial character is a comma, the delimiter cannot be changed
@@ -465,7 +349,7 @@ public class CSVParser implements CSVParse {
      *
      * @since ostermillerutils 1.00.00
      */
-    public static void main(String[] args){
+    private static void main(String[] args){
         InputStream in;
         try {
             if (args.length > 0){
@@ -483,8 +367,6 @@ public class CSVParser implements CSVParse {
                 in = System.in;
             }
             CSVParser p = new CSVParser(in);
-            p.setCommentStart("#;!");
-            //p.setEscapes("nrtf", "\n\r\t\f");
             String[] t;
             while ((t = p.getLine()) != null){
                 for (int i=0; i<t.length; i++){
@@ -502,9 +384,6 @@ public class CSVParser implements CSVParse {
 
     /**
      * Parse the comma delimited data from a string.
-     * <p>
-     * Only escaped backslashes and quotes will be recognized as escape sequences.
-     * The data will be treated as having no comments.
      *
      * @param s string with comma delimited data to parse.
      * @return parsed data.
@@ -521,9 +400,6 @@ public class CSVParser implements CSVParse {
 
     /**
      * Parse the delimited data from a string.
-     * <p>
-     * Only escaped backslashes and quotes will be recognized as escape sequences.
-     * The data will be treated as having no comments.
      *
      * @param s string with delimited data to parse.
      * @param delimiter record separator
@@ -541,70 +417,7 @@ public class CSVParser implements CSVParse {
     }
 
     /**
-     * Parse the comma delimited data from a string.
-     * Escaped backslashes and quotes will always recognized as escape sequences.
-     *
-     * @param s string with comma delimited data to parse.
-     * @param escapes a list of additional characters that will represent escape sequences.
-     * @param replacements the list of replacement characters for those escape sequences.
-     * @param commentDelims list of characters a comment line may start with.
-     * @return parsed data.
-     *
-     * @since ostermillerutils 1.02.03
-     */
-    public static String[][] parse(String s, String escapes, String replacements, String commentDelims){
-        try {
-            return (new CSVParser(new StringReader(s), escapes, replacements, commentDelims)).getAllValues();
-        } catch (IOException x){
-            return null;
-        }
-    }
-
-    /**
-     * Parse the delimited data from a string.
-     * Escaped backslashes and quotes will always recognized as escape sequences.
-     *
-     * @param s string with delimited data to parse.
-     * @param escapes a list of additional characters that will represent escape sequences.
-     * @param replacements the list of replacement characters for those escape sequences.
-     * @param commentDelims list of characters a comment line may start with.
-     * @param delimiter record separator
-     * @return parsed data.
-     * @throws BadDelimiterException if the character cannot be used as a delimiter.
-     *
-     * @since ostermillerutils 1.02.24
-     */
-    public static String[][] parse(String s, char delimiter, String escapes, String replacements, String commentDelims) throws BadDelimiterException{
-        try {
-            return (new CSVParser(new StringReader(s), delimiter, escapes, replacements, commentDelims)).getAllValues();
-        } catch (IOException x){
-            return null;
-        }
-    }
-
-    /**
      * Parse the comma delimited data from a stream.
-     * <p>
-     * Only escaped backslashes and quotes will be recognized as escape sequences.
-     * The data will be treated as having no comments.
-     *
-     * @param in Reader with comma delimited data to parse.
-     * @param delimiter record separator
-     * @return parsed data.
-     * @throws BadDelimiterException if the character cannot be used as a delimiter.
-     * @throws IOException if an error occurs while reading.
-     *
-     * @since ostermillerutils 1.02.24
-     */
-    public static String[][] parse(Reader in, char delimiter) throws IOException, BadDelimiterException {
-        return (new CSVParser(in, delimiter)).getAllValues();
-    }
-
-    /**
-     * Parse the delimited data from a stream.
-     * <p>
-     * Only escaped backslashes and quotes will be recognized as escape sequences.
-     * The data will be treated as having no comments.
      *
      * @param in Reader with comma delimited data to parse.
      * @return parsed data.
@@ -616,39 +429,19 @@ public class CSVParser implements CSVParse {
         return (new CSVParser(in)).getAllValues();
     }
 
+
     /**
      * Parse the delimited data from a stream.
-     * Escaped backslashes and quotes will always recognized as escape sequences.
      *
      * @param in Reader with delimited data to parse.
      * @param delimiter record separator
-     * @param escapes a list of additional characters that will represent escape sequences.
-     * @param replacements the list of replacement characters for those escape sequences.
-     * @param commentDelims list of characters a comment line may start with.
      * @return parsed data.
      * @throws BadDelimiterException if the character cannot be used as a delimiter.
      * @throws IOException if an error occurs while reading.
      *
      * @since ostermillerutils 1.02.24
      */
-    public static String[][] parse(Reader in, char delimiter, String escapes, String replacements, String commentDelims) throws IOException, BadDelimiterException {
-        return (new CSVParser(in, delimiter, escapes, replacements, commentDelims)).getAllValues();
-    }
-
-    /**
-     * Parse the comma delimited data from a stream.
-     * Escaped backslashes and quotes will always recognized as escape sequences.
-     *
-     * @param in Reader with comma delimited data to parse.
-     * @param escapes a list of additional characters that will represent escape sequences.
-     * @param replacements the list of replacement characters for those escape sequences.
-     * @param commentDelims list of characters a comment line may start with.
-     * @return parsed data.
-     * @throws IOException if an error occurs while reading.
-     *
-     * @since ostermillerutils 1.02.03
-     */
-    public static String[][] parse(Reader in, String escapes, String replacements, String commentDelims) throws IOException {
-        return (new CSVParser(in, escapes, replacements, commentDelims)).getAllValues();
+    public static String[][] parse(Reader in, char delimiter) throws IOException, BadDelimiterException {
+        return (new CSVParser(in, delimiter)).getAllValues();
     }
 }
