@@ -465,7 +465,16 @@ public class XMLCatalog
 				/*  !!!!!!!!!!!  IMPORTANT !!!!!!!!!!
 				 *   I do the convertion to lower case.
 				 */
+				if (datatype == null)
+				{
+					throw new XMLCatalogException("Datatype attribute must be specified");
+				}
 				columnName = column.getName().toLowerCase();
+				
+				if (columnName == null)
+				{
+					throw new XMLCatalogException("The column name attribute must be specified");
+				}
 				unit =  column.getUnit();
 				ucd = column.getUcd();
 				columnDescription = column.getDescription();

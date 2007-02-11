@@ -540,18 +540,17 @@ public class DBInterface
 	}
 
 
-	public void insertTable(String catalog, String table, List<String> columns, List<String> columnTypes, List<String> columnUnits, List<String> infoList, List<String> descriptionList) throws SQLException, DBException
+	public void insertTable(String catalog, String table, List<String> columnNames, List<String> columnTypes, List<String> columnUnits, List<String> columnInfos, List<String> columnDescriptions) throws SQLException, DBException
 	{
 		String query = "INSERT INTO table_list (name, catalog_id) VALUES ( '"+table+"',cas_get_catalog_id('"+catalog+"') )";
 
 		stmt.execute(query);            
-		ListIterator<String> cit = columns.listIterator();
-		ListIterator<String> ctit = columnTypes.listIterator();
-		ListIterator<String> cuit = columnUnits.listIterator();
-		ListIterator<String> ciit = infoList.listIterator();
-		ListIterator<String> cdit = descriptionList.listIterator();
+		ListIterator<String> cit = columnNames.listIterator();
+		ListIterator<String> columnTypesIterator = columnTypes.listIterator();
+		ListIterator<String> columnUnitsIterator = columnUnits.listIterator();
+		ListIterator<String> columnInfosIterator = columnInfos.listIterator();
+		ListIterator<String> columnDescriptionsIterator = columnDescriptions.listIterator();
 
-//		List columnInternalTypes = new ArrayList();
 		StringBuffer sb = new StringBuffer();
 		String column, columnType, columnInternalType, columnUnit, columnDescription, columnInfo;
 		sb.append("CREATE TABLE "+catalog + "." + table + " ( ");
@@ -563,19 +562,17 @@ public class DBInterface
 
 		while (cit.hasNext())
 		{
-			if (!ctit.hasNext())
+			if (!columnTypesIterator.hasNext())
 			{
 				throw new DBException("Column and ColumnType lists have different lengths");
 			}
 			column = cit.next();
-			columnType = ctit.next();
-			columnUnit = cuit.next();
-			columnInfo = ciit.next();
-			columnDescription = cdit.next();
+			columnType = columnTypesIterator.next();
+			columnUnit = columnUnitsIterator.next();
+			columnInfo = columnInfosIterator.next();
+			columnDescription = columnDescriptionsIterator.next();
 
-			//System.out.println(columnType);
 			columnInternalType = getInternalDatatype(columnType);
-			//System.out.println(columnInternalType);
 			
 			sb.append("\""+column + "\" " + columnInternalType+",");
 			
