@@ -236,7 +236,7 @@ public class ConeSearch
 					", table: "+ table+"\n" +
 					"RA="+ra+" DEC="+dec+" SR="+rad+"\n"+
 					"Contact "+Parameters.getSupportEmail()+" in case of problems");
-				voqro.setTable(table);
+				voqro.setTable(catalog+"."+table);
 			}
 			qro.print(out, dbi);
 
