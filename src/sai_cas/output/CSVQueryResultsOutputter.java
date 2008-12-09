@@ -34,7 +34,7 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 	static Logger logger = Logger.getLogger("sai_cas.output.CVSQueryResultsOutputter");
 
 	String resource, table, resourceInfo, resourceDescription, nulls;
-	
+	String delimiter = ',';	
 	public CSVQueryResultsOutputter(String nulls)
 	{
 		this.nulls = nulls;
@@ -44,6 +44,14 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 	{
 		String messageCorrected = "#" + message.replace("\n","\n#");
 		out.print("#"+messageCorrected);
+	}
+
+	public void setDelimiter(String delimiter)
+	{
+		if (delimiter!=null)
+		{
+			this.delimiter = delimiter;
+		}
 	}
 
 	public void print(PrintWriter out, DBInterface dbi)
@@ -62,7 +70,7 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 				out.print(dbi.qr.getColumnName(i));
 				if (i != ncols)
 				{
-					out.print(",");
+					out.print(delimiter);
 				}
 			}
 			out.println("");
@@ -85,14 +93,14 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 							s=nulls;
 						}
 					}
-					if ((s.indexOf(",")!=-1)||(s.indexOf("\n")!=-1)||(s.indexOf("\"")!=-1))
+					if ((s.indexOf(delimiter)!=-1)||(s.indexOf("\n")!=-1)||(s.indexOf("\"")!=-1))
 					{
 						s=s.replace("\"","\"\"");
 						s="\""+s+"\"";
 					}
 					if (i != 0) 
 					{
-						out.print("," + s);
+						out.print(delimiter + s);
 					}
 					else
 					{

@@ -64,6 +64,7 @@ public class ConeSearchServlet extends HttpServlet {
 		String sdec = request.getParameter("DEC");
 		String ssr = request.getParameter("SR");
 		String nulls = request.getParameter("NULLS");
+		String delimiter = request.getParameter("delimiter");
 
 		String format = request.getParameter("format");
 		String fileExtension;
