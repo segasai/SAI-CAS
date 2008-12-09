@@ -295,6 +295,7 @@ public class Votable
 		
 		catalogName = (catalogName0 == null)?catalogName:catalogName0;
 		catalogName.replace('.','_');
+		catalogName.replace('+','_');
 
 		String catalogInfo=null;
 
