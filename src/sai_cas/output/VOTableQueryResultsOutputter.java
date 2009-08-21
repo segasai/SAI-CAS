@@ -39,6 +39,10 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 	public VOTableQueryResultsOutputter()
 	{}
 	
+	private String xmlQuote(String str)
+	{
+		return "<![CDATA["+ str + "]]>";
+	}
 	
 	public void printError(PrintWriter out, String message)
 	{
@@ -47,9 +51,7 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 		out.print("<VOTABLE version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
 		out.println("xmlns=\"http://www.ivoa.net/xml/VOTable/v1.1\">");
 		out.print("<DESCRIPTION>");
-		out.print("<![CDATA[");
-		out.print(message);
-		out.print("]]>");
+		out.print(xmlQuote(message));
 		out.println("</DESCRIPTION>");
 		out.println("</VOTABLE>");
 	}
@@ -87,10 +89,10 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 			out.println("<RESOURCE name=\"" +
 				((resource == null) ? "" : resource) + "\">");
 			out.println("<DESCRIPTION>" +
-				((resourceDescription == null) ? "" : resourceDescription) +
+				xmlQuote((resourceDescription == null) ? "" : resourceDescription) +
 				"</DESCRIPTION>");
 			out.println("<INFO>"+
-				((resourceInfo == null) ? "" : resourceInfo) +
+				xmlQuote((resourceInfo == null) ? "" : resourceInfo) +
 				"</INFO>");
 
 			out.println("<TABLE name=\"" + ((table==null)?"":table) + "\">");
@@ -117,8 +119,8 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 				 */
 				
 				out.print("<DESCRIPTION>");
-				out.println(dbi.qr.getColumnDescription(i));
-				out.print(dbi.qr.getColumnInfo(i));
+				out.println(xmlQuote(dbi.qr.getColumnDescription(i)));
+				out.print(xmlQuote(dbi.qr.getColumnInfo(i)));
 				out.println("</DESCRIPTION>");
 				/*
 				out.print("<INFO>");
