@@ -34,7 +34,7 @@ public class CSVQueryResultsOutputter implements QueryResultsOutputter
 	static Logger logger = Logger.getLogger("sai_cas.output.CVSQueryResultsOutputter");
 
 	String resource, table, resourceInfo, resourceDescription, nulls;
-	String delimiter = ',';	
+	String delimiter = ",";	
 	public CSVQueryResultsOutputter(String nulls)
 	{
 		this.nulls = nulls;
