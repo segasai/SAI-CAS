@@ -43,7 +43,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.zip.GZIPInputStream;
 import java.util.Properties;
 import java.util.Arrays;
-
+import java.lang.IndexOutOfBoundsException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -873,7 +873,7 @@ public class XMLCatalog
 					result[i] = s.substring(fieldsLeft[i],fieldsRight[i]);
 				}
 			} 
-			catch (IndexOutOfBoundException e)
+			catch (java.lang.IndexOutOfBoundsException e)
 			{
 				throw new XMLCatalogException("String in the data-file too short given the format");
 			}			
