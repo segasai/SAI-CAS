@@ -875,7 +875,7 @@ public class XMLCatalog
 			} 
 			catch (java.lang.IndexOutOfBoundsException e)
 			{
-				throw new XMLCatalogException("String in the data-file too short given the format");
+				throw new XMLCatalogException("String in the data-file too short given the format: " + s);
 			}			
 			return result;
 		}
