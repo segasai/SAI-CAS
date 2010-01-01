@@ -866,11 +866,17 @@ public class XMLCatalog
 				stringBufferIterator = stringBuffer.listIterator();
 			}
 			s = stringBufferIterator.next();
-
-			for(int i = 0; i < ncols; i++)
+			try
 			{
-				result[i] = s.substring(fieldsLeft[i],fieldsRight[i]);
-			}
+				for(int i = 0; i < ncols; i++)
+				{
+					result[i] = s.substring(fieldsLeft[i],fieldsRight[i]);
+				}
+			} 
+			catch (IndexOutOfBoundException e)
+			{
+				throw new XMLCatalogException("String in the data-file too short given the format");
+			}			
 			return result;
 		}
 
