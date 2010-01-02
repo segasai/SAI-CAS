@@ -351,6 +351,8 @@ public class MainAxisServices {
 			conn = DBConnection.getPooledPerUserConnection();
 			dbi = new DBInterface(conn);
 			result = dbi.getCatalogNames();
+			Arrays.sort(result);
+
 		}
 		catch(SQLException e)
 		{
@@ -377,7 +379,7 @@ public class MainAxisServices {
 			conn = DBConnection.getPooledPerUserConnection(user, password);
 			dbi = new DBInterface(conn, user);
 			result = dbi.getCatalogNames();
-			java.util.Arrays.sort(result);
+			Arrays.sort(result);
 		}
 		catch(SQLException e)
 		{
@@ -519,7 +521,7 @@ public class MainAxisServices {
 			conn = DBConnection.getPooledPerUserConnection();
 			dbi = new DBInterface(conn);
 			result = dbi.getTableNames(catalogName);
-			java.util.Arrays.sort(result);
+			Arrays.sort(result);
 		}
 		catch(SQLException e)
 		{
@@ -549,6 +551,7 @@ public class MainAxisServices {
 			conn = DBConnection.getPooledPerUserConnection(user, password);
 			dbi = new DBInterface(conn, user);
 			result = dbi.getTableNames(catalogName);
+			Arrays.sort(result);
 		}
 		catch(SQLException e)
 		{
