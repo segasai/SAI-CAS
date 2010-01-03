@@ -20,8 +20,8 @@
 	<property name="build.axis2-wsdl" value="${build}/axis2-wsdl"/>
 	
 	<property name="gen.src" value="${basedir}/gen_src"/>
-	<property name="gen.src.axis" value="${basedir}/gen_src_axis"/>
-	<property name="gen.src.axis2" value="${basedir}/gen_src_axis2"/>
+	<property name="gen.src.axis" value="${basedir}/gen_src_axis/"/>
+	<property name="gen.src.axis2" value="${basedir}/gen_src_axis2/"/>
 
 	<property name="impl" value="${basedir}/impl"/>
 	<property name="impl.axis2" value="${basedir}/impl_axis2"/>
@@ -328,7 +328,7 @@
 			overwrite="true"/>
 		<copy
 			file="${impl.axis2}/net/ivoa/skynode/SkyNodeSkeleton.java"
-			todir="${gen.src.axis2}net/ivoa/skynode/"
+			todir="${gen.src.axis2}/net/ivoa/skynode/"
 			overwrite="true"/>
 
 		<javac debug="${debug}" srcdir="${gen.src.axis2}"
