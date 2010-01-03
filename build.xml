@@ -151,9 +151,9 @@
 	</target>
 	
 	<target name="axiscompile" depends="wsdl2java1">
-		<copy file="${impl}/sai_cas/gen_services/Sai_casSkeleton.java"
+<!--		<copy file="${impl}/sai_cas/gen_services/Sai_casSkeleton.java"
 			todir="${gen.src.axis}/src/sai_cas/gen_services/"
-			overwrite="true"/>
+			overwrite="true"/>-->
 		<javac debug="on" srcdir="${gen.src.axis}/src/"
 			destdir="${build.classes}">
 			<compilerarg line="-Xlint:-unchecked"/>

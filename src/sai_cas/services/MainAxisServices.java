@@ -396,7 +396,7 @@ public class MainAxisServices {
 	 * @return String[] -- the array of UCD's of columns in the table of the catalogue
 	 * @throws Exception
 	 */
-/*
+
 	public static String[] getColumnUCDs(String catalogName, String tableName) throws SAICASFault
 	{
 		Connection conn = null;
@@ -419,7 +419,7 @@ public class MainAxisServices {
 		}
 		return result;
 	}
-*/
+
 
 	/**
 	 * 
@@ -428,7 +428,7 @@ public class MainAxisServices {
 	 * @return String[][] -- the array of string pairs (indexName, indexDefinition) for given catalog and table
 	 * @throws Exception
 	 */
-/*	public static String[][] getIndexes(String catalogName, String tableName) throws SAICASFault
+	public static String[][] getIndexes(String catalogName, String tableName) throws SAICASFault
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -442,7 +442,7 @@ public class MainAxisServices {
 		catch(SQLException e)
 		{
 			logger.error("Caught an exception... ",e);
-			throw new SAICASFault("SQLE",e.getMessage());
+			throw new SAICASFault("SQLE"+e.getMessage());
 		}
 		finally
 		{
@@ -451,7 +451,7 @@ public class MainAxisServices {
 		return result;
 	}
 
-*/
+
 
 	public static String getConeSearchAsString(String cat, String tab,
 		double ra, double dec, double sr, String format, int verbosity) 
