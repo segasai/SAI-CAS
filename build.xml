@@ -21,13 +21,6 @@
 	
 	<!-- Definition of various Ant tasks -->
 	
-	<!-- The Java XML Binding Binding Compiler -->
-<!--	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
-		<classpath>
-			<fileset dir="${jwsdp.home}" includes="jaxb/lib/jaxb-xjc.jar" />
-		</classpath>
-	</taskdef>-->
-	
 	<!-- The Axis tasks -->
 	<taskdef resource="axis-tasks.properties">
 		<classpath>
@@ -85,11 +78,6 @@
 	<target name="compile1" depends="xsd2java1,xsd2java2">
 		<javac debug="${debug}" srcdir="${gen.src}" destdir="${build.classes}">
 			<compilerarg line="-Xlint:unchecked"/>
-			<classpath>
-				<fileset dir="${jwsdp.home}" includes="jaxb/lib/*.jar" />
-				<fileset dir="${jwsdp.home}" includes="jwsdp-shared/lib/*.jar" />
-				<fileset dir="${jwsdp.home}" includes="jaxp/lib/**/*.jar" />
-			</classpath>
 		</javac>
 	</target>
 	
@@ -99,8 +87,6 @@
 			<compilerarg line="-Xlint:unchecked" />
 			<classpath>
 				<fileset dir="${commons.fileupload.lib}" includes="*.jar" />
-				<fileset dir="${jwsdp.home}" includes="jaxb/lib/*.jar" />
-				<fileset dir="${jwsdp.home}" includes="jwsdp-shared/lib/*.jar" />
 				<fileset dir="${tomcat.common.lib}" includes="*.jar" />
 			</classpath>
 		</javac>
@@ -235,9 +221,6 @@
 				<fileset dir="${axis.lib}" includes="*.jar"/>
 				<fileset dir="${javamail.lib}" includes="*.jar"/>
 				<fileset dir="${activation.lib}" includes="*.jar"/>
-
-				<!--<fileset dir="${jwsdp.home}" includes="jwsdp-shared/lib/*.jar" />
-				<fileset dir="${jwsdp.home}" includes="jaxp/lib/**/*.jar" />-->
 			</classpath>
 		</javac>
 	</target>
