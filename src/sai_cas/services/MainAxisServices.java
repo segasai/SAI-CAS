@@ -419,8 +419,8 @@ public class MainAxisServices {
 		}
 		return result;
 	}
-
 */
+
 	/**
 	 * 
 	 * @param catalogName
@@ -428,7 +428,7 @@ public class MainAxisServices {
 	 * @return String[][] -- the array of string pairs (indexName, indexDefinition) for given catalog and table
 	 * @throws Exception
 	 */
-	public static String[][] getIndexes(String catalogName, String tableName) throws SAICASFault
+/*	public static String[][] getIndexes(String catalogName, String tableName) throws SAICASFault
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -451,7 +451,7 @@ public class MainAxisServices {
 		return result;
 	}
 
-
+*/
 
 	public static String getConeSearchAsString(String cat, String tab,
 		double ra, double dec, double sr, String format, int verbosity) 
