@@ -17,6 +17,7 @@
 	<property name="build" value="${basedir}/build"/>
 	<property name="build.classes" value="${build}/classes"/>
 	<property name="build.wsdl" value="${build}/wsdl"/>
+	<property name="build.axis2-wsdl" value="${build}/axis2-wsdl"/>
 	
 	<property name="gen.src" value="${basedir}/gen_src"/>
 	<property name="gen.src.axis" value="${basedir}/gen_src_axis"/>
@@ -68,6 +69,7 @@
 		<mkdir dir="${gen.src.axis}"/>		
 		<mkdir dir="${gen.src.axis2}"/>		
 		<mkdir dir="${build.wsdl}"/>
+		<mkdir dir="${build.axis2-wsdl}"/>
 	</target>
 	
 	
@@ -151,6 +153,18 @@
 		</axis-java2wsdl>
 	</target>
 	
+	<target name="axis2-java2wsdl1" depends="compile2">
+		<axis2-java2wsdl targetNamespace="gen_services.sai_cas"
+			schemaTargetNamespace="gen_services.sai_cas"
+			classname="sai_cas.services.MainAxisServices"
+			outputFileName="sai_cas.wsdl"
+			outputLocation="${build.axis2-wsdl}"
+			serviceName="sai_cas">
+			<classpath>
+				<fileset dir="${build}" includes="*jar" />
+			</classpath>
+		</axis2-java2wsdl>
+	</target>
 	
 	<target name="axis1-java2wsdl2" depends="compile2">
 		<axis-java2wsdl namespace="gen_services.sai_cas"
@@ -165,6 +179,19 @@
 			</classpath>
 		</axis-java2wsdl>
 	</target>
+
+	<target name="axis2-java2wsdl2" depends="compile2">
+		<axis2-java2wsdl targetNamespace="gen_services.sai_cas"
+			schemaTargetNamespace="gen_services.sai_cas"
+			classname="sai_cas.services.EditingServices"
+			outputFileName="sai_cas_edit.wsdl"
+			outputLocation="${build.axis2-wsdl}"
+			serviceName="sai_cas_edit">
+			<classpath>
+				<fileset dir="${build}" includes="*jar" />
+			</classpath>
+		</axis2-java2wsdl>
+	</target>
 	
 	<target name="axis1-java2wsdl3" depends="compile2">
 		<axis-java2wsdl namespace="gen_services.sai_cas"
@@ -178,6 +205,19 @@
 				<pathelement path="${build.classes}"/>
 			</classpath>
 		</axis-java2wsdl>
+	</target>
+
+	<target name="axis2-java2wsdl3" depends="compile2">
+		<axis2-java2wsdl targetNamespace="gen_services.sai_cas"
+			schemaTargetNamespace="gen_services.sai_cas"
+			classname="sai_cas.services.UserServices"
+			outputFileName="sai_cas_user.wsdl"
+			outputLocation="${build.axis2-wsdl}"
+			serviceName="sai_cas_user">
+			<classpath>
+				<fileset dir="${build}" includes="*jar" />
+			</classpath>
+		</axis2-java2wsdl>
 	</target>
 
 	
