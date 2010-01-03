@@ -35,23 +35,12 @@
 
 	<taskdef name="axis-java2wsdl" classname="org.apache.ws.java2wsdl.Java2WSDLTask">
 		<classpath>
-			<fileset dir="${axis2.web-inf.lib}" includes="*.jar" />
 			<fileset dir="${log4j.lib}" includes="*jar" />
 			<fileset dir="${axis2.lib}" includes="*jar" />
 			<fileset dir="${glassfish.imq.lib}" includes="*jar" />
 		</classpath>
 	</taskdef>
 
-	
-	<!-- The Axis tasks -->
-<!--	<taskdef resource="axis-tasks.properties">
-		<classpath>
-			<fileset dir="${axis.lib}" includes="*.jar"/>
-			<fileset dir="${javamail.lib}" includes="*.jar"/>
-			<fileset dir="${activation.lib}" includes="*.jar"/>
-		</classpath>
-	</taskdef>
--->	
 	<!-- Tomcat tasks -->
 	<taskdef resource="org/apache/catalina/ant/antlib.xml">
 		<classpath>
@@ -153,8 +142,6 @@
 			</classpath>
 		</axis-java2wsdl>
 	</target>
-	
-
 	
 	
 	<target name="wsdl2java1" depends="java2wsdl1">
