@@ -9,6 +9,10 @@
 	<property name="axis.web-inf.lib"
 		value="${tomcat.home}/webapps/axis/WEB-INF/lib"/>	
 	<property name="axis.lib" value="${axis.home}/lib"/>
+	<property name="axis2.web-inf.lib"
+		value="${tomcat.home}/webapps/axis2/WEB-INF/lib"/>	
+	<property name="axis2.lib" value="${axis2.home}/lib"/>
+	<property name="glassfish.imq.lib"	value="/opt/java_libs/glassfish/imq/lib" />
 	
 	<property name="build" value="${basedir}/build"/>
 	<property name="build.classes" value="${build}/classes"/>
@@ -16,12 +20,14 @@
 	
 	<property name="gen.src" value="${basedir}/gen_src"/>
 	<property name="gen.src.axis" value="${basedir}/gen_src_axis"/>
+	<property name="gen.src.axis2" value="${basedir}/gen_src_axis2"/>
+
 	<property name="impl" value="${basedir}/impl"/>
 	<property name="docs" value="${basedir}/docs"/>
 	
 	<!-- Definition of various Ant tasks -->
 	
-	<!-- The Axis tasks -->
+	<!-- Axis1 tasks -->
 	<taskdef resource="axis-tasks.properties">
 		<classpath>
 			<fileset dir="${axis.lib}" includes="*.jar"/>
@@ -36,7 +42,23 @@
 			<fileset dir="${tomcat.server.lib}" includes="catalina-ant.jar"/>
 		</classpath>
 	</taskdef>
-	
+
+	<!-- Axis2 tasks -->	
+	<taskdef name="axis2-wsdl2java" classname="org.apache.axis2.tool.ant.AntCodegenTask">
+		<classpath>
+			<fileset dir="${axis2.lib}" includes="*jar" />
+<!--			<fileset dir="${log4j.lib}" includes="*jar" />-->
+		</classpath>
+	</taskdef>
+
+	<taskdef name="axis2-java2wsdl" classname="org.apache.ws.java2wsdl.Java2WSDLTask">
+		<classpath>
+<!--			<fileset dir="${log4j.lib}" includes="*jar" />-->
+			<fileset dir="${axis2.lib}" includes="*jar" />
+			<fileset dir="${glassfish.imq.lib}" includes="*jar" />
+		</classpath>
+	</taskdef>
+
 	<!-- End of task definition section -->
 	
 	<!-- Now the real tasks -->	
@@ -44,6 +66,7 @@
 		<mkdir dir="${build.classes}"/>
 		<mkdir dir="${gen.src}"/>		
 		<mkdir dir="${gen.src.axis}"/>		
+		<mkdir dir="${gen.src.axis2}"/>		
 		<mkdir dir="${build.wsdl}"/>
 	</target>
 	
@@ -115,7 +138,7 @@
 	</target>
 
 	
-	<target name="java2wsdl1" depends="compile2">
+	<target name="axis1-java2wsdl1" depends="compile2">
 		<axis-java2wsdl namespace="gen_services.sai_cas"
 			namespaceimpl="gen_services.sai_cas"
 			classname="sai_cas.services.MainAxisServices"
@@ -129,7 +152,7 @@
 	</target>
 	
 	
-	<target name="java2wsdl2" depends="compile2">
+	<target name="axis1-java2wsdl2" depends="compile2">
 		<axis-java2wsdl namespace="gen_services.sai_cas"
 			namespaceimpl="gen_services.sai_cas"
 			classname="sai_cas.services.EditingServices"
@@ -143,7 +166,7 @@
 		</axis-java2wsdl>
 	</target>
 	
-	<target name="java2wsdl3" depends="compile2">
+	<target name="axis1-java2wsdl3" depends="compile2">
 		<axis-java2wsdl namespace="gen_services.sai_cas"
 			namespaceimpl="gen_services.sai_cas"
 			classname="sai_cas.services.UserServices"
@@ -158,7 +181,7 @@
 	</target>
 
 	
-	<target name="wsdl2java1" depends="java2wsdl1">
+	<target name="axis1-wsdl2java1" depends="axis1-java2wsdl1">
 		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
 			url="${build.wsdl}/sai_cas.wsdl" serverside="true"
 			skeletondeploy="true"/>
@@ -169,7 +192,7 @@
 	</target>
 
 	
-	<target name="wsdl2java2" depends="java2wsdl2">
+	<target name="axis1-wsdl2java2" depends="axis1-java2wsdl2">
 		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
 			url="${build.wsdl}/sai_cas_edit.wsdl" serverside="true"
 			skeletondeploy="true"/>
@@ -179,7 +202,7 @@
 			tofile="${gen.src.axis}/sai_cas/gen_services/undeploy2.wsdd"/>
 	</target>
 
-	<target name="wsdl2java3" depends="java2wsdl3">
+	<target name="axis1-wsdl2java3" depends="axis1-java2wsdl3">
 		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
 			url="${build.wsdl}/sai_cas_user.wsdl" serverside="true"
 			skeletondeploy="true"/>
@@ -189,15 +212,15 @@
 			tofile="${gen.src.axis}/sai_cas/gen_services/undeploy3.wsdd"/>
 	</target>
 
-	<target name="wsdl2javaSkyNode">
+	<target name="axis1-wsdl2javaSkyNode">
 		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
 			url="wsdls/SkyNode.wsdl" serverside="true"
 			skeletondeploy="true"/>
 	</target>
 
 				
-	<target name="axiscompile" 
-		depends="wsdl2java1,wsdl2java2,wsdl2java3,wsdl2javaSkyNode">
+	<target name="axis1-compile" 
+		depends="axis1-wsdl2java1,axis1-wsdl2java2,axis1-wsdl2java3,axis1-wsdl2javaSkyNode">
 		<copy
 			file="${impl}/sai_cas/gen_services/MainAxisServicesBindingImpl.java"
 			todir="${gen.src.axis}/sai_cas/gen_services/"
@@ -226,13 +249,13 @@
 	</target>
 
 	
-	<target name="axisjar" depends="compile1,axiscompile">
+	<target name="axis1-jar" depends="compile1,axis1-compile">
 		<jar basedir="${build.classes}" destfile="${build}/sai_cas_ws.jar">
 		</jar>
 	</target>
 
 	
-	<target name="deploy_cas_ws" depends="axisjar">
+	<target name="axis1-deploy_cas_ws" depends="axis1-jar">
 		<copy file="${build}/sai_cas_ws.jar" todir="${axis.web-inf.lib}"/>
 		<axis-admin
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/deploy1.wsdd"
@@ -250,9 +273,8 @@
 			xmlfile="${gen.src.axis}/net/ivoa/SkyNode/deploy.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
 	</target>
-
 	
-	<target name="undeploy_cas_ws" depends="axisjar">
+	<target name="axis1-undeploy_cas_ws" depends="axis1-jar">
 		<copy file="${build}/sai_cas_ws.jar" todir="${axis.web-inf.lib}"/>
 		<axis-admin
 			xmlfile="${gen.src.axis}/sai_cas/gen_services/undeploy1.wsdd"
@@ -269,7 +291,7 @@
 	</target>
 				
 	
-	<target name="all" depends="deploy_cas,deploy_cas_ws"/>
+	<target name="all" depends="deploy_cas,axis1-deploy_cas_ws"/>
 	
 	<target name="docs">
 		<mkdir dir="${docs}"/>		
@@ -285,6 +307,7 @@
 		<delete includeemptydirs="true" quiet="true">
 			<fileset dir="${gen.src}"/>
 			<fileset dir="${gen.src.axis}"/>
+			<fileset dir="${gen.src.axis2}"/>
 			<fileset dir="${build}"/>
 			<fileset dir="${docs}"/>
 		</delete>
