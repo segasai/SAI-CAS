@@ -22,11 +22,11 @@
 	<!-- Definition of various Ant tasks -->
 	
 	<!-- The Java XML Binding Binding Compiler -->
-	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+<!--	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
 		<classpath>
 			<fileset dir="${jwsdp.home}" includes="jaxb/lib/jaxb-xjc.jar" />
 		</classpath>
-	</taskdef>
+	</taskdef>-->
 	
 	<!-- The Axis tasks -->
 	<taskdef resource="axis-tasks.properties">
@@ -56,18 +56,29 @@
 	
 	
 	<target name="xsd2java1" depends="init">
-		<xjc schema="schema/cas1.xsd" target="${gen.src}"
-			package="sai_cas.XMLCatalogFile">
-			<produces dir="${gen.src}/sai_cas/XMLCatalogFile"/>
-		</xjc>
+		<exec executable="xjc">
+			<arg value="-d"/>
+			<arg value="${gen.src}"/>
+			<arg value="-p"/>
+			<arg value="sai_cas.XMLCatalogFile"/>
+			<arg value="schema/cas1.xsd"/>
+<!--			<produces dir="${gen.src}/sai_cas/XMLCatalogFile"/>-->
+		</exec>
 	</target>
 
 	
 	<target name="xsd2java2" depends="init">
-		<xjc schema="schema/VOTable-1.1.xsd" target="${gen.src}"
-			package="sai_cas.VOTABLEFile" binding="schema/VOTable-1.1.xjb">
-			<produces dir="${gen.src}/sai_cas/VOTABLEFile"/>
-		</xjc>
+		<exec executable="xjc">
+			<arg value="-d"/>
+			<arg value="${gen.src}"/>
+			<arg value="-p"/>
+			<arg value="sai_cas.VOTABLEFile"/>
+			<arg value="-b"/>
+			<arg value="schema/VOTable-1.1.xjb"/>
+			<arg value="schema/VOTable-1.1.xsd"/>
+
+<!--			<produces dir="${gen.src}/sai_cas/VOTABLEFile"/>-->
+		</exec>
 	</target>
 	
 	
