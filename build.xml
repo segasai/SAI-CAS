@@ -11,8 +11,8 @@
 	<property name="axis2.services"
 	value="${tomcat.home}/webapps/axis2/WEB-INF/services"/>	
 
-	<property name="axis.codegen.plugin" value="/tmp/codegen/Axis2_Codegen_Wizard_1.2.0/"/>
-	
+	<property name="axis2.lib" value="/opt/java_libs/axis2-1.5.1/lib"/>
+	<property name="glassfish.imq.lib"	value="/opt/java_libs/glassfish/imq/lib" />
 	<property name="build" value="${basedir}/build/"/>
 	<property name="build.classes" value="${build}/classes/"/>
 	<property name="build.wsdl" value="${build}/wsdl"/>
@@ -26,9 +26,8 @@
 
 	<taskdef name="axis-wsdl2java" classname="org.apache.axis2.tool.ant.AntCodegenTask">
 		<classpath>
-			<fileset dir="${axis.codegen.plugin}" includes="*jar" />
+			<fileset dir="${axis2.lib}" includes="*jar" />
 <!--			<fileset dir="${axis2.web-inf.lib}" includes="*.jar" />-->
-			<fileset dir="${axis.codegen.plugin}/lib" includes="*jar" />
 			<fileset dir="${log4j.lib}" includes="*jar" />
 
 		</classpath>
@@ -38,6 +37,8 @@
 		<classpath>
 			<fileset dir="${axis2.web-inf.lib}" includes="*.jar" />
 			<fileset dir="${log4j.lib}" includes="*jar" />
+			<fileset dir="${axis2.lib}" includes="*jar" />
+			<fileset dir="${glassfish.imq.lib}" includes="*jar" />
 		</classpath>
 	</taskdef>
 
@@ -177,7 +178,7 @@
 			destdir="${build.classes}">
 			<compilerarg line="-Xlint:-unchecked"/>
 			<classpath>
-				<fileset dir="${axis2.home}/lib" includes="*.jar"/>
+				<fileset dir="${axis2.lib}" includes="*.jar"/>
 				<fileset dir="${javamail.lib}" includes="*.jar"/>
 				<fileset dir="${activation.lib}" includes="*.jar"/>
 				<fileset dir="${log4j.lib}" includes="*jar" />
