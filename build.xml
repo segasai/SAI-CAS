@@ -24,6 +24,8 @@
 	<property name="gen.src.axis2" value="${basedir}/gen_src_axis2"/>
 
 	<property name="impl" value="${basedir}/impl"/>
+	<property name="impl.axis2" value="${basedir}/impl_axis2"/>
+
 	<property name="docs" value="${basedir}/docs"/>
 	
 	<!-- Definition of various Ant tasks -->
@@ -161,7 +163,7 @@
 			outputLocation="${build.axis2-wsdl}"
 			serviceName="sai_cas">
 			<classpath>
-				<fileset dir="${build}" includes="*jar" />
+			    <pathelement location="${build}/classes"/>
 			</classpath>
 		</axis2-java2wsdl>
 	</target>
@@ -188,7 +190,7 @@
 			outputLocation="${build.axis2-wsdl}"
 			serviceName="sai_cas_edit">
 			<classpath>
-				<fileset dir="${build}" includes="*jar" />
+				<pathelement path="${build.classes}"/>
 			</classpath>
 		</axis2-java2wsdl>
 	</target>
@@ -215,7 +217,7 @@
 			outputLocation="${build.axis2-wsdl}"
 			serviceName="sai_cas_user">
 			<classpath>
-				<fileset dir="${build}" includes="*jar" />
+				<pathelement path="${build.classes}"/>
 			</classpath>
 		</axis2-java2wsdl>
 	</target>
@@ -304,6 +306,36 @@
 			<compilerarg line="-Xlint:-unchecked"/>
 			<classpath>
 				<fileset dir="${axis.lib}" includes="*.jar"/>
+				<fileset dir="${javamail.lib}" includes="*.jar"/>
+				<fileset dir="${activation.lib}" includes="*.jar"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="axis2-compile" 
+		depends="axis2-wsdl2java1,axis2-wsdl2java2,axis2-wsdl2java3,axis2-wsdl2javaSkyNode">
+		<copy
+			file="${impl.axis2}/sai_cas/gen_services/Sai_casSkeleton.java"
+			todir="${gen.src.axis2}/sai_cas/gen_services/"
+			overwrite="true"/>
+		<copy
+			file="${impl.axis2}/sai_cas/gen_services/Sai_cas_editSkeleton.java"
+			todir="${gen.src.axis2}/sai_cas/gen_services/"
+			overwrite="true"/>
+		<copy
+			file="${impl.axis2}/sai_cas/gen_services/Sai_cas_userSkeleton.java"
+			todir="${gen.src.axis2}/sai_cas/gen_services/"
+			overwrite="true"/>
+		<copy
+			file="${impl.axis2}/net/ivoa/skynode/SkyNodeSkeleton.java"
+			todir="${gen.src.axis2}net/ivoa/skynode/"
+			overwrite="true"/>
+
+		<javac debug="${debug}" srcdir="${gen.src.axis2}"
+			destdir="${build.classes}">
+			<compilerarg line="-Xlint:-unchecked"/>
+			<classpath>
+				<fileset dir="${axis2.lib}" includes="*.jar"/>
 				<fileset dir="${javamail.lib}" includes="*.jar"/>
 				<fileset dir="${activation.lib}" includes="*.jar"/>
 			</classpath>
