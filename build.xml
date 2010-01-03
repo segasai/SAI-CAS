@@ -11,6 +11,9 @@
 	<property name="axis.lib" value="${axis.home}/lib"/>
 	<property name="axis2.web-inf.lib"
 		value="${tomcat.home}/webapps/axis2/WEB-INF/lib"/>	
+	<property name="axis2.services"
+		value="${tomcat.home}/webapps/axis2/WEB-INF/services/"/>	
+
 	<property name="axis2.lib" value="${axis2.home}/lib"/>
 	<property name="glassfish.imq.lib"	value="/opt/java_libs/glassfish/imq/lib" />
 	
@@ -316,19 +319,19 @@
 		depends="axis2-wsdl2java1,axis2-wsdl2java2,axis2-wsdl2java3,axis2-wsdl2javaSkyNode">
 		<copy
 			file="${impl.axis2}/sai_cas/gen_services/Sai_casSkeleton.java"
-			todir="${gen.src.axis2}/sai_cas/gen_services/"
+			todir="${gen.src.axis2}/src/sai_cas/gen_services/"
 			overwrite="true"/>
 		<copy
 			file="${impl.axis2}/sai_cas/gen_services/Sai_cas_editSkeleton.java"
-			todir="${gen.src.axis2}/sai_cas/gen_services/"
+			todir="${gen.src.axis2}/src/sai_cas/gen_services/"
 			overwrite="true"/>
 		<copy
 			file="${impl.axis2}/sai_cas/gen_services/Sai_cas_userSkeleton.java"
-			todir="${gen.src.axis2}/sai_cas/gen_services/"
+			todir="${gen.src.axis2}/src/sai_cas/gen_services/"
 			overwrite="true"/>
 		<copy
 			file="${impl.axis2}/net/ivoa/skynode/SkyNodeSkeleton.java"
-			todir="${gen.src.axis2}/net/ivoa/skynode/"
+			todir="${gen.src.axis2}/src/net/ivoa/skynode/"
 			overwrite="true"/>
 
 		<javac debug="${debug}" srcdir="${gen.src.axis2}"
@@ -345,6 +348,17 @@
 	
 	<target name="axis1-jar" depends="compile1,axis1-compile">
 		<jar basedir="${build.classes}" destfile="${build}/sai_cas_ws.jar">
+		</jar>
+	</target>
+
+	<target name="axis2-jar" depends="compile1,axis2-compile">
+		<mkdir dir="${build}/resources/META-INF"/>
+		<copy todir="${build}/resources/META-INF">
+			<fileset dir="${gen.src.axis2}/resources/" includes="*"/>
+		</copy>
+		<jar basedir="${build.classes}" destfile="${build}/sai_cas_ws.aar">
+  		<fileset dir="${build.classes}" />
+  		<fileset dir="${build}/resources/"/>
 		</jar>
 	</target>
 
@@ -367,6 +381,10 @@
 			xmlfile="${gen.src.axis}/net/ivoa/SkyNode/deploy.wsdd"
 			debug="${debug}" hostname="${axis.host}" port="${axis.port}"/>
 	</target>
+
+	<target name="axis2-deploy_cas_ws" depends="axis2-jar">
+		<copy file="${build}/sai_cas_ws.aar" todir="${axis2.services}"/>
+	</target>
 	
 	<target name="axis1-undeploy_cas_ws" depends="axis1-jar">
 		<copy file="${build}/sai_cas_ws.jar" todir="${axis.web-inf.lib}"/>
@@ -386,6 +404,7 @@
 				
 	
 	<target name="all" depends="deploy_cas,axis1-deploy_cas_ws"/>
+	<target name="axis2-all" depends="deploy_cas,axis2-deploy_cas_ws"/>
 	
 	<target name="docs">
 		<mkdir dir="${docs}"/>		
