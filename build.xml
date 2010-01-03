@@ -230,7 +230,12 @@
 		<move file="${gen.src.axis}/sai_cas/gen_services/undeploy.wsdd"
 			tofile="${gen.src.axis}/sai_cas/gen_services/undeploy1.wsdd"/>
 	</target>
-
+	
+	<target name="axis2-wsdl2java1" depends="axis2-java2wsdl1">
+		<axis2-wsdl2java output="${gen.src.axis2}"
+			WSDLFileName="${build.axis2-wsdl}/sai_cas.wsdl" serverside="true"
+			generateServiceXML="true"/>
+	</target>
 	
 	<target name="axis1-wsdl2java2" depends="axis1-java2wsdl2">
 		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
@@ -240,6 +245,12 @@
 			tofile="${gen.src.axis}/sai_cas/gen_services/deploy2.wsdd"/>
 		<move file="${gen.src.axis}/sai_cas/gen_services/undeploy.wsdd"
 			tofile="${gen.src.axis}/sai_cas/gen_services/undeploy2.wsdd"/>
+	</target>
+
+	<target name="axis2-wsdl2java2" depends="axis2-java2wsdl2">
+		<axis2-wsdl2java output="${gen.src.axis2}"
+			WSDLFileName="${build.axis2-wsdl}/sai_cas_edit.wsdl" serverside="true"
+			generateServiceXML="true"/>
 	</target>
 
 	<target name="axis1-wsdl2java3" depends="axis1-java2wsdl3">
@@ -252,12 +263,23 @@
 			tofile="${gen.src.axis}/sai_cas/gen_services/undeploy3.wsdd"/>
 	</target>
 
+	<target name="axis2-wsdl2java3" depends="axis2-java2wsdl3">
+		<axis2-wsdl2java output="${gen.src.axis2}"
+			WSDLFileName="${build.axis2-wsdl}/sai_cas_user.wsdl" serverside="true"
+			generateServiceXML="true"/>
+	</target>
+
 	<target name="axis1-wsdl2javaSkyNode">
 		<axis-wsdl2java output="${gen.src.axis}" timeout="-1"
 			url="wsdls/SkyNode.wsdl" serverside="true"
 			skeletondeploy="true"/>
 	</target>
 
+	<target name="axis2-wsdl2javaSkyNode">
+		<axis2-wsdl2java output="${gen.src.axis2}"
+			WSDLFileName="wsdls/SkyNode.wsdl" serverside="true"
+			generateServiceXML="true"/>
+	</target>
 				
 	<target name="axis1-compile" 
 		depends="axis1-wsdl2java1,axis1-wsdl2java2,axis1-wsdl2java3,axis1-wsdl2javaSkyNode">
