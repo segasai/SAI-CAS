@@ -98,13 +98,20 @@
                  public sai_cas.gen_services.GetCatalogDescriptionResponse getCatalogDescription
                   (
                   sai_cas.gen_services.GetCatalogDescription getCatalogDescription
-                  )
+                  ) throws RemoteExceptionException
             {
-                sai_cas.gen_services.GetCatalogDescriptionResponse ret = new
-                sai_cas.gen_services.GetCatalogDescriptionResponse();
-                ret.set_return(MainAxisServices.getCatalogDescription(
-                  getCatalogDescription.getArgs0()));
+                try
+                {
+					sai_cas.gen_services.GetCatalogDescriptionResponse ret = new
+					sai_cas.gen_services.GetCatalogDescriptionResponse();
+					ret.set_return(MainAxisServices.getCatalogDescription(
+						getCatalogDescription.getArgs0()));
                 return ret;
+				}
+				catch (RemoteException e)
+				{
+					throw new RemoteExceptionException(e.getMessage(),e.getCause());
+				}
 
                 //TODO : fill this with the necessary business logic
                 //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getCatalogDescription");
@@ -446,10 +453,20 @@
                  public sai_cas.gen_services.GetTableCountResponse getTableCount
                   (
                   sai_cas.gen_services.GetTableCount getTableCount
-                  )
+                  ) throws RemoteExceptionException
             {
+                sai_cas.gen_services.GetTableCountResponse ret = new
+                sai_cas.gen_services.GetTableCountResponse();
+                try {
+                ret.set_return(MainAxisServices.getTableCount(
+                  getTableCount.getArgs0(),getTableCount.getArgs1()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getTableCount");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getTableCount");
         }
      
          
@@ -465,8 +482,20 @@
                   sai_cas.gen_services.GetColumnNames_U getColumnNames_U
                   )
             throws RemoteExceptionException{
+                sai_cas.gen_services.GetColumnNames_UResponse ret = new
+                sai_cas.gen_services.GetColumnNames_UResponse();
+                try {
+                ret.set_return(MainAxisServices.getColumnNames_U(
+                  getColumnNames_U.getArgs0(),getColumnNames_U.getArgs1(),
+                  getColumnNames_U.getArgs2(),getColumnNames_U.getArgs3()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
+
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnNames_U");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnNames_U");
         }
      
          
@@ -482,8 +511,19 @@
                   sai_cas.gen_services.DumpCatalog dumpCatalog
                   )
             throws RemoteExceptionException{
+                sai_cas.gen_services.DumpCatalogResponse ret = new
+                sai_cas.gen_services.DumpCatalogResponse();
+                try {
+                ret.set_return(MainAxisServices.dumpCatalog(
+                  dumpCatalog.getArgs0(),dumpCatalog.getArgs1(),
+                  dumpCatalog.getArgs2()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#dumpCatalog");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#dumpCatalog");
         }
      
          
@@ -499,8 +539,20 @@
                   sai_cas.gen_services.GetTableNames_U getTableNames_U
                   )
             throws RemoteExceptionException{
+                sai_cas.gen_services.GetTableNames_UResponse ret = new
+                sai_cas.gen_services.GetTableNames_UResponse();
+                try {
+                ret.set_return(MainAxisServices.getTableNames_U(
+                  getTableNames_U.getArgs0(),getTableNames_U.getArgs1(),
+                  getTableNames_U.getArgs2()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
+
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getTableNames_U");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getTableNames_U");
         }
      
          
@@ -513,10 +565,21 @@
                  public sai_cas.gen_services.GetCatalogDescription_UResponse getCatalogDescription_U
                   (
                   sai_cas.gen_services.GetCatalogDescription_U getCatalogDescription_U
-                  )
+                  ) throws RemoteExceptionException
             {
+                sai_cas.gen_services.GetCatalogDescription_UResponse ret = new
+                sai_cas.gen_services.GetCatalogDescription_UResponse();
+                try {
+                ret.set_return(MainAxisServices.getCatalogDescription_U(
+                  getCatalogDescription_U.getArgs0(),getCatalogDescription_U.getArgs1(),
+                  getCatalogDescription_U.getArgs2()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getCatalogDescription_U");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getCatalogDescription_U");
         }
      
          
@@ -532,8 +595,19 @@
                   sai_cas.gen_services.GetColumnUCDs_U getColumnUCDs_U
                   )
             throws RemoteExceptionException{
+                sai_cas.gen_services.GetColumnUCDs_UResponse ret = new
+                sai_cas.gen_services.GetColumnUCDs_UResponse();
+                try {
+                ret.set_return(MainAxisServices.getColumnUCDs_U(
+                  getColumnUCDs_U.getArgs0(),getColumnUCDs_U.getArgs1(),
+                  getColumnUCDs_U.getArgs2(),getColumnUCDs_U.getArgs3()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnUCDs_U");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnUCDs_U");
         }
      
          
@@ -550,6 +624,14 @@
                   )
             throws RemoteExceptionException{
                 //TODO : fill this with the necessary business logic
+                try {
+                MainAxisServices.insertCatalogFromURI(
+                  insertCatalogFromURI.getArgs0(),insertCatalogFromURI.getArgs1(),
+                  insertCatalogFromURI.getArgs2());
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
                 
         }
      
@@ -566,8 +648,20 @@
                   sai_cas.gen_services.GetTableDescription_U getTableDescription_U
                   )
             throws RemoteExceptionException{
+                sai_cas.gen_services.GetTableDescription_UResponse ret = new
+                sai_cas.gen_services.GetTableDescription_UResponse();
+                try {
+                ret.set_return(MainAxisServices.getTableDescription_U(
+                  getTableDescription_U.getArgs0(),getTableDescription_U.getArgs1(),
+                  getTableDescription_U.getArgs2(),getTableDescription_U.getArgs3()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
+
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getTableDescription_U");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getTableDescription_U");
         }
      
          
@@ -583,8 +677,20 @@
                   sai_cas.gen_services.GetColumnUnits_U getColumnUnits_U
                   )
             throws RemoteExceptionException{
+                sai_cas.gen_services.GetColumnUnits_UResponse ret = new
+                sai_cas.gen_services.GetColumnUnits_UResponse();
+                try {
+                ret.set_return(MainAxisServices.getColumnUnits_U(
+                  getColumnUnits_U.getArgs0(),getColumnUnits_U.getArgs1(),
+                  getColumnUnits_U.getArgs2(),getColumnUnits_U.getArgs3()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
+
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnUnits_U");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnUnits_U");
         }
      
          
@@ -600,8 +706,18 @@
                   sai_cas.gen_services.GetColumnUCDs getColumnUCDs
                   )
             throws RemoteExceptionException{
+                sai_cas.gen_services.GetColumnUCDsResponse ret = new
+                sai_cas.gen_services.GetColumnUCDsResponse();
+                try {
+                ret.set_return(MainAxisServices.getColumnUCDs(
+                  getColumnUCDs.getArgs0(),getColumnUCDs.getArgs1()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnUCDs");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnUCDs");
         }
      
          
@@ -616,10 +732,55 @@
                   sai_cas.gen_services.GetConeSearchAsString getConeSearchAsString
                   )
             {
+                sai_cas.gen_services.GetConeSearchAsStringResponse ret = new
+                sai_cas.gen_services.GetConeSearchAsStringResponse();
+                //try
+				{
+                ret.set_return(MainAxisServices.getConeSearchAsString(
+                  getConeSearchAsString.getArgs0(),getConeSearchAsString.getArgs1(),
+                  getConeSearchAsString.getArgs2(),getConeSearchAsString.getArgs3(),
+                  getConeSearchAsString.getArgs4(),getConeSearchAsString.getArgs5()));
+                }
+				//catch (RemoteException e)
+                {
+                //  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getConeSearchAsString");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getConeSearchAsString");
         }
      
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param getConeSearchAsString
+         */
+        
+                 public sai_cas.gen_services.GetConeSearchAsString_withColumnsResponse getConeSearchAsString_withColumns
+                  (
+                  sai_cas.gen_services.GetConeSearchAsString_withColumns getConeSearchAsString_withColumns
+                  )
+            {
+                sai_cas.gen_services.GetConeSearchAsString_withColumnsResponse ret = new
+                sai_cas.gen_services.GetConeSearchAsString_withColumnsResponse();
+                //try
+				{
+                ret.set_return(MainAxisServices.getConeSearchAsString_withColumns(
+                  getConeSearchAsString_withColumns.getArgs0(),getConeSearchAsString_withColumns.getArgs1(),
+                  getConeSearchAsString_withColumns.getArgs2(),getConeSearchAsString_withColumns.getArgs3(),
+                  getConeSearchAsString_withColumns.getArgs4(),getConeSearchAsString_withColumns.getArgs5(),
+					getConeSearchAsString_withColumns.getArgs6()));
+                }
+				//catch (RemoteException e)
+                {
+                  //throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
+                //TODO : fill this with the necessary business logic
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getConeSearchAsString");
+        }
+
+
          
         /**
          * Auto generated method signature
@@ -633,8 +794,19 @@
                   sai_cas.gen_services.GetColumnDatatypes getColumnDatatypes
                   )
             throws RemoteExceptionException{
+                sai_cas.gen_services.GetColumnDatatypesResponse ret = new
+                sai_cas.gen_services.GetColumnDatatypesResponse();
+                try {
+                ret.set_return(MainAxisServices.getColumnDatatypes(
+                  getColumnDatatypes.getArgs0(),getColumnDatatypes.getArgs1()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
+
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnDatatypes");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnDatatypes");
         }
      
          
@@ -650,8 +822,19 @@
                   sai_cas.gen_services.GetColumnDescriptions_U getColumnDescriptions_U
                   )
             throws RemoteExceptionException{
+                sai_cas.gen_services.GetColumnDescriptions_UResponse ret = new
+                sai_cas.gen_services.GetColumnDescriptions_UResponse();
+                try {
+                ret.set_return(MainAxisServices.getColumnDescriptions_U(
+                  getColumnDescriptions_U.getArgs0(),getColumnDescriptions_U.getArgs1(),
+                  getColumnDescriptions_U.getArgs2(),getColumnDescriptions_U.getArgs3()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;                
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnDescriptions_U");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnDescriptions_U");
         }
      
          
@@ -667,8 +850,18 @@
                   sai_cas.gen_services.GetTableNames getTableNames
                   )
             throws RemoteExceptionException{
+                sai_cas.gen_services.GetTableNamesResponse ret = new
+                sai_cas.gen_services.GetTableNamesResponse();
+                try {
+                ret.set_return(MainAxisServices.getTableNames(
+                  getTableNames.getArgs0()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;                
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getTableNames");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getTableNames");
         }
      
          
@@ -684,8 +877,19 @@
                   sai_cas.gen_services.GetColumnDatatypes_U getColumnDatatypes_U
                   )
             throws RemoteExceptionException{
+                sai_cas.gen_services.GetColumnDatatypes_UResponse ret = new
+                sai_cas.gen_services.GetColumnDatatypes_UResponse();
+                try {
+                ret.set_return(MainAxisServices.getColumnDatatypes_U(
+                  getColumnDatatypes_U.getArgs0(),getColumnDatatypes_U.getArgs1(),
+                  getColumnDatatypes_U.getArgs2(),getColumnDatatypes_U.getArgs3()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnDatatypes_U");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnDatatypes_U");
         }
      
          
@@ -701,8 +905,18 @@
                   sai_cas.gen_services.GetTableDescription getTableDescription
                   )
             throws RemoteExceptionException{
+                sai_cas.gen_services.GetTableDescriptionResponse ret = new
+                sai_cas.gen_services.GetTableDescriptionResponse();
+                try {
+                ret.set_return(MainAxisServices.getTableDescription(
+                  getTableDescription.getArgs0(),getTableDescription.getArgs1()));
+                } catch (RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }
+                return ret;
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getTableDescription");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getTableDescription");
         }
      
          
@@ -718,6 +932,16 @@
                   sai_cas.gen_services.InsertTable insertTable
                   )
             throws RemoteExceptionException{
+                try
+                {
+                sai_cas.services.MainAxisServices.insertTable(
+                  insertTable.getArgs0(),insertTable.getArgs1(),
+                  insertTable.getArgs2());
+                } catch(RemoteException e)
+                {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+                }                
+
                 //TODO : fill this with the necessary business logic
                 
         }
@@ -733,8 +957,18 @@
                   
                   )
             {
+              sai_cas.gen_services.GetDBLastChangedDateResponse ret =
+              new sai_cas.gen_services.GetDBLastChangedDateResponse();
+              //try{
+              ret.set_return(MainAxisServices.getDBLastChangedDate());
+              //} catch(RemoteException e)
+              {
+              //    throw new RemoteExceptionException(e.getMessage(),e.getCause());
+              }
+              return ret;
+
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getDBLastChangedDate");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getDBLastChangedDate");
         }
      
          
@@ -750,8 +984,18 @@
                   sai_cas.gen_services.GetCatalogNames_U getCatalogNames_U
                   )
             throws RemoteExceptionException{
+              sai_cas.gen_services.GetCatalogNames_UResponse ret =
+              new sai_cas.gen_services.GetCatalogNames_UResponse();
+              try{
+              ret.set_return(MainAxisServices.getCatalogNames_U(getCatalogNames_U.getArgs0(),
+				getCatalogNames_U.getArgs1()));
+              } catch(RemoteException e)
+              {
+                  throw new RemoteExceptionException(e.getMessage(),e.getCause());
+              }
+              return ret;
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getCatalogNames_U");
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getCatalogNames_U");
         }
      
     }

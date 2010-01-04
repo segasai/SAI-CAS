@@ -449,16 +449,11 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 	}
 
 
-	public String getConeSearchAsString(String cat, String tab, double ra, double dec, double sr, String format, String columnList[])
+	public String getConeSearchAsString_withColumns(String cat, String tab, double ra, double dec, double sr, String format, String columnList[])
 	{
 		return MainAxisServices.getConeSearchAsString(cat, tab, ra, dec, sr, format, columnList);
 	}
 	
-/*	public Date getDBLastChangedDate()
-	{
-		return (MainAxisServices.getDBLastChangedDate());
-	}
-*/
 	public Calendar getDBLastChangedDate()
 	{
 		return (MainAxisServices.getDBLastChangedDate());

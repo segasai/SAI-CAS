@@ -455,7 +455,7 @@ public class MainAxisServices {
 	 * @return String -- the Description of the catalogue
 	 * @throws RemoteException
 	 */
-	public static String getCatalogDescription(String catalog) 
+	public static String getCatalogDescription(String catalog) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -468,7 +468,8 @@ public class MainAxisServices {
 		}
 		catch(SQLException e)
 		{
-			logger.error("Caught an exception... ", e);			
+			logger.error("Caught an exception... ", e);
+			throw new RemoteException(e.getMessage(),e.getCause());
 		}
 		finally
 		{
@@ -482,7 +483,7 @@ public class MainAxisServices {
 	 * @return String -- the Description of the catalogue
 	 * @throws RemoteException
 	 */
-	public static String getCatalogDescription_U(String catalog, String user, String password) 
+	public static String getCatalogDescription_U(String catalog, String user, String password) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -495,7 +496,8 @@ public class MainAxisServices {
 		}
 		catch(SQLException e)
 		{
-			logger.error("Caught an exception... ", e);			
+			logger.error("Caught an exception... ", e);
+			throw new RemoteException(e.getMessage(),e.getCause());
 		}
 		finally
 		{
@@ -1058,7 +1060,7 @@ public class MainAxisServices {
 
 
 	public static String getConeSearchAsString(String cat, String tab,
-		double ra, double dec, double sr, String format) 
+		double ra, double dec, double sr, String format)
 	{	
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
@@ -1072,7 +1074,7 @@ public class MainAxisServices {
 		return sw.toString();	
 	}	
 
-	public static String getConeSearchAsString(String cat, String tab,
+	public static String getConeSearchAsString_withColumns(String cat, String tab,
 		double ra, double dec, double sr, String format, String columnList[] ) 
 	{	
 		StringWriter sw = new StringWriter();
