@@ -118,15 +118,15 @@
 	
 	<target name="compile2" depends="compile1">
 		<javac srcdir="src" debug="${debug}" destdir="${build.classes}"
-			excludes="src/sai_cas/services/*" classpath="${build.classes}">
+			excludes="sai_cas/services/*" classpath="${build.classes}">
 			<compilerarg line="-Xlint:unchecked" />
 			<classpath>
 				<fileset dir="${commons.fileupload.lib}" includes="*.jar" />
 				<fileset dir="${tomcat.common.lib}" includes="*.jar" />
 			</classpath>
 		</javac>
-		<javac srcdir="src" debug="${debug}" destdir="${build.classes}"
-			includes="src/sai_cas/services/*" classpath="${build.classes}">
+		<javac srcdir="src" debug="on" destdir="${build.classes}"
+			includes="sai_cas/services/*" classpath="${build.classes}">
 			<compilerarg line="-Xlint:unchecked" />
 			<classpath>
 				<fileset dir="${commons.fileupload.lib}" includes="*.jar" />
@@ -299,7 +299,7 @@
 			WSDLFileName="wsdls/SkyNode.wsdl" serverside="true"
 			generateServiceXML="true"/>
 	</target>
-				
+			
 	<target name="axis1-compile" 
 		depends="axis1-wsdl2java1,axis1-wsdl2java2,axis1-wsdl2java3,axis1-wsdl2javaSkyNode">
 		<copy
