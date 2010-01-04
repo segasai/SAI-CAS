@@ -32,7 +32,7 @@ import java.util.Calendar;
 import org.apache.log4j.Logger;
 
 import sai_cas.services.MainAxisServices;
-
+import java.rmi.RemoteException;
 
 public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxisServices
 {
@@ -142,9 +142,9 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		return MainAxisServices.getCatalogNames();
 	}
 
-	public java.lang.String[] getCatalogNames(String user, String password) throws java.rmi.RemoteException
+	public java.lang.String[] getCatalogNames_U(String user, String password) throws java.rmi.RemoteException
 	{
-		return MainAxisServices.getCatalogNames(user, password);
+		return MainAxisServices.getCatalogNames_U(user, password);
 	}
 
 
@@ -161,11 +161,11 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		}	
 	}
 
-	public java.lang.String getCatalogInfo(String cat, String user, String password) throws java.rmi.RemoteException
+	public java.lang.String getCatalogInfo_U(String cat, String user, String password) throws java.rmi.RemoteException
 	{
 		try 
 		{
-			return MainAxisServices.getCatalogInfo(cat, user, password);
+			return MainAxisServices.getCatalogInfo_U(cat, user, password);
 		}
 		catch (Exception e)
 		{
@@ -187,11 +187,11 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		}	
 	}
 
-	public java.lang.String getCatalogDescription(String cat, String user, String password) throws java.rmi.RemoteException
+	public java.lang.String getCatalogDescription_U(String cat, String user, String password) throws java.rmi.RemoteException
 	{
 		try 
 		{
-			return MainAxisServices.getCatalogDescription(cat, user, password);
+			return MainAxisServices.getCatalogDescription_U(cat, user, password);
 		}
 		catch (Exception e)
 		{
@@ -213,11 +213,11 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		}
 	}
 
-	public java.lang.String[] getTableNames(java.lang.String catalogName, String user, String password) throws java.rmi.RemoteException
+	public java.lang.String[] getTableNames_U(java.lang.String catalogName, String user, String password) throws java.rmi.RemoteException
 	{
 		try
 		{
-			return MainAxisServices.getTableNames(catalogName, user, password);
+			return MainAxisServices.getTableNames_U(catalogName, user, password);
 		}
 		catch(Exception e)
 		{
@@ -239,11 +239,11 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		}
 	}
 
-	public java.lang.String getTableDescription(java.lang.String catalogName, String tableName, String user, String password) throws java.rmi.RemoteException
+	public java.lang.String getTableDescription_U(java.lang.String catalogName, String tableName, String user, String password) throws java.rmi.RemoteException
 	{
 		try
 		{
-			return MainAxisServices.getTableDescription(catalogName, tableName, user, password);
+			return MainAxisServices.getTableDescription_U(catalogName, tableName, user, password);
 		}
 		catch(Exception e)
 		{
@@ -266,11 +266,11 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		}
 	}
 
-	public java.lang.String[] getColumnNames(java.lang.String catalogName, java.lang.String tableName, String user, String password) throws java.rmi.RemoteException
+	public java.lang.String[] getColumnNames_U(java.lang.String catalogName, java.lang.String tableName, String user, String password) throws java.rmi.RemoteException
 	{
 		try
 		{
-			return MainAxisServices.getColumnNames(catalogName, tableName, user, password);
+			return MainAxisServices.getColumnNames_U(catalogName, tableName, user, password);
 		}
 		catch(Exception e)
 		{
@@ -293,11 +293,11 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		}
 	}
 
-	public java.lang.String[] getColumnInfos(java.lang.String catalogName, java.lang.String tableName, String user, String password) throws java.rmi.RemoteException
+	public java.lang.String[] getColumnInfos_U(java.lang.String catalogName, java.lang.String tableName, String user, String password) throws java.rmi.RemoteException
 	{
 		try
 		{
-			return MainAxisServices.getColumnInfos(catalogName, tableName, user, password);
+			return MainAxisServices.getColumnInfos_U(catalogName, tableName, user, password);
 		}
 		catch(Exception e)
 		{
@@ -320,11 +320,11 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 	}
 	
 
-	public java.lang.String[] getColumnDescriptions(java.lang.String catalogName, java.lang.String tableName, String user, String password) throws java.rmi.RemoteException
+	public java.lang.String[] getColumnDescriptions_U(java.lang.String catalogName, java.lang.String tableName, String user, String password) throws java.rmi.RemoteException
 	{
 		try
 		{
-			return MainAxisServices.getColumnDescriptions(catalogName, tableName, user, password);
+			return MainAxisServices.getColumnDescriptions_U(catalogName, tableName, user, password);
 		}
 		catch(Exception e)
 		{
@@ -347,11 +347,11 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		}
 	}
 
-	public java.lang.String[] getColumnUnits(java.lang.String catalogName, java.lang.String tableName, String user, String password) throws java.rmi.RemoteException
+	public java.lang.String[] getColumnUnits_U(java.lang.String catalogName, java.lang.String tableName, String user, String password) throws java.rmi.RemoteException
 	{
 		try
 		{
-			return MainAxisServices.getColumnUnits(catalogName, tableName, user, password);
+			return MainAxisServices.getColumnUnits_U(catalogName, tableName, user, password);
 		}
 		catch(Exception e)
 		{
@@ -375,11 +375,11 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 	}
 
 
-	public java.lang.String[] getColumnDatatypes(java.lang.String catalogName, java.lang.String tableName, String user, String password) throws java.rmi.RemoteException
+	public java.lang.String[] getColumnDatatypes_U(java.lang.String catalogName, java.lang.String tableName, String user, String password) throws java.rmi.RemoteException
 	{
 		try
 		{
-			return MainAxisServices.getColumnDatatypes(catalogName, tableName, user, password);
+			return MainAxisServices.getColumnDatatypes_U(catalogName, tableName, user, password);
 		}
 		catch(Exception e)
 		{
@@ -405,11 +405,11 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 
 
 
-	public java.lang.String[] getColumnUCDs(java.lang.String catalogName, java.lang.String tableName, String user, String password) throws java.rmi.RemoteException
+	public java.lang.String[] getColumnUCDs_U(java.lang.String catalogName, java.lang.String tableName, String user, String password) throws java.rmi.RemoteException
 	{
 		try
 		{
-			return MainAxisServices.getColumnUCDs(catalogName, tableName, user, password);
+			return MainAxisServices.getColumnUCDs_U(catalogName, tableName, user, password);
 		}
 		catch(Exception e)
 		{
@@ -432,14 +432,14 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 		}
 	}
 
-	public long getTableCount(String catalogName, String tableName)
+	public long getTableCount(String catalogName, String tableName) throws RemoteException
 	{
 		return MainAxisServices.getTableCount(catalogName, tableName);
 	}
 
-	public long getTableCount(java.lang.String catalogName, String tableName, String user, String password)
+	public long getTableCount_U(java.lang.String catalogName, String tableName, String user, String password) throws RemoteException
 	{
-		return MainAxisServices.getTableCount(catalogName, tableName, user, password);
+		return MainAxisServices.getTableCount_U(catalogName, tableName, user, password);
 	}
 
 	
@@ -451,7 +451,7 @@ public class MainAxisServicesBindingImpl implements sai_cas.gen_services.MainAxi
 
 	public String getConeSearchAsString_withColumns(String cat, String tab, double ra, double dec, double sr, String format, String columnList[])
 	{
-		return MainAxisServices.getConeSearchAsString(cat, tab, ra, dec, sr, format, columnList);
+		return MainAxisServices.getConeSearchAsString_withColumns(cat, tab, ra, dec, sr, format, columnList);
 	}
 	
 	public Calendar getDBLastChangedDate()
