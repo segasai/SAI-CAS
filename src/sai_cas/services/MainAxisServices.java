@@ -1003,7 +1003,7 @@ public class MainAxisServices {
 	 * @return the (approximate) row count of the table
 	 * @throws RemoteException
 	 */
-	public static long getTableCount(String catalogName, String tableName)
+	public static long getTableCount(String catalogName, String tableName) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -1016,7 +1016,8 @@ public class MainAxisServices {
 		}
 		catch(SQLException e)
 		{
-			logger.error("Caught an exception... ", e);			
+			logger.error("Caught an exception... ", e);
+			throw new RemoteException(e.getMessage(),e.getCause());
 		}
 		finally
 		{
@@ -1032,7 +1033,7 @@ public class MainAxisServices {
 	 * @return the (approximate) row count of the table
 	 * @throws RemoteException
 	 */
-	public static long getTableCount_U(String catalogName, String tableName, String user, String password)
+	public static long getTableCount_U(String catalogName, String tableName, String user, String password) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -1045,7 +1046,8 @@ public class MainAxisServices {
 		}
 		catch(SQLException e)
 		{
-			logger.error("Caught an exception... ", e);			
+			logger.error("Caught an exception... ", e);
+			throw new RemoteException(e.getMessage(),e.getCause());
 		}
 		finally
 		{
