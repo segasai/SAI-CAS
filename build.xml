@@ -15,7 +15,7 @@
 		value="${tomcat.home}/webapps/axis2/WEB-INF/services/"/>	
 
 	<property name="axis2.lib" value="${axis2.home}/lib"/>
-	<property name="glassfish.imq.lib"	value="/opt/java_libs/glassfish/imq/lib" />
+	<property name="glassfish.imq.lib"	value="${glassfish.home}/imq/lib" />
 	
 	<property name="build" value="${basedir}/build"/>
 	<property name="build.classes" value="${build}/classes"/>
