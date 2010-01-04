@@ -67,7 +67,7 @@ public class XMLCatalog
 		Unmarshaller um = null;
 		try
 		{
-			JAXBContext jc = JAXBContext.newInstance("sai_cas.XMLCatalogFile");
+			JAXBContext jc = JAXBContext.newInstance(new Class[] {sai_cas.XMLCatalogFile.ObjectFactory.class});
 			um = jc.createUnmarshaller();
 		}
 		catch (JAXBException e)
