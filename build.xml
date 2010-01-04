@@ -117,13 +117,23 @@
 	
 	
 	<target name="compile2" depends="compile1">
-		<javac srcdir="src" debug="${debug}" destdir="${build.classes}" classpath="${build.classes}">
+		<javac srcdir="src" debug="${debug}" destdir="${build.classes}"
+			excludes="src/sai_cas/services/*" classpath="${build.classes}">
 			<compilerarg line="-Xlint:unchecked" />
 			<classpath>
 				<fileset dir="${commons.fileupload.lib}" includes="*.jar" />
 				<fileset dir="${tomcat.common.lib}" includes="*.jar" />
 			</classpath>
 		</javac>
+		<javac srcdir="src" debug="${debug}" destdir="${build.classes}"
+			includes="src/sai_cas/services/*" classpath="${build.classes}">
+			<compilerarg line="-Xlint:unchecked" />
+			<classpath>
+				<fileset dir="${commons.fileupload.lib}" includes="*.jar" />
+				<fileset dir="${tomcat.common.lib}" includes="*.jar" />
+			</classpath>
+		</javac>
+
 	</target>
 
 	
