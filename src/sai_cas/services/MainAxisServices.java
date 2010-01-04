@@ -369,7 +369,7 @@ public class MainAxisServices {
 	 * @return String[] -- the array of catalogues in the system
 	 * @throws RemoteException
 	 */
-	public static String[] getCatalogNames(String user, String password) throws RemoteException
+	public static String[] getCatalogNames_U(String user, String password) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -427,7 +427,7 @@ public class MainAxisServices {
 	 * @return String -- the info about the catalogue
 	 * @throws RemoteException
 	 */
-	public static String getCatalogInfo(String catalog, String user, String password) 
+	public static String getCatalogInfo_U(String catalog, String user, String password) 
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -482,7 +482,7 @@ public class MainAxisServices {
 	 * @return String -- the Description of the catalogue
 	 * @throws RemoteException
 	 */
-	public static String getCatalogDescription(String catalog, String user, String password) 
+	public static String getCatalogDescription_U(String catalog, String user, String password) 
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -541,7 +541,7 @@ public class MainAxisServices {
 	 * @return String[] the array of table names in the catalogue
 	 * @throws RemoteException
 	 */
-	public static String[] getTableNames(String catalogName, String user, String password) throws RemoteException
+	public static String[] getTableNames_U(String catalogName, String user, String password) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -599,7 +599,7 @@ public class MainAxisServices {
 	 * @return String the table description in the catalogue
 	 * @throws RemoteException
 	 */
-	public static String getTableDescription(String catalogName, String tableName, String user, String password) throws RemoteException
+	public static String getTableDescription_U(String catalogName, String tableName, String user, String password) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -659,7 +659,7 @@ public class MainAxisServices {
 	 * @return String[] the array of column names in the table of the catalogue
 	 * @throws RemoteException
 	 */
-	public static String[] getColumnNames(String catalogName, String tableName, String user, String password) throws RemoteException
+	public static String[] getColumnNames_U(String catalogName, String tableName, String user, String password) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -718,7 +718,7 @@ public class MainAxisServices {
 	 * @return String[] the array of infos about the columns in the table of the catalogue
 	 * @throws RemoteException
 	 */
-	public static String[] getColumnInfos(String catalogName, String tableName, String user, String password) throws RemoteException
+	public static String[] getColumnInfos_U(String catalogName, String tableName, String user, String password) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -777,7 +777,7 @@ public class MainAxisServices {
 	 * @return String[] the array of descriptions of the columns in the table of the catalogue
 	 * @throws RemoteException
 	 */
-	public static String[] getColumnDescriptions(String catalogName, String tableName, String user, String password) throws RemoteException
+	public static String[] getColumnDescriptions_U(String catalogName, String tableName, String user, String password) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -837,7 +837,7 @@ public class MainAxisServices {
 	 * @return String[] -- the array of units of columns in the table of the catalogue
 	 * @throws RemoteException
 	 */
-	public static String[] getColumnUnits(String catalogName, String tableName, String user, String password) throws RemoteException
+	public static String[] getColumnUnits_U(String catalogName, String tableName, String user, String password) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -896,7 +896,7 @@ public class MainAxisServices {
 	 * @return String[] -- the array of UCD's of columns in the table of the catalogue
 	 * @throws RemoteException
 	 */
-	public static String[] getColumnUCDs(String catalogName, String tableName, String user, String password) throws RemoteException
+	public static String[] getColumnUCDs_U(String catalogName, String tableName, String user, String password) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -942,7 +942,7 @@ public class MainAxisServices {
 	}
 
 
-	public static String[] getColumnDatatypes(String catalogName, String tableName, String user, String password) throws RemoteException
+	public static String[] getColumnDatatypes_U(String catalogName, String tableName, String user, String password) throws RemoteException
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
@@ -1032,7 +1032,7 @@ public class MainAxisServices {
 	 * @return the (approximate) row count of the table
 	 * @throws RemoteException
 	 */
-	public static long getTableCount(String catalogName, String tableName, String user, String password)
+	public static long getTableCount_U(String catalogName, String tableName, String user, String password)
 	{
 		Connection conn = null;
 		DBInterface dbi = null;
