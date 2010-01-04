@@ -11,8 +11,9 @@
      */
     import sai_cas.services.MainAxisServices;
     import java.rmi.RemoteException;
-        
+    import org.apache.log4j.Logger;    
     public class Sai_casSkeleton{
+    static Logger logger = Logger.getLogger("sai_cas.AXIS_SERVICES");
         
          
         /**
@@ -94,6 +95,7 @@
                   )
             throws RemoteExceptionException{
                 //TODO : fill this with the necessary business logic
+                logger.info("Running GetCatalogNames()");
                 sai_cas.gen_services.GetCatalogNamesResponse ret =
                 new sai_cas.gen_services.GetCatalogNamesResponse();
                 try{
@@ -109,14 +111,14 @@
          * Auto generated method signature
          * 
                                      * @param getColumnUnits
-             * @throws ExceptionException : 
+             * @throws RemoteExceptionException : 
          */
         
                  public sai_cas.gen_services.GetColumnUnitsResponse getColumnUnits
                   (
                   sai_cas.gen_services.GetColumnUnits getColumnUnits
                   )
-            throws ExceptionException{
+            throws RemoteExceptionException{
                 //TODO : fill this with the necessary business logic
                 throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnUnits");
         }
@@ -126,14 +128,14 @@
          * Auto generated method signature
          * 
                                      * @param getIndexes
-             * @throws ExceptionException : 
+             * @throws RemoteExceptionException : 
          */
         
                  public sai_cas.gen_services.GetIndexesResponse getIndexes
                   (
                   sai_cas.gen_services.GetIndexes getIndexes
                   )
-            throws ExceptionException{
+            throws RemoteExceptionException{
                 //TODO : fill this with the necessary business logic
                 throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getIndexes");
         }
@@ -143,14 +145,14 @@
          * Auto generated method signature
          * 
                                      * @param getColumnDescriptions
-             * @throws ExceptionException : 
+             * @throws RemoteExceptionException : 
          */
         
                  public sai_cas.gen_services.GetColumnDescriptionsResponse getColumnDescriptions
                   (
                   sai_cas.gen_services.GetColumnDescriptions getColumnDescriptions
                   )
-            throws ExceptionException{
+            throws RemoteExceptionException{
                 //TODO : fill this with the necessary business logic
                 throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnDescriptions");
         }
@@ -177,14 +179,14 @@
          * Auto generated method signature
          * 
                                      * @param getColumnInfos
-             * @throws ExceptionException : 
+             * @throws RemoteExceptionException : 
          */
         
                  public sai_cas.gen_services.GetColumnInfosResponse getColumnInfos
                   (
                   sai_cas.gen_services.GetColumnInfos getColumnInfos
                   )
-            throws ExceptionException{
+            throws RemoteExceptionException{
                 //TODO : fill this with the necessary business logic
                 throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnInfos");
         }
@@ -211,14 +213,14 @@
          * Auto generated method signature
          * 
                                      * @param getColumnNames
-             * @throws ExceptionException : 
+             * @throws RemoteExceptionException : 
          */
         
                  public sai_cas.gen_services.GetColumnNamesResponse getColumnNames
                   (
                   sai_cas.gen_services.GetColumnNames getColumnNames
                   )
-            throws ExceptionException{
+            throws RemoteExceptionException{
                 //TODO : fill this with the necessary business logic
                 throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnNames");
         }
@@ -278,14 +280,14 @@
          * Auto generated method signature
          * 
                                      * @param getColumnUCDs
-             * @throws ExceptionException : 
+             * @throws RemoteExceptionException : 
          */
         
                  public sai_cas.gen_services.GetColumnUCDsResponse getColumnUCDs
                   (
                   sai_cas.gen_services.GetColumnUCDs getColumnUCDs
                   )
-            throws ExceptionException{
+            throws RemoteExceptionException{
                 //TODO : fill this with the necessary business logic
                 throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnUCDs");
         }
@@ -311,14 +313,14 @@
          * Auto generated method signature
          * 
                                      * @param getColumnDatatypes
-             * @throws ExceptionException : 
+             * @throws RemoteExceptionException : 
          */
         
                  public sai_cas.gen_services.GetColumnDatatypesResponse getColumnDatatypes
                   (
                   sai_cas.gen_services.GetColumnDatatypes getColumnDatatypes
                   )
-            throws ExceptionException{
+            throws RemoteExceptionException{
                 //TODO : fill this with the necessary business logic
                 throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getColumnDatatypes");
         }
@@ -328,14 +330,14 @@
          * Auto generated method signature
          * 
                                      * @param getTableNames
-             * @throws ExceptionException : 
+             * @throws RemoteExceptionException : 
          */
         
                  public sai_cas.gen_services.GetTableNamesResponse getTableNames
                   (
                   sai_cas.gen_services.GetTableNames getTableNames
                   )
-            throws ExceptionException{
+            throws RemoteExceptionException{
                 //TODO : fill this with the necessary business logic
                 throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getTableNames");
         }
@@ -345,14 +347,14 @@
          * Auto generated method signature
          * 
                                      * @param getTableDescription
-             * @throws ExceptionException : 
+             * @throws RemoteExceptionException : 
          */
         
                  public sai_cas.gen_services.GetTableDescriptionResponse getTableDescription
                   (
                   sai_cas.gen_services.GetTableDescription getTableDescription
                   )
-            throws ExceptionException{
+            throws RemoteExceptionException{
                 //TODO : fill this with the necessary business logic
                 throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getTableDescription");
         }
