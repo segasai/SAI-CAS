@@ -9,6 +9,9 @@
     /**
      *  Sai_casSkeleton java skeleton for the axisService
      */
+    import sai_cas.services.MainAxisServices;
+    import java.rmi.RemoteException;
+        
     public class Sai_casSkeleton{
         
          
@@ -91,7 +94,14 @@
                   )
             throws RemoteExceptionException{
                 //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getCatalogNames");
+                sai_cas.gen_services.GetCatalogNamesResponse ret =
+                new sai_cas.gen_services.GetCatalogNamesResponse();
+                try{
+                ret.set_return(MainAxisServices.getCatalogNames());
+                } catch(RemoteException e)
+                {}
+                return ret;
+                //throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#getCatalogNames");
         }
      
          
