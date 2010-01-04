@@ -75,10 +75,14 @@
 		<mkdir dir="${gen.src.axis2}"/>		
 		<mkdir dir="${build.wsdl}"/>
 		<mkdir dir="${build.axis2-wsdl}"/>
+		<uptodate property="xsd2java1.notRequired" srcfile="schema/cas1.xsd"
+		targetfile="${gen.src}/sai_cas/XMLCatalogFile" />		
+		<uptodate property="xsd2java2.notRequired" srcfile="schema/VOTable-1.1.xsd"
+		targetfile="${gen.src}/sai_cas/VOTABLEFile"/>
 	</target>
 	
 	
-	<target name="xsd2java1" depends="init">
+	<target name="xsd2java1" depends="init"  unless="xsd2java1.notRequired">
 		<exec executable="xjc">
 			<arg value="-d"/>
 			<arg value="${gen.src}"/>
@@ -90,7 +94,7 @@
 	</target>
 
 	
-	<target name="xsd2java2" depends="init">
+	<target name="xsd2java2" depends="init" unless="xsd2java2.notRequired">
 		<exec executable="xjc">
 			<arg value="-d"/>
 			<arg value="${gen.src}"/>
