@@ -43,6 +43,11 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 	{
 		return "<![CDATA["+ str + "]]>";
 	}
+	private String quoteQuote(String str)
+	{
+		return str.replaceAll("\"","&quot;");
+	}
+
 	
 	public void printError(PrintWriter out, String message)
 	{
@@ -53,7 +58,7 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 		out.print("<DESCRIPTION>");
 		out.print(xmlQuote(message));
 		out.println("</DESCRIPTION>");
-		out.print("<INFO ID=\"Error\" name=\"Error\" value=\""+xmlQuote(message)+"\"/>");
+		out.print("<INFO ID=\"Error\" name=\"Error\" value=\""+quoteQuote(message)+"\"/>");
 		out.println("</VOTABLE>");
 	}
 
