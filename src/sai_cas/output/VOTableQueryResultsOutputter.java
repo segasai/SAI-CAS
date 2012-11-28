@@ -53,6 +53,7 @@ public class VOTableQueryResultsOutputter implements QueryResultsOutputter
 		out.print("<DESCRIPTION>");
 		out.print(xmlQuote(message));
 		out.println("</DESCRIPTION>");
+		out.print("<INFO ID=\"Error\" name=\"Error\" value=\""+xmlQuote(message)+"\"/>");
 		out.println("</VOTABLE>");
 	}
 
