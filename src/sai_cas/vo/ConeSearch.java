@@ -150,6 +150,10 @@ public class ConeSearch
 			{
 				throw new ConeSearchException("ERROR: Sorry, we currently do not allow queries with search radius greater than "+sai_cas.Parameters.getMaxConeSearchRadius()+" degrees.");
 			}
+			if (rad <0 )
+			{
+				throw new ConeSearchException("ERROR: Radius can't be negative");
+			}
 			
 			outputColumnSelection = "*";
 			/* The default output list is the list of all table columns */
